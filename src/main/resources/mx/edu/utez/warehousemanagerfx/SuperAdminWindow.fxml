@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="500.0" maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12">
    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00a8e8" height="75.0" stroke="TRANSPARENT" strokeType="INSIDE" width="600.0" />
-   <Label layoutX="22.0" layoutY="21.0" text="¡Welcome Super Admin!" textFill="WHITE">
+   <Label layoutX="10.0" layoutY="17.0" text="¡Welcome Super Admin!" textFill="WHITE">
       <font>
          <Font name="Tw Cen MT Italic" size="27.0" />
       </font>

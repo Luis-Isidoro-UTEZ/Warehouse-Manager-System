@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.LoginController">
+   <Button layoutX="372.0" layoutY="371.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Log In" />
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#003457" height="500.0" stroke="TRANSPARENT" strokeType="INSIDE" width="267.0" />
+   <Label layoutX="359.0" layoutY="14.0" text="WareHouse" underline="true">
+      <font>
+         <Font name="Times New Roman" size="32.0" />
+      </font>
+   </Label>
+   <Label layoutX="332.0" layoutY="150.0" text="Type your Username or Mail">
+      <font>
+         <Font name="Segoe UI" size="16.0" />
+      </font>
+   </Label>
+   <Label layoutX="333.0" layoutY="241.0" text="Type your Password">
+      <font>
+         <Font name="Segoe UI" size="16.0" />
+      </font>
+   </Label>
+   <PasswordField layoutX="333.0" layoutY="265.0" prefHeight="40.0" prefWidth="197.0" />
+   <TextField layoutX="333.0" layoutY="176.0" prefHeight="40.0" prefWidth="197.0" />
+   <Label layoutX="330.0" layoutY="52.0" text="Sales &amp; Rentals" underline="true">
+      <font>
+         <Font name="Times New Roman" size="32.0" />
+      </font>
+   </Label>
+   <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="55.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@img/LogoWareHouse.png" />
+   </ImageView>
+   <Label layoutX="31.0" layoutY="285.0" text="More than a Warehouse, an investment" textFill="WHITE">
+      <font>
+         <Font name="Serif Italic" size="13.0" />
+      </font>
+   </Label>
+</AnchorPane>

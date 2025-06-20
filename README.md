@@ -1,6 +1,6 @@
-#  Sistema de Venta y Renta de Almacenes
+#  Warehouse Sales and Rental System
 
-##  Integrantes del equipo
+##  Team Members
 
 - Luis Haziel Isidoro Ocampo  
 - Edgar Adrian Gonzalez Guadarrama
@@ -9,15 +9,15 @@
 - Carlos Daniel Soriano Cortes
 ---
 
-##  Descripción
+##  Description
 
-Este proyecto consiste en proporcionar una plataforma para gestionar la venta y renta de almacenes, desarrollado como parte de la materia integradora en la UTEZ.  
-El objetivo principal es facilitar la gestión de almacenes para los administradores de cada sede y para el superadministrador. 
+This project provides a platform to manage the sale and rental of warehouses, developed as part of the Integrative Project course at UTEZ.
+The main objective is to facilitate warehouse management for the administrators of each location and for the super administrator. 
 
 ---
 
-## Puntos A Considerar:
-- Solo un administrador puede gestionar una sola sede y una sede puede no tener ningún administrador.
-- La sede se encuentra en una ubicación específica, pero cada sede contiene múltiples almacenes.
+## Key Points to Consider:
+- Only one administrator can manage a single location, and a location may have no administrator.
+- Each location is in a specific geographical area, but every location contains multiple warehouses.
 
 ---

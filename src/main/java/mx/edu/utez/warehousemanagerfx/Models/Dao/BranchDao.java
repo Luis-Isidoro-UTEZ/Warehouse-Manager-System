@@ -1,5 +1,7 @@
 package mx.edu.utez.warehousemanagerfx.Models.Dao;
 
+import mx.edu.utez.warehousemanagerfx.Utils.OracleDatabaseConnectionManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

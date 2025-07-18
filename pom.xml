@@ -14,7 +14,17 @@
         <junit.version>5.10.2</junit.version>
     </properties>
 
-    <dependencies>
+    <dependencies> <!-- Archivo pom.xml -->
+        <dependency> <!-- Hubo cambios en esta dependencia -->
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId> <!-- Oracle Cloud es más compatible con jdbc 8 y Oracle 19c -->
+            <version>19.6.0.0</version>
+        </dependency>
+        <dependency> <!-- Tener estas dos dependencias en la integradora -->
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>
+            <version>19.6.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

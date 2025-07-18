@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.AdminAlternativeController">
+    <top>
+        <AnchorPane prefHeight="140.0" prefWidth="966.0" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5e97cc" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="965.0" />
+                <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="896.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img/UserPicture.png" />
+                    </image></ImageView>
+                <Label layoutX="66.0" layoutY="16.0" text="WAREHOUSE " textAlignment="CENTER">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img/Logo.png" />
+                    </image></ImageView>
+                <Label layoutX="73.0" layoutY="35.0" text="SALES &amp; RENTALS" />
+                <Label layoutX="190.0" layoutY="21.0" text="More than a warehouse," />
+                <Label layoutX="215.0" layoutY="35.0" text="an investment." />
+                <Button layoutX="383.0" layoutY="23.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Inicio" />
+                <Button layoutX="768.0" layoutY="23.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Cuenta" />
+                <Button layoutX="492.0" layoutY="22.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="64.0" text="Ayuda" />
+                <Button layoutX="647.0" layoutY="23.0" mnemonicParsing="false" text="Cerrar sesion" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="965.0" />
+                <ComboBox layoutX="37.0" layoutY="90.0" prefWidth="150.0" promptText="Almacenes" style="-fx-background-radius: 20px; -fx-background-color: skyblue;" visibleRowCount="3">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets></ComboBox>
+                <Button layoutX="315.0" layoutY="92.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Clientes" />
+                <Button layoutX="212.0" layoutY="90.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Sedes" />
+                <ComboBox layoutX="780.0" layoutY="89.0" prefWidth="150.0" promptText="Mas Filtros..." />
+            </children>
+        </AnchorPane>
+    </top>
+    <center>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefHeight="50.0" />
+                <ScrollPane prefHeight="550.0">
+                    <content>
+                        <GridPane fx:id="warehousesGrid" prefHeight="0.0" prefWidth="0.0">
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                        </GridPane>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

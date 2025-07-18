@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.LoginController">
+   <Button id="loginButton" layoutX="372.0" layoutY="358.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="120.0" style="-fx-background-radius: 20px; -fx-background-color: skyblue;" text="Log In" />
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#003457" height="500.0" stroke="TRANSPARENT" strokeType="INSIDE" width="267.0" />
+   <Label layoutX="359.0" layoutY="14.0" text="WareHouse" underline="true">
+      <font>
+         <Font name="Times New Roman" size="32.0" />
+      </font>
+   </Label>
+   <Label layoutX="330.0" layoutY="157.0" text="Username or Email">
+      <font>
+         <Font name="Segoe UI" size="16.0" />
+      </font>
+   </Label>
+   <Label layoutX="331.0" layoutY="248.0" text="Password">
+      <font>
+         <Font name="Segoe UI" size="16.0" />
+      </font>
+   </Label>
+   <PasswordField id="password" fx:id="password" layoutX="331.0" layoutY="272.0" prefHeight="40.0" prefWidth="207.0" promptText="Enter your Password" style="-fx-background-radius: 10px;" />
+   <TextField id="user" fx:id="user" layoutX="331.0" layoutY="183.0" prefHeight="40.0" prefWidth="207.0" promptText="Enter your Username or Email" style="-fx-background-radius: 10px;" />
+   <Label layoutX="330.0" layoutY="52.0" text="Sales &amp; Rentals" underline="true">
+      <font>
+         <Font name="Times New Roman" size="32.0" />
+      </font>
+   </Label>
+   <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="55.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@img/LogoWareHouse.png" />
+   </ImageView>
+   <Label layoutX="31.0" layoutY="285.0" text="More than a Warehouse, an investment" textFill="WHITE">
+      <font>
+         <Font name="Serif Italic" size="13.0" />
+      </font>
+   </Label>
+</AnchorPane>

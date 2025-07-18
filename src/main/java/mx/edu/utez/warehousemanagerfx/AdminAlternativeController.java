@@ -28,7 +28,7 @@ public class AdminAlternativeController implements Initializable {
         try {
             for (Warehouse warehouse: warehouses) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("warehouse.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("warehouse-card.fxml"));
                 Pane pane = fxmlLoader.load();
                 WarehouseController warehouseController = fxmlLoader.getController();
                 warehouseController.setData(warehouse);

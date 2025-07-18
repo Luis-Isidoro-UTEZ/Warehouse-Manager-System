@@ -70,32 +70,6 @@ public class LoginController {
             } catch (Exception e) {
                 System.out.println("Ocurrió un Error al cargar la escena del Index del Admin");
             }
-        } else if (user.getText().equals("admin2") && password.getText().equals("root")) {
-            // Cambiar de pantalla
-            try {
-                // 1. Necesito cargar mi nueva ventana.
-                Parent adminAlternativeIndex = FXMLLoader.load(
-                        Objects.requireNonNull(getClass().getResource("AdminAlternativeWindow.fxml"))
-                );
-
-                // 2. Obtener el stage que ya existía previamente.
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-                // 3. Preparar la nueva escena.
-                Scene escena = new Scene(adminAlternativeIndex);
-
-                // 4. Poner en el escenario la nueva escena.
-                stage.setScene(escena);
-
-                // 5. Asegurarnos de que se vea.
-                stage.show();
-                JOptionPane.showMessageDialog(null, "¡Bienvenido al Sistema Admin!");
-            } catch (Exception e) {
-                System.out.println("Ocurrió un Error al cargar la escena del Index del Admin");
-            }
-        } else {
-            // El usuario no tiene cuenta.
-            JOptionPane.showMessageDialog(null, "No existes en el sistema");
         }
     }
 }

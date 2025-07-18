@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -7,113 +8,77 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="965.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <AnchorPane prefHeight="571.0" prefWidth="966.0" BorderPane.alignment="CENTER">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5e97cc" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="965.0" />
-            <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="896.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/UserPicture.png" />
-               </image></ImageView>
-            <Label layoutX="66.0" layoutY="16.0" text="WAREHOUSE " textAlignment="CENTER">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.AdminAlternativeController">
+    <top>
+        <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle fill="#335d7a" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
+                <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="882.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img/UserPicture.png" />
+                    </image></ImageView>
+                <Label layoutX="81.0" layoutY="19.0" text="WAREHOUSE " textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Albert Sans ExtraBold" size="18.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img/Logo.png" />
+                    </image></ImageView>
+                <Label layoutX="97.0" layoutY="38.0" text="SALES &amp; RENTALS" textFill="WHITE">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Albert Sans SemiBold" size="10.0" />
+               </font></Label>
+                <Label layoutX="207.0" layoutY="26.0" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Albert Sans ExtraBold Italic" size="8.0" />
+               </font></Label>
+                <Label layoutX="215.0" layoutY="35.0" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
+                <Button layoutX="777.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Account">
+               <font>
+                  <Font name="Albert Sans Bold" size="12.0" />
+               </font></Button>
+                <Button layoutX="712.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: darkred; -fx-background-radius: 10;" text="Log out" textFill="WHITE">
+               <font>
+                  <Font name="Albert Sans Bold" size="12.0" />
+               </font></Button>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
+                <ComboBox layoutX="14.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" promptText="Warehouses" style="-fx-background-radius: 20px; -fx-background-color: #80D4F4;" visibleRowCount="3">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets></ComboBox>
+                <ComboBox layoutX="517.0" layoutY="93.0" prefHeight="25.0" prefWidth="105.0" promptText="More Filters" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" />
+            <Slider layoutX="183.0" layoutY="98.0" style="-fx-base: #003459; -fx-control-inner-background: #335D7A;" />
+            <Slider layoutX="335.0" layoutY="98.0" style="-fx-base: #003459; -fx-control-inner-background: #335D7A;" />
+            <Button layoutX="799.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Register Warehouse">
+               <font>
+                  <Font name="Albert Sans Regular" size="12.0" />
                </font>
-            </Label>
-            <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/Logo.png" />
-               </image></ImageView>
-            <Label layoutX="73.0" layoutY="35.0" text="SALES &amp; RENTALS" />
-            <Label layoutX="190.0" layoutY="21.0" text="More than a warehouse," />
-            <Label layoutX="215.0" layoutY="35.0" text="an investment." />
-            <Button layoutX="383.0" layoutY="23.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Inicio" />
-            <Button layoutX="768.0" layoutY="23.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Cuenta" />
-            <Button layoutX="492.0" layoutY="22.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="64.0" text="Ayuda" />
-            <Button layoutX="647.0" layoutY="23.0" mnemonicParsing="false" text="Cerrar sesion" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="429.0" layoutY="137.0" stroke="WHITE" strokeType="INSIDE" width="965.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="965.0" />
-            <ComboBox layoutX="37.0" layoutY="90.0" prefWidth="150.0" promptText="Almacenes" style="-fx-background-radius: 20px; -fx-background-color: skyblue;" visibleRowCount="3">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets></ComboBox>
-            <Button layoutX="315.0" layoutY="92.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="91.0" text="Clientes" />
-            <Button layoutX="212.0" layoutY="90.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Sedes" />
-            <ComboBox layoutX="780.0" layoutY="89.0" prefWidth="150.0" promptText="Mas Filtros..." />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d9eeff" height="157.0" layoutX="7.0" layoutY="144.0" stroke="#ffffff00" strokeType="INSIDE" width="954.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d9eeff" height="160.0" layoutX="5.0" layoutY="308.0" stroke="#ffffff00" strokeType="INSIDE" width="955.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d9eeff" height="158.0" layoutX="5.0" layoutY="472.0" stroke="#ffffff00" strokeType="INSIDE" width="954.0" />
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="12.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/Almacen1.jpeg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="148.0" fitWidth="202.0" layoutX="12.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/Almacen2.jpeg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="12.0" layoutY="478.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/Almacen3.jpeg" />
-               </image></ImageView>
-            <Label layoutX="220.0" layoutY="148.0" text="Almacen Grande">
-               <font>
-                  <Font size="20.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="194.0" text="Informacion especifica">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="267.0" text="Precio : $$$">
-               <font>
-                  <Font size="15.0" />
-               </font></Label>
-            <Label layoutX="220.0" layoutY="315.0" text="Almacen Mediano">
-               <font>
-                  <Font size="20.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="358.0" text="Informacion especifica">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <Label layoutX="225.0" layoutY="434.0" text="Precio: $$$">
-               <font>
-                  <Font size="15.0" />
-               </font></Label>
-            <Label layoutX="220.0" layoutY="478.0" text="Almacen Pequeño">
-               <font>
-                  <Font size="20.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="508.0" text="Informacion especifica">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="541.0" text="Ubicacion">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <Label layoutX="223.0" layoutY="231.0" text="Ubicacion">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="223.0" layoutY="388.0" text="Ubicacion">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <Label layoutX="218.0" layoutY="594.0" text="Precio: $$$">
-               <font>
-                  <Font size="15.0" />
-               </font></Label>
-            <Button layoutX="863.0" layoutY="250.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Vender" />
-            <Button layoutX="864.0" layoutY="421.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Vender" />
-            <Button layoutX="864.0" layoutY="581.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Vender" />
-            <Button layoutX="761.0" layoutY="251.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="82.0" text="Rentar" />
-            <Button layoutX="768.0" layoutY="421.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Rentar" />
-            <Button layoutX="770.0" layoutY="581.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="71.0" text="Rentar" />
-         </children>
-      </AnchorPane>
-   </top>
+            </Button>
+            <JFXToggleButton layoutX="647.0" layoutY="76.0" mnemonicParsing="false" prefWidth="130.0" text="View Mode" />
+            <Label layoutX="240.0" layoutY="84.0" text="Price" />
+            <Label layoutX="395.0" layoutY="85.0" text="Size" />
+            </children>
+        </AnchorPane>
+    </top>
+    <center>
+        <VBox style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefHeight="50.0" style="-fx-background-color: #ffffff;" />
+                <ScrollPane prefHeight="550.0" style="-fx-background-color: #ffffff;">
+                    <content>
+                        <GridPane fx:id="warehousesGrid" prefHeight="0.0" prefWidth="0.0">
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                        </GridPane>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>

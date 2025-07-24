@@ -8,7 +8,7 @@
 
 <AnchorPane maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.LoginController">
    <Button id="loginButton" layoutX="372.0" layoutY="358.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="120.0" style="-fx-background-radius: 20px; -fx-background-color: skyblue;" text="Log In" />
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#003457" height="500.0" stroke="TRANSPARENT" strokeType="INSIDE" width="267.0" />
+   <Rectangle fill="#003457" height="500.0" stroke="TRANSPARENT" strokeType="INSIDE" width="267.0" />
    <Label layoutX="359.0" layoutY="14.0" text="WareHouse" underline="true">
       <font>
          <Font name="Times New Roman" size="32.0" />
@@ -32,7 +32,7 @@
       </font>
    </Label>
    <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="55.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
-      <Image url="@img/LogoWareHouse.png" />
+      <Image url="@img/logo/OldLogo.png" />
    </ImageView>
    <Label layoutX="31.0" layoutY="285.0" text="More than a Warehouse, an investment" textFill="WHITE">
       <font>

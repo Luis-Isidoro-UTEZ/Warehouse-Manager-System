@@ -4,6 +4,8 @@ module mx.edu.utez.warehousemanagerfx {
     requires java.desktop;
     requires java.sql;
     requires ucp;
+    requires com.jfoenix;
+    requires org.controlsfx.controls;
 
 
     opens mx.edu.utez.warehousemanagerfx to javafx.fxml;

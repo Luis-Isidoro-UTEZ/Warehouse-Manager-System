@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.shape.Rectangle?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0"
+      prefWidth="300.0"
+      style="-fx-background-color: #CED8DF; -fx-border-color: gray; -fx-border-width: 0.1; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+      xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mx.edu.utez.warehousemanagerfx.WarehouseController">
+    <children>
+        <VBox alignment="TOP_CENTER" prefHeight="320.0" prefWidth="300.0">
+            <children>
+                <ImageView fx:id="img" fitHeight="150.0" fitWidth="260.0" >
+                    <VBox.margin>
+                        <Insets bottom="20.0"/>
+                    </VBox.margin>
+                    <clip>
+                        <Rectangle fx:id="imgBorder" arcHeight="20.0" arcWidth="20.0" height="150.0" width="260.0"/>
+                    </clip>
+                </ImageView>
+                <Label fx:id="name" prefHeight="50.0" prefWidth="260.0"
+                       style="-fx-background-color: white; -fx-background-radius: 5px;" text="Name">
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                    <font>
+                        <Font name="Albert Sans Regular" size="12.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="price" prefHeight="50.0" prefWidth="260.0"
+                       style="-fx-background-color: white; -fx-background-radius: 5px;" text="Price: $$$">
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                    <font>
+                        <Font name="Albert Sans Regular" size="12.0"/>
+                    </font>
+                </Label>
+                <HBox prefHeight="45.0" prefWidth="300.0">
+                    <children>
+                        <VBox prefHeight="50.0" prefWidth="140.0">
+                            <children>
+                                <Label fx:id="size" prefHeight="50.0" prefWidth="140.0"
+                                       style="-fx-background-color: white; -fx-background-radius: 5px;" text="Size">
+                                    <padding>
+                                        <Insets left="20.0" right="20.0"/>
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="130.0">
+                            <children>
+                                <Label fx:id="status" prefHeight="50.0" prefWidth="130.0"
+                                       style="-fx-background-color: white; -fx-background-radius: 5px;" text="Status">
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="20.0" right="20.0"/>
+                                    </padding>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0"/>
+                            </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
+                            <children>
+                                <Button fx:id="moreButton" mnemonicParsing="false" prefWidth="50.0"
+                                        style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="...">
+                                    <VBox.margin>
+                                        <Insets left="5.0"/>
+                                    </VBox.margin>
+                                    <font>
+                                        <Font name="Albert Sans Bold" size="12.0"/>
+                                    </font>
+                                </Button>
+                            </children>
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+        </VBox>
+    </children>
+</Pane>

@@ -7,73 +7,121 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import org.controlsfx.control.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.AdminAlternativeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="950.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.AdminController">
     <top>
         <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle fill="#335d7a" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
-                <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="882.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                <Rectangle fill="#335d7a" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0"/>
+                <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="882.0" layoutY="7.0" pickOnBounds="true"
+                           preserveRatio="true">
                     <image>
-                        <Image url="@img/UserPicture.png" />
-                    </image></ImageView>
+                        <Image url="@img/icon/UserPicture.png"/>
+                    </image>
+                    <clip>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
+                    </clip>
+                </ImageView>
                 <Label layoutX="81.0" layoutY="19.0" text="WAREHOUSE " textAlignment="CENTER" textFill="WHITE">
                     <font>
-                        <Font name="Albert Sans ExtraBold" size="18.0" />
+                        <Font name="Albert Sans ExtraBold" size="18.0"/>
                     </font>
                 </Label>
-                <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true"
+                           preserveRatio="true">
                     <image>
-                        <Image url="@img/Logo.png" />
-                    </image></ImageView>
+                        <Image url="@img/logo/AppLogo.png"/>
+                    </image>
+                </ImageView>
                 <Label layoutX="97.0" layoutY="38.0" text="SALES &amp; RENTALS" textFill="WHITE">
-               <font>
-                  <Font name="Albert Sans SemiBold" size="10.0" />
-               </font></Label>
-                <Label layoutX="207.0" layoutY="26.0" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Albert Sans ExtraBold Italic" size="8.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Albert Sans SemiBold" size="10.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="207.0" layoutY="26.0" text="More than a warehouse, &#10;an investment."
+                       textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Albert Sans ExtraBold Italic" size="8.0"/>
+                    </font>
+                </Label>
                 <Label layoutX="215.0" layoutY="35.0" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Label>
-                <Button layoutX="777.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Account">
-               <font>
-                  <Font name="Albert Sans Bold" size="12.0" />
-               </font></Button>
-                <Button layoutX="712.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: darkred; -fx-background-radius: 10;" text="Log out" textFill="WHITE">
-               <font>
-                  <Font name="Albert Sans Bold" size="12.0" />
-               </font></Button>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
-                <ComboBox layoutX="14.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" promptText="Warehouses" style="-fx-background-radius: 20px; -fx-background-color: #80D4F4;" visibleRowCount="3">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Button layoutX="789.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0"
+                        style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Account">
+                    <font>
+                        <Font name="Albert Sans Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <Button layoutX="712.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0"
+                        style="-fx-background-color: darkred; -fx-background-radius: 10;" text="Log out"
+                        textFill="WHITE">
+                    <font>
+                        <Font name="Albert Sans Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00"
+                           strokeType="INSIDE" width="950.0"/>
+                <ComboBox layoutX="14.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" promptText="Warehouses"
+                          style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;"
+                          visibleRowCount="3">
                     <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets></ComboBox>
-                <ComboBox layoutX="517.0" layoutY="93.0" prefHeight="25.0" prefWidth="105.0" promptText="More Filters" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" />
-            <Slider layoutX="183.0" layoutY="98.0" style="-fx-base: #003459; -fx-control-inner-background: #335D7A;" />
-            <Slider layoutX="335.0" layoutY="98.0" style="-fx-base: #003459; -fx-control-inner-background: #335D7A;" />
-            <Button layoutX="799.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Register Warehouse">
-               <font>
-                  <Font name="Albert Sans Regular" size="12.0" />
-               </font>
-            </Button>
-            <JFXToggleButton layoutX="647.0" layoutY="76.0" mnemonicParsing="false" prefWidth="130.0" text="View Mode" />
-            <Label layoutX="240.0" layoutY="84.0" text="Price" />
-            <Label layoutX="395.0" layoutY="85.0" text="Size" />
+                        <Insets/>
+                    </opaqueInsets>
+                </ComboBox>
+                <Label layoutX="240.0" layoutY="85.0" text="Size">
+                    <font>
+                        <Font name="Albert Sans Regular" size="12.0"/>
+                    </font>
+                </Label>
+                <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" layoutX="183.0" layoutY="98.0"
+                             majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true"
+                             showTickMarks="true" stylesheets="@styles/slider.css"/>
+                <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@styles/slider.css"/>
+                <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@styles/slider.css"/>
+                <Label layoutX="395.0" layoutY="85.0" text="Price">
+                    <font>
+                        <Font name="Albert Sans Regular" size="12.0"/>
+                    </font>
+                </Label>
+                <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" layoutX="335.0" layoutY="98.0"
+                             majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true"
+                             showTickMarks="true" stylesheets="@styles/slider.css"/>
+                <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@styles/slider.css"/>
+                <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@styles/slider.css"/>
+                <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="487.0" layoutY="98.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@img/icon/Loupe.png"/>
+                    </image>
+                </ImageView>
+                <ComboBox layoutX="507.0" layoutY="92.0" prefHeight="27.0" prefWidth="140.0" promptText="More Filters"
+                          style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-color: #003459; -fx-border-radius: 20px;"/>
+                <JFXToggleButton layoutX="647.0" layoutY="76.0" mnemonicParsing="false" prefWidth="130.0"
+                                 text="View Mode" toggleColor="WHITE" toggleLineColor="#003459"/>
+                <Button layoutX="799.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0"
+                        style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Register Warehouse">
+                    <font>
+                        <Font name="Albert Sans Regular" size="12.0"/>
+                    </font>
+                </Button>
             </children>
         </AnchorPane>
     </top>
     <center>
         <VBox style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
             <children>
-                <HBox prefHeight="50.0" style="-fx-background-color: #ffffff;" />
+                <HBox prefHeight="50.0" style="-fx-background-color: #ffffff;"/>
                 <ScrollPane prefHeight="550.0" style="-fx-background-color: #ffffff;">
                     <content>
                         <GridPane fx:id="warehousesGrid" prefHeight="0.0" prefWidth="0.0">
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                             </rowConstraints>
                         </GridPane>
                     </content>

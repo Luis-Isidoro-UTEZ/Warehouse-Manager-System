@@ -5,6 +5,18 @@ public class Warehouse {
     private String name;
     private int price;
     private int size;
+    private String status;
+
+    public Warehouse() {
+    }
+
+    public Warehouse(String imgSrc, String name, int price, int size, String status) {
+        this.imgSrc = imgSrc;
+        this.name = name;
+        this.price = price;
+        this.size = size;
+        this.status = status;
+    }
 
     public String getImgSrc() {
         return imgSrc;
@@ -36,5 +48,13 @@ public class Warehouse {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

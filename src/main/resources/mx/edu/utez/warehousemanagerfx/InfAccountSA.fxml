@@ -100,6 +100,6 @@
    </Label>
    <Button layoutX="333.0" layoutY="285.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="175.0" text="Change Your User Picture" />
    <ImageView fitHeight="211.0" fitWidth="221.0" layoutX="316.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
-      <Image url="@img/UserPicture.png" />
+      <Image url="@img/icon/UserPicture.png" />
    </ImageView>
 </AnchorPane>

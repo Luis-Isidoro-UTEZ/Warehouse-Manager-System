@@ -80,7 +80,7 @@
                 <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@styles/slider.css" />
                 <ProgressIndicator fx:id="spinner" layoutX="469.0" layoutY="95.0" prefHeight="20.0" prefWidth="20.0" visible="false" />
                 <TextField fx:id="searchTextField" layoutX="494.0" layoutY="92.0" prefHeight="27.0" prefWidth="140.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-color: #003459; -fx-border-radius: 20px;" />
-                <Button fx:id="searchButton" layoutX="639.0" layoutY="93.0" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Buscar">
+                <Button fx:id="searchButton" layoutX="639.0" layoutY="93.0" onAction="#search" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Buscar">
                     <graphic>
                       <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                           <image>

@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 
+import java.io.InputStream;
+
 public class WarehouseController {
 
     @FXML
@@ -32,12 +34,13 @@ public class WarehouseController {
     private Button moreButton;
 
     public void setData(Warehouse warehouse) {
-        Image image = new Image(getClass().getResourceAsStream(warehouse.getImgSrc()));
+        String fullPath = getClass().getResource("/mx/edu/utez/warehousemanagerfx/img/" + warehouse.getImgSrc()).toExternalForm();
+        Image image = new Image(fullPath, true);
         img.setImage(image);
         imgBorder.setHeight(img.getFitHeight());
         imgBorder.setWidth(img.getFitWidth());
         name.setText("Name: " + warehouse.getName());
-        price.setText("Price: $" + warehouse.getPrice());
+        price.setText("Price: $" + warehouse.getSalePrice() + " / $" + warehouse.getRentalPrice() + " * Month");
         size.setText("Size: " + warehouse.getSize() + "m2");
         status.setText(warehouse.getStatus());
     }

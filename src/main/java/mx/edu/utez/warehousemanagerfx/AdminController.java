@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
+import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import org.controlsfx.control.RangeSlider;
 
 import java.io.IOException;
@@ -37,11 +38,12 @@ public class AdminController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        warehouses = new ArrayList<>(getWarehouses());
+        WarehouseDao dao = new WarehouseDao();
+        List<Warehouse> datos = dao.readWarehouses();
         int column = 0;
         int row = 1;
         try {
-            for (Warehouse warehouse: warehouses) {
+            for (Warehouse warehouse: datos) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("WarehouseCard.fxml"));
                 Pane pane = fxmlLoader.load();
@@ -58,75 +60,5 @@ public class AdminController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private List<Warehouse> getWarehouses() {
-        List<Warehouse> ls = new ArrayList<>();
-
-        Warehouse warehouse = new Warehouse();
-        warehouse.setName("CDMX\nLos Santos");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        warehouse = new Warehouse();
-        warehouse.setName("CDMX");
-        warehouse.setImgSrc("/mx/edu/utez/warehousemanagerfx/img/Warehouse.jpg");
-        warehouse.setPrice(2500);
-        warehouse.setSize(240);
-        warehouse.setStatus("Available");
-        ls.add(warehouse);
-
-        return ls;
     }
 }

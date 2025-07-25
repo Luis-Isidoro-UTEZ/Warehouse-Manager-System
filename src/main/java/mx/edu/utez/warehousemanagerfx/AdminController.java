@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -12,6 +13,7 @@ import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import org.controlsfx.control.RangeSlider;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class AdminController implements Initializable {
     private GridPane warehousesGrid;
     @FXML
     private JFXToggleButton toggleView;
+    @FXML
+    private ChoiceBox<String> statusChoiceBox;
     @FXML
     private RangeSlider sizeRangeSlider;
     @FXML
@@ -38,9 +42,14 @@ public class AdminController implements Initializable {
     private Label priceHighLabel;
 
     private List<Warehouse> warehouses;
+    private String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        statusChoiceBox.getItems().addAll(statusChoiceList);
+        statusChoiceBox.setValue("Status"); // Default Value
+
+
         // Load initial view
         loadWarehousesView(true); // true = cardView
 
@@ -48,14 +57,24 @@ public class AdminController implements Initializable {
         toggleView.selectedProperty().addListener((obs, oldVal, newVal) -> {
             loadWarehousesView(newVal); // true = cardView, false = listView
         });
+
+        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            loadWarehousesView(toggleView.isSelected());
+        });
     }
 
     private void loadWarehousesView(boolean isGridView) {
         warehousesGrid.getChildren().clear(); // Clears the current view
         toggleView.setText(isGridView ? "Card View Mode" : "List View Mode");
+        String statusSeleccionado = (String) statusChoiceBox.getValue();
 
         WarehouseDao dao = new WarehouseDao();
-        List<Warehouse> datos = dao.readWarehouses();
+        List<Warehouse> datos = new ArrayList<>();
+        if (statusSeleccionado.equals("Status") || statusSeleccionado.equals("Show All")) {
+            datos = dao.readWarehouses();
+        } else {
+            datos = dao.readWarehousesStatus(statusSeleccionado);
+        }
         int column = 0;
         int row = 1;
         try {

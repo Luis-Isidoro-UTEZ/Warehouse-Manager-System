@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -58,17 +57,13 @@
                     </font>
                 </Button>
                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
-                <ComboBox layoutX="14.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" promptText="Warehouses" style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;" visibleRowCount="3">
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </ComboBox>
+                <ChoiceBox fx:id="statusChoiceBox" layoutX="14.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;" value="Status" />
                 <Label layoutX="240.0" layoutY="85.0" text="Size">
                     <font>
                         <Font name="Albert Sans Regular" size="12.0" />
                     </font>
                 </Label>
-                <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" layoutX="183.0" layoutY="98.0" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
+                <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" layoutX="174.0" layoutY="98.0" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
                 <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@styles/slider.css" />
                 <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@styles/slider.css" />
                 <Label layoutX="395.0" layoutY="85.0" text="Price">
@@ -76,16 +71,28 @@
                         <Font name="Albert Sans Regular" size="12.0" />
                     </font>
                 </Label>
-                <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" layoutX="335.0" layoutY="98.0" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
+                <ToggleButton fx:id="priceToggle" layoutX="359.0" layoutY="74.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #80D4F4 #80D4F4; -fx-background-radius: 10;" text="Rental Price" textAlignment="CENTER">
+               <font>
+                  <Font name="Albert Sans Regular" size="10.0" />
+               </font></ToggleButton>
+                <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" layoutX="324.0" layoutY="98.0" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
                 <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@styles/slider.css" />
                 <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@styles/slider.css" />
-                <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="502.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@img/icon/Loupe.png" />
-                    </image>
-                </ImageView>
-                <ComboBox layoutX="522.0" layoutY="92.0" prefHeight="27.0" prefWidth="140.0" promptText="More Filters" style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-color: #003459; -fx-border-radius: 20px;" />
-                <JFXToggleButton fx:id="toggleView" layoutX="667.0" layoutY="76.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View Mode" toggleColor="WHITE" toggleLineColor="#003459" />
+                <ProgressIndicator fx:id="spinner" layoutX="469.0" layoutY="95.0" prefHeight="20.0" prefWidth="20.0" visible="false" />
+                <TextField fx:id="searchTextField" layoutX="494.0" layoutY="92.0" prefHeight="27.0" prefWidth="140.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-color: #003459; -fx-border-radius: 20px;" />
+                <Button fx:id="searchButton" layoutX="639.0" layoutY="93.0" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Buscar">
+                    <graphic>
+                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@img/icon/Loupe.png" />
+                          </image>
+                      </ImageView>
+                    </graphic>
+               <font>
+                  <Font name="Albert Sans Regular" size="10.0" />
+               </font>
+                </Button>
+                <JFXToggleButton fx:id="toggleView" layoutX="695.0" layoutY="76.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View Mode" toggleColor="WHITE" toggleLineColor="#003459" />
                 <Button layoutX="856.0" layoutY="91.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Register &#10;Warehouse" textAlignment="CENTER">
                     <font>
                         <Font name="Albert Sans Regular" size="10.0" />

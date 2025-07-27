@@ -8,12 +8,18 @@
     -fx-background-radius: 3;
 }
 
+.range-slider .axis .tick-mark .text {
+    -fx-font-size: 5px;
+    -fx-font-family: "Albert Sans Regular";
+}
+
 /* range-slider pick */
 .pick {
-    -fx-background-color: #3F51B5;
+    -fx-background-color: #003459;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
     -fx-padding: 4 10 4 10;
     -fx-background-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0.2, 0, 2);

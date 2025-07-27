@@ -1,24 +1,22 @@
 package mx.edu.utez.warehousemanagerfx;
 
 import com.jfoenix.controls.JFXToggleButton;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
+import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
 import org.controlsfx.control.RangeSlider;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -31,11 +29,19 @@ public class AdminController implements Initializable {
     @FXML
     private ChoiceBox<String> statusChoiceBox;
     @FXML
+    private ChoiceBox<String> orderByChoiceBox;
+    @FXML
     private ProgressIndicator spinner;
     @FXML
     private TextField searchTextField;
     @FXML
     private Button searchButton;
+    @FXML
+    private Button clearFiltersButton;
+    @FXML
+    private ToggleButton priceToggle;
+    @FXML
+    private BorderPane rootPane;
     @FXML
     private RangeSlider sizeRangeSlider;
     @FXML
@@ -49,34 +55,82 @@ public class AdminController implements Initializable {
     @FXML
     private Label priceHighLabel;
 
-    private List<Warehouse> warehouses;
     private String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
+    private String[] orderByChoiceList = {"Size: High to Low", "Size: Low to High", "Rental Price: High to Low", "Rental Price: Low to High", "Sale Price: High to Low", "Sale Price: Low to High"};
+    private double sizeMinValue = 0, sizeMaxValue = 100;
+    private double priceMinValue = 0, priceMaxValue = 100;
 
+    /**
+     * In the listeners -->
+     * o: Observable Value;
+     * a: Old Value;
+     * b: New Value
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Configure initial Status Choice Box
         statusChoiceBox.getItems().addAll(statusChoiceList);
         statusChoiceBox.setValue("Status"); // Default Value
 
-        // Load initial view
-        loadWarehousesView(true); // true = cardView
+        // Configure initial Order By Choice Box
+        orderByChoiceBox.getItems().addAll(orderByChoiceList);
+        orderByChoiceBox.setValue("Order By"); // Default Value
 
-        // Detect changes in the toggle
-        toggleView.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            String keyword = searchTextField.getText();
-            if(!keyword.isEmpty()) {
-                searchAndLoadView();
+        // Configure Size Range Slider and Price Range Slider controllers
+        new RangeSliderAnimator(sizeRangeSlider, sizeLowLabel, sizeHighLabel, rootPane);
+        new RangeSliderAnimator(priceRangeSlider, priceLowLabel, priceHighLabel, rootPane);
+        setupSizeSlider();
+        setupPriceSlider(true); // Starts with Rental Price Mode
+
+        // Detect changes in the toggle view
+        toggleView.selectedProperty()
+                .addListener((o, a, b) -> loadFilteredViewSync());
+
+        // Detect changes in the status choice box
+        statusChoiceBox.getSelectionModel().selectedItemProperty()
+                .addListener((o, a, b) -> { searchTextField.clear(); loadFilteredViewSync(); });
+
+        // Detect changes in the status choice box
+        orderByChoiceBox.getSelectionModel().selectedItemProperty()
+                .addListener((o, a, b) -> loadFilteredViewSync());
+
+        // Detect changes in Price Toggle controller to switch between Rental Price and Sale Price
+        priceToggle.selectedProperty().addListener((o, a, b) -> {
+            priceToggle.setText(b ? "Sale Price" : "Rental Price");
+            setupPriceSlider(!b); // true -> sale, false -> rental
+            loadFilteredViewSync();
+        });
+
+        // Detect changes in the Size Range Slider and Price Range Slider controllers
+        sizeRangeSlider.lowValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
+        sizeRangeSlider.highValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
+        priceRangeSlider.lowValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
+        priceRangeSlider.highValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
+
+        clearFiltersButton.setOnAction(e -> {
+            statusChoiceBox.setValue("Status");
+            orderByChoiceBox.setValue("Order By");
+            searchTextField.clear();
+            setupSizeSlider();
+            setupPriceSlider(!priceToggle.isSelected());
+            loadFilteredViewSync();
+        });
+
+        // Search Button: ONLY here we execute the Task if there is text
+        searchButton.setOnAction(e -> {
+            if (searchTextField.getText().isEmpty()) {
+                loadFilteredViewSync();
             } else {
-                loadWarehousesView(newVal); // true = cardView, false = listView
+                loadFilteredViewAsync();
             }
         });
 
-        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            searchTextField.setText("");
-            loadWarehousesView(toggleView.isSelected());
-        });
+        // Load initial view
+        loadFilteredViewSync();
     }
 
     private void loadWarehouses(List<Warehouse> data, boolean isGridView) {
+        warehousesGrid.getChildren().clear(); // Clears the current view
         int column = 0;
         int row = 1;
         try {
@@ -100,63 +154,147 @@ public class AdminController implements Initializable {
         }
     }
 
-    private void loadWarehousesView(boolean isGridView) {
-        warehousesGrid.getChildren().clear(); // Clears the current view
-        toggleView.setText(isGridView ? "Card View Mode" : "List View Mode");
-        String statusSeleccionado = (String) statusChoiceBox.getValue();
-
+    private List<Warehouse> fetchFilteredWarehouses() {
         WarehouseDao dao = new WarehouseDao();
-        List<Warehouse> data = new ArrayList<>();
-        if (statusSeleccionado.equals("Status") || statusSeleccionado.equals("Show All")) {
-            data = dao.readWarehouses();
-        } else {
-            data = dao.readWarehousesStatus(statusSeleccionado);
+
+        String keyword        = searchTextField.getText().trim();
+        String status         = statusChoiceBox.getValue();
+        String orderBy        = orderByChoiceBox.getValue();
+        boolean isPriceMode   = !priceToggle.isSelected(); //  true = salePrice, false = rentalPrice
+        boolean sliderTouched = isRangeSliderModified();
+        boolean statusAll     = status.equals("Show All") || status.equals("Status"); // Status: Default Value
+        double minSize        = sizeRangeSlider.getLowValue();
+        double maxSize        = sizeRangeSlider.getHighValue();
+        double minPrice       = priceRangeSlider.getLowValue();
+        double maxPrice       = priceRangeSlider.getHighValue();
+
+        String orderColumn, orderDir;
+        switch (orderBy) {
+            case "Size: High to Low":         orderColumn="SIZEQMETERS"; orderDir="DESC"; break;
+            case "Size: Low to High":         orderColumn="SIZEQMETERS"; orderDir="ASC";  break;
+            case "Rental Price: High to Low": orderColumn="RENTALPRICE"; orderDir="DESC"; break;
+            case "Rental Price: Low to High": orderColumn="RENTALPRICE"; orderDir="ASC";  break;
+            case "Sale Price: High to Low":   orderColumn="SALEPRICE";   orderDir="DESC"; break;
+            case "Sale Price: Low to High":   orderColumn="SALEPRICE";   orderDir="ASC";  break;
+            default:                          orderColumn="ID";          orderDir="ASC";
         }
-        loadWarehouses(data, isGridView);
+
+        // 1) Runs when the sliders are in their original position.
+        if (!sliderTouched) {
+            if (statusAll && keyword.isEmpty())
+                return dao.readWarehouses(orderColumn, orderDir); // without filters
+            if (statusAll)
+                return dao.readWarehousesSearch(keyword, orderColumn, orderDir); // Search by keyword only
+            if (keyword.isEmpty())
+                return dao.readWarehousesStatus(status, orderColumn, orderDir);  // status  only
+            return dao.readWarehousesSearchAndStatus(keyword, status, orderColumn, orderDir); // both filters combined (Search by keyword + status)
+        }
+        // 2) Runs when movement is detected on the sliders
+        else {
+            if (statusAll && keyword.isEmpty())
+                return dao.readWarehousesPriceAndSize(
+                        minPrice, maxPrice,
+                        minSize, maxSize,
+                        isPriceMode,
+                        orderColumn, orderDir
+                ); // range filters
+            if (statusAll)
+                return dao.readWarehousesPriceSizeAndSearch(
+                        keyword,
+                        minPrice, maxPrice,
+                        minSize, maxSize,
+                        isPriceMode,
+                        orderColumn, orderDir
+                ); // range filters + keyword search
+            if (keyword.isEmpty())
+                return dao.readWarehousesPriceSizeAndStatus(
+                        minPrice, maxPrice,
+                        minSize, maxSize,
+                        isPriceMode, status,
+                        orderColumn, orderDir
+                ); // range filters + status
+            return dao.readWarehousesFiltered(
+                    keyword,
+                    minPrice, maxPrice,
+                    minSize, maxSize,
+                    status, isPriceMode,
+                    orderColumn, orderDir
+            ); // all filters combined
+        }
     }
 
-    private void searchAndLoadView() {
-        warehousesGrid.getChildren().clear();
-        String keyword = searchTextField.getText();
-        String selectedStatus = statusChoiceBox.getValue();
-        boolean isGridView = toggleView.isSelected();
-        toggleView.setText(isGridView ? "Card View Mode" : "List View Mode");
+    private void loadFilteredViewSync() {
+        List<Warehouse> data = fetchFilteredWarehouses();
+        loadWarehouses(data, toggleView.isSelected());
+    }
 
-        Task<List<Warehouse>> searchTask = new Task<>() {
-            @Override
-            protected List<Warehouse> call() throws Exception {
-                WarehouseDao dao = new WarehouseDao();
-                if ((selectedStatus.equals("Status") || selectedStatus.equals("Show All")) && keyword.isEmpty()) {
-                    return dao.readWarehouses(); // without filters
-                } else if (selectedStatus.equals("Status") || selectedStatus.equals("Show All")) {
-                    return dao.readWarehousesSearch(keyword); // keyword only
-                } else if (keyword.isEmpty()) {
-                    return dao.readWarehousesStatus(selectedStatus); // only status
-                } else {
-                    return dao.readWarehousesSearchAndStatus(keyword, selectedStatus); // both filters combined
-                }
-            }
-        };
-
-        searchTask.setOnSucceeded(e -> {
-            List<Warehouse> data = searchTask.getValue();
-            loadWarehouses(data, isGridView);
-            spinner.setVisible(false);
-            searchButton.setDisable(false);
-        });
-
-        searchTask.setOnFailed(e -> {
-            spinner.setVisible(false);
-            searchButton.setDisable(false);
-            System.err.println("Error loading warehouses: " + searchTask.getException());
-        });
-
+    private void loadFilteredViewAsync() {
         spinner.setVisible(true);
         searchButton.setDisable(true);
-        new Thread(searchTask).start();
+
+        Task<List<Warehouse>> task = new Task<>() {
+            @Override
+            protected List<Warehouse> call() {
+                return fetchFilteredWarehouses();
+            }
+        };
+        task.setOnSucceeded(e -> {
+            loadWarehouses(task.getValue(), toggleView.isSelected());
+            spinner.setVisible(false);
+            searchButton.setDisable(false);
+        });
+        task.setOnFailed(e -> {
+            spinner.setVisible(false);
+            searchButton.setDisable(false);
+            task.getException().printStackTrace();
+        });
+        new Thread(task).start();
     }
 
-    public void search(ActionEvent event) {
-        searchAndLoadView();
+    private boolean isRangeSliderModified() {
+        return sizeRangeSlider.getLowValue() > sizeMinValue
+                || sizeRangeSlider.getHighValue() < sizeMaxValue
+                || priceRangeSlider.getLowValue() > priceMinValue
+                || priceRangeSlider.getHighValue() < priceMaxValue;
+    }
+
+    private void setupSizeSlider() {
+        WarehouseDao dao = new WarehouseDao();
+        try {
+            double[] minMax = dao.getMinMaxSize();
+            sizeMinValue = minMax[0];
+            sizeMaxValue = minMax[1];
+            sizeRangeSlider.setMin(sizeMinValue);
+            sizeRangeSlider.setMax(sizeMaxValue);
+            sizeRangeSlider.setBlockIncrement((sizeMaxValue - sizeMinValue) / 25);
+            sizeRangeSlider.setMajorTickUnit((sizeMaxValue - sizeMinValue) / 2);
+            sizeRangeSlider.setMinorTickCount(3);
+            sizeRangeSlider.setLowValue(sizeMinValue);
+            sizeRangeSlider.setHighValue(sizeMaxValue);
+        } catch (Exception e) {
+            System.err.println("Error setting up size slider: " + e.getMessage());
+            sizeRangeSlider.setLowValue(0);
+            sizeRangeSlider.setHighValue(100);
+        }
+    }
+
+    private void setupPriceSlider(boolean isMode) {
+        WarehouseDao dao = new WarehouseDao();
+        try {
+            double[] minMax = dao.getMinMaxPrice(isMode);
+            priceMinValue = minMax[0];
+            priceMaxValue = minMax[1];
+            priceRangeSlider.setMin(priceMinValue);
+            priceRangeSlider.setMax(priceMaxValue);
+            priceRangeSlider.setBlockIncrement((priceMaxValue - priceMinValue) / 25);
+            priceRangeSlider.setMajorTickUnit((priceMaxValue - priceMinValue) / 2);
+            priceRangeSlider.setMinorTickCount(1);
+            priceRangeSlider.setLowValue(priceMinValue);
+            priceRangeSlider.setHighValue(priceMaxValue);
+        } catch (Exception e) {
+            System.err.println("Error setting up price slider: " + e.getMessage());
+            priceRangeSlider.setLowValue(0);
+            priceRangeSlider.setHighValue(100);
+        }
     }
 }

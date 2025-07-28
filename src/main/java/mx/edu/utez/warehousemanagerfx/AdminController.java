@@ -55,16 +55,16 @@ public class AdminController implements Initializable {
     @FXML
     private Label priceHighLabel;
 
-    private String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
-    private String[] orderByChoiceList = {"Size: High to Low", "Size: Low to High", "Rental Price: High to Low", "Rental Price: Low to High", "Sale Price: High to Low", "Sale Price: Low to High"};
+    private final String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
+    private final String[] orderByChoiceList = {"Size: High to Low", "Size: Low to High", "Rental Price: High to Low", "Rental Price: Low to High", "Sale Price: High to Low", "Sale Price: Low to High"};
     private double sizeMinValue = 0, sizeMaxValue = 100;
     private double priceMinValue = 0, priceMaxValue = 100;
 
     /**
-     * In the listeners -->
+     * In the listeners:
      * o: Observable Value;
      * a: Old Value;
-     * b: New Value
+     * b: New Value;
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,7 +84,10 @@ public class AdminController implements Initializable {
 
         // Detect changes in the toggle view
         toggleView.selectedProperty()
-                .addListener((o, a, b) -> loadFilteredViewSync());
+                .addListener((o, a, b) -> {
+                    toggleView.setText(b ? "Card View" : "List View");
+                    loadFilteredViewSync();
+                });
 
         // Detect changes in the status choice box
         statusChoiceBox.getSelectionModel().selectedItemProperty()
@@ -157,11 +160,10 @@ public class AdminController implements Initializable {
     private List<Warehouse> fetchFilteredWarehouses() {
         WarehouseDao dao = new WarehouseDao();
 
-        String keyword        = searchTextField.getText().trim();
+        String keyword        = searchTextField.getText();
         String status         = statusChoiceBox.getValue();
         String orderBy        = orderByChoiceBox.getValue();
         boolean isPriceMode   = !priceToggle.isSelected(); //  true = salePrice, false = rentalPrice
-        boolean sliderTouched = isRangeSliderModified();
         boolean statusAll     = status.equals("Show All") || status.equals("Status"); // Status: Default Value
         double minSize        = sizeRangeSlider.getLowValue();
         double maxSize        = sizeRangeSlider.getHighValue();
@@ -179,48 +181,20 @@ public class AdminController implements Initializable {
             default:                          orderColumn="ID";          orderDir="ASC";
         }
 
-        // 1) Runs when the sliders are in their original position.
-        if (!sliderTouched) {
-            if (statusAll && keyword.isEmpty())
-                return dao.readWarehouses(orderColumn, orderDir); // without filters
-            if (statusAll)
-                return dao.readWarehousesSearch(keyword, orderColumn, orderDir); // Search by keyword only
-            if (keyword.isEmpty())
-                return dao.readWarehousesStatus(status, orderColumn, orderDir);  // status  only
-            return dao.readWarehousesSearchAndStatus(keyword, status, orderColumn, orderDir); // both filters combined (Search by keyword + status)
-        }
-        // 2) Runs when movement is detected on the sliders
-        else {
-            if (statusAll && keyword.isEmpty())
-                return dao.readWarehousesPriceAndSize(
-                        minPrice, maxPrice,
-                        minSize, maxSize,
-                        isPriceMode,
-                        orderColumn, orderDir
-                ); // range filters
-            if (statusAll)
-                return dao.readWarehousesPriceSizeAndSearch(
-                        keyword,
-                        minPrice, maxPrice,
-                        minSize, maxSize,
-                        isPriceMode,
-                        orderColumn, orderDir
-                ); // range filters + keyword search
-            if (keyword.isEmpty())
-                return dao.readWarehousesPriceSizeAndStatus(
-                        minPrice, maxPrice,
-                        minSize, maxSize,
-                        isPriceMode, status,
-                        orderColumn, orderDir
-                ); // range filters + status
-            return dao.readWarehousesFiltered(
-                    keyword,
-                    minPrice, maxPrice,
-                    minSize, maxSize,
-                    status, isPriceMode,
-                    orderColumn, orderDir
-            ); // all filters combined
-        }
+        // Flags for the DAO
+        boolean useKeyword = !keyword.isEmpty();
+        boolean useStatus  = !statusAll;
+        boolean useSlider  = isRangeSliderModified();
+
+        return dao.readWarehouses(
+                keyword,
+                status,
+                minPrice, maxPrice,
+                minSize,  maxSize,
+                isPriceMode,
+                orderColumn, orderDir,
+                useKeyword, useStatus, useSlider
+        );
     }
 
     private void loadFilteredViewSync() {
@@ -261,7 +235,7 @@ public class AdminController implements Initializable {
     private void setupSizeSlider() {
         WarehouseDao dao = new WarehouseDao();
         try {
-            double[] minMax = dao.getMinMaxSize();
+            double[] minMax = dao.getMinMax("SIZEQMETERS");
             sizeMinValue = minMax[0];
             sizeMaxValue = minMax[1];
             sizeRangeSlider.setMin(sizeMinValue);
@@ -280,8 +254,9 @@ public class AdminController implements Initializable {
 
     private void setupPriceSlider(boolean isMode) {
         WarehouseDao dao = new WarehouseDao();
+        String priceType = isMode ? "RENTALPRICE" : "SALEPRICE";
         try {
-            double[] minMax = dao.getMinMaxPrice(isMode);
+            double[] minMax = dao.getMinMax(priceType);
             priceMinValue = minMax[0];
             priceMaxValue = minMax[1];
             priceRangeSlider.setMin(priceMinValue);

@@ -8,7 +8,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 
-import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.Objects;
 
 public class WarehouseController {
 
@@ -30,18 +33,19 @@ public class WarehouseController {
     @FXML
     private Label status;
 
-    @FXML
-    private Button moreButton;
-
     public void setData(Warehouse warehouse) {
-        String fullPath = getClass().getResource("/mx/edu/utez/warehousemanagerfx/img/" + warehouse.getImgSrc()).toExternalForm();
+        // Load and set the image
+        String fullPath = Objects.requireNonNull(getClass().getResource("/mx/edu/utez/warehousemanagerfx/img/" + warehouse.getImgSrc())).toExternalForm();
         Image image = new Image(fullPath, true);
         img.setImage(image);
         imgBorder.setHeight(img.getFitHeight());
         imgBorder.setWidth(img.getFitWidth());
+        // Format numbers with commas as a thousand separators
+        DecimalFormat formatter = new DecimalFormat("#,###.00", DecimalFormatSymbols.getInstance(Locale.US));
+        // Set warehouse information in the labels
         name.setText("Name: " + warehouse.getName());
-        price.setText("Price: $" + warehouse.getSalePrice() + " / $" + warehouse.getRentalPrice() + " * Month");
-        size.setText("Size: " + warehouse.getSize() + "m2");
+        price.setText("Price: $" + formatter.format(warehouse.getSalePrice()) + " / $" + formatter.format(warehouse.getRentalPrice()) + " * Month");
+        size.setText("Size: " + formatter.format(warehouse.getSize()) + " m²");
         status.setText(warehouse.getStatus());
     }
 

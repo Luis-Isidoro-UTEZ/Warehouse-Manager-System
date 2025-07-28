@@ -13,7 +13,7 @@
     -fx-font-family: "Albert Sans Regular";
 }
 
-/* range-slider pick */
+/* Label for range-slider low/high values */
 .pick {
     -fx-background-color: #003459;
     -fx-text-fill: white;

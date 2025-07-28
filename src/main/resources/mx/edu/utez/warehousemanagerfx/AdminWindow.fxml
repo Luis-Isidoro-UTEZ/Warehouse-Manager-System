@@ -1,134 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.AdminController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@styles/AdminWindow.css"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.edu.utez.warehousemanagerfx.AdminController">
     <top>
         <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
-            <children>
-                <Rectangle fill="#335d7a" height="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
-                <ImageView fitHeight="56.0" fitWidth="91.0" layoutX="882.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@img/icon/UserPicture.png" />
-                    </image>
-                    <clip>
-                        <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
-                    </clip>
-                </ImageView>
-                <Label layoutX="81.0" layoutY="19.0" text="WAREHOUSE " textAlignment="CENTER" textFill="WHITE">
-                    <font>
-                        <Font name="Albert Sans ExtraBold" size="18.0" />
-                    </font>
-                </Label>
-                <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@img/logo/AppLogo.png" />
-                    </image>
-                </ImageView>
-                <Label layoutX="97.0" layoutY="38.0" text="SALES &amp; RENTALS" textFill="WHITE">
-                    <font>
-                        <Font name="Albert Sans SemiBold" size="10.0" />
-                    </font>
-                </Label>
-                <Label layoutX="207.0" layoutY="26.0" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" textFill="WHITE">
-                    <font>
-                        <Font name="Albert Sans ExtraBold Italic" size="8.0" />
-                    </font>
-                </Label>
-                <Label layoutX="215.0" layoutY="35.0" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <Button layoutX="789.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Account">
-                    <font>
-                        <Font name="Albert Sans Bold" size="12.0" />
-                    </font>
-                </Button>
-                <Button layoutX="712.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: darkred; -fx-background-radius: 10;" text="Log out" textFill="WHITE">
-                    <font>
-                        <Font name="Albert Sans Bold" size="12.0" />
-                    </font>
-                </Button>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="70.0" layoutY="70.0" stroke="#ffffff00" strokeType="INSIDE" width="950.0" />
-                <ChoiceBox fx:id="statusChoiceBox" layoutX="14.0" layoutY="76.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;" value="Status" />
-                <ChoiceBox fx:id="orderByChoiceBox" layoutX="14.0" layoutY="108.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;" value="Order by" />
-                <Label layoutX="228.0" layoutY="85.0" text="Size">
-                    <font>
-                        <Font name="Albert Sans Regular" size="12.0" />
-                    </font>
-                </Label>
-                <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" layoutX="174.0" layoutY="98.0" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
-                <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@styles/slider.css" />
-                <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@styles/slider.css" />
-                <Label layoutX="395.0" layoutY="85.0" text="Price">
-                    <font>
-                        <Font name="Albert Sans Regular" size="12.0" />
-                    </font>
-                </Label>
-                <ToggleButton fx:id="priceToggle" layoutX="369.0" layoutY="74.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #80D4F4 #80D4F4; -fx-background-radius: 10;" text="Rental Price" textAlignment="CENTER">
-                    <font>
-                        <Font name="Albert Sans Regular" size="10.0" />
-                    </font>
-                </ToggleButton>
-                <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" layoutX="334.0" layoutY="98.0" majorTickUnit="20.0" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@styles/slider.css" />
-                <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@styles/slider.css" />
-                <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@styles/slider.css" />
-                <ProgressIndicator fx:id="spinner" layoutX="478.0" layoutY="82.0" prefHeight="15.0" prefWidth="15.0" visible="false" />
-                <TextField fx:id="searchTextField" layoutX="494.0" layoutY="76.0" prefHeight="27.0" prefWidth="140.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-color: #003459; -fx-border-radius: 20px;" />
-                <Button fx:id="searchButton" layoutX="639.0" layoutY="77.0" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Buscar">
-                    <graphic>
-                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@img/icon/Loupe.png" />
-                            </image>
+            <VBox prefHeight="140.0" prefWidth="950.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="950.0" styleClass="header">
+                    <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
+                        <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+                            <HBox.margin>
+                                <Insets left="25.0"/>
+                            </HBox.margin>
+                            <Image url="@img/logo/AppLogo.png"/>
                         </ImageView>
-                    </graphic>
-                    <font>
-                        <Font name="Albert Sans Regular" size="10.0" />
-                    </font>
-                </Button>
-                <Button fx:id="clearFiltersButton" layoutX="504.0" layoutY="108.0" prefHeight="27.0" prefWidth="120.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Clear All Filters">
-                    <graphic>
-                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@img/icon/ClearFilter.png" />
-                            </image>
+                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
+                                   textAlignment="CENTER">
+                                <VBox.margin>
+                                    <Insets left="9.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white"
+                                   text="SALES &amp; RENTALS">
+                                <VBox.margin>
+                                    <Insets left="5.0" top="-5.0"/>
+                                </VBox.margin>
+                            </Label>
+                        </VBox>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
+                               textAlignment="CENTER"/>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" styleClass="button-red"
+                                text="Log out">
+                            <HBox.margin>
+                                <Insets right="16.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue"
+                                text="Account">
+                            <HBox.margin>
+                                <Insets right="18.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                            <clip>
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
+                            </clip>
+                            <HBox.margin>
+                                <Insets right="12.0"/>
+                            </HBox.margin>
+                            <Image url="@img/icon/UserPicture.png"/>
                         </ImageView>
-                    </graphic>
-                    <font>
-                        <Font name="Albert Sans Regular" size="12.0" />
-                    </font>
-                </Button>
-                <JFXToggleButton fx:id="toggleView" layoutX="695.0" layoutY="76.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View Mode" toggleColor="WHITE" toggleLineColor="#003459" />
-                <Button layoutX="856.0" layoutY="91.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10px;" text="Register &#10;Warehouse" textAlignment="CENTER">
-                    <font>
-                        <Font name="Albert Sans Regular" size="10.0" />
-                    </font>
-                </Button>
-            </children>
+                    </HBox>
+                </HBox>
+                <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
+                    <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="165.0" spacing="5.0">
+                        <padding>
+                            <Insets left="14.0"/>
+                        </padding>
+                        <ChoiceBox fx:id="statusChoiceBox" prefHeight="25.0" prefWidth="150.0"
+                                   styleClass="choicebox-rounded" value="Status"/>
+                        <ChoiceBox fx:id="orderByChoiceBox" prefHeight="25.0" prefWidth="150.0"
+                                   styleClass="choicebox-rounded" value="Order by"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="160.0">
+                        <Label prefHeight="25.0" styleClass="label-section" text="Size"/>
+                        <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20"
+                                     max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true"
+                                     stylesheets="@styles/RangeSlider.css"/>
+                        <padding>
+                            <Insets left="10.0" right="10.0"/>
+                        </padding>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="170.0">
+                        <padding>
+                            <Insets left="10.0" right="20.0"/>
+                        </padding>
+                        <ToggleButton fx:id="priceToggle" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0"
+                                      styleClass="toggle-button-blue" text="Rental Price"/>
+                        <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20.0"
+                                     max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true"
+                                     stylesheets="@styles/RangeSlider.css"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
+                        <Button fx:id="clearFiltersButton" prefHeight="27.0" prefWidth="120.0"
+                                styleClass="button-clear-filter-icon" text="Clear All Filters">
+                            <graphic>
+                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                    <Image url="@img/icon/ClearFilter.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="140.0" promptText="Search..."
+                                   styleClass="search-field"/>
+                    </VBox>
+                    <VBox alignment="TOP_CENTER" prefHeight="70.0" prefWidth="70.0">
+                        <padding>
+                            <Insets top="38.0"/>
+                        </padding>
+                        <Button fx:id="searchButton" prefHeight="25.0" prefWidth="65.0"
+                                styleClass="button-magnifier-icon" text="Buscar">
+                            <graphic>
+                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                    <Image url="@img/icon/Loupe.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="150.0">
+                        <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0"
+                                         selected="true" text="Card View" toggleColor="WHITE"
+                                         toggleLineColor="#003459"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="95.0">
+                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0"
+                                styleClass="button-blue-register" text="Register &#10;Warehouse"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+            <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@styles/RangeSlider.css"/>
+            <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@styles/RangeSlider.css"/>
+            <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@styles/RangeSlider.css"/>
+            <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@styles/RangeSlider.css"/>
+            <ProgressIndicator fx:id="spinner" layoutX="478.0" layoutY="114.0" prefHeight="15.0" prefWidth="15.0"
+                               visible="false"/>
         </AnchorPane>
     </top>
     <center>
-        <VBox style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
-            <children>
-                <HBox prefHeight="50.0" style="-fx-background-color: #ffffff;" />
-                <ScrollPane prefHeight="550.0" style="-fx-background-color: #ffffff;">
-                    <content>
-                        <GridPane fx:id="warehousesGrid" alignment="TOP_CENTER" prefHeight="0.0" prefWidth="0.0">
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                        </GridPane>
-                    </content>
-                </ScrollPane>
-            </children>
+        <VBox BorderPane.alignment="CENTER">
+            <HBox prefHeight="50.0"/>
+            <ScrollPane prefHeight="550.0">
+                <GridPane fx:id="warehousesGrid" alignment="TOP_CENTER" prefHeight="0.0" prefWidth="0.0">
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                </GridPane>
+            </ScrollPane>
         </VBox>
     </center>
 </BorderPane>

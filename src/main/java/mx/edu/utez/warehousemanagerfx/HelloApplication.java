@@ -3,24 +3,33 @@ package mx.edu.utez.warehousemanagerfx;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import mx.edu.utez.warehousemanagerfx.utils.FontLoader; // Importa el FontLoader
+import mx.edu.utez.warehousemanagerfx.utils.FontLoader; // Import the FontLoader
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        /*// 1. Cargar fuentes ANTES de crear la escena
+        /*// 1. Load fonts BEFORE creating the scene
         FontLoader.loadAlbertSansFonts();
 
-        // 2. Verificar en consola que se cargaron
+        // 2. Check in console that the fonts were loaded successfully
         FontLoader.listAvailableFonts(); // Debugging*/
 
-        // 3. Cargar el FXML y la escena
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("LoginWindow.fxml"));
+        // 3. Load the FXML and scene
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(FXMLRoutes.LOGIN));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Warehouse Manager");
+
+        // Change the stage icon
+        Image icon = new Image(Objects.requireNonNull(getClass().getResource(ImageRoutes.MAIN_APP_ICON)).toString());
+        stage.getIcons().add(icon);
+
         stage.setScene(scene);
         stage.show();
     }

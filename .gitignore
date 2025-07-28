@@ -38,3 +38,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/dataSources.xml
+/src/main/java/mx/edu/utez/warehousemanagerfx/utils/database/OracleDatabaseConnectionManager.java

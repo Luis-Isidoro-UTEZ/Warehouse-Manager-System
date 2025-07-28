@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx;
+package mx.edu.utez.warehousemanagerfx.controllers;
 
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.concurrent.Task;
@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import org.controlsfx.control.RangeSlider;
 
 import java.io.IOException;
@@ -139,7 +140,7 @@ public class AdminController implements Initializable {
         try {
             for (Warehouse warehouse : data) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                String fxmlPath = isGridView ? "WarehouseCard.fxml" : "WarehouseList.fxml";
+                String fxmlPath = isGridView ? FXMLRoutes.WAREHOUSE_CARD : FXMLRoutes.WAREHOUSE_LIST;
                 fxmlLoader.setLocation(getClass().getResource(fxmlPath));
                 Pane pane = fxmlLoader.load();
                 WarehouseController warehouseController = fxmlLoader.getController();

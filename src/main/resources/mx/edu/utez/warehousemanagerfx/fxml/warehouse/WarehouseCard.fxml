@@ -8,8 +8,8 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0"
       prefWidth="300.0"
-      styleClass="root" stylesheets="@styles/WarehouseCard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="mx.edu.utez.warehousemanagerfx.WarehouseController">
+      styleClass="root" stylesheets="@../../styles/WarehouseCard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseController">
     <VBox alignment="TOP_CENTER" prefHeight="320.0" prefWidth="300.0">
         <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

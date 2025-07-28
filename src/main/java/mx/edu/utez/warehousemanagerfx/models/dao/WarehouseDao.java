@@ -1,7 +1,7 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
-import mx.edu.utez.warehousemanagerfx.utils.OracleDatabaseConnectionManager;
+import mx.edu.utez.warehousemanagerfx.utils.database.OracleDatabaseConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;

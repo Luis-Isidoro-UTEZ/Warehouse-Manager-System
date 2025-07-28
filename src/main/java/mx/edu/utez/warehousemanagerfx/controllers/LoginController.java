@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx;
+package mx.edu.utez.warehousemanagerfx.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class LoginController {
             try {
                 // 1. Necesito cargar mi nueva ventana.
                 Parent superAdminIndex = FXMLLoader.load(
-                        Objects.requireNonNull(getClass().getResource("SuperAdminWindow.fxml"))
+                        Objects.requireNonNull(getClass().getResource(FXMLRoutes.SUPERADMIN))
                 );
 
                 // 2. Obtener el stage que ya existía previamente.
@@ -40,6 +41,8 @@ public class LoginController {
 
                 // 4. Poner en el escenario la nueva escena.
                 stage.setScene(escena);
+
+                stage.centerOnScreen();
 
                 // 5. Asegurarnos de que se vea.
                 stage.show();
@@ -52,7 +55,7 @@ public class LoginController {
             try {
                 // 1. Necesito cargar mi nueva ventana.
                 Parent adminIndex = FXMLLoader.load(
-                        Objects.requireNonNull(getClass().getResource("AdminWindow.fxml"))
+                        Objects.requireNonNull(getClass().getResource(FXMLRoutes.ADMIN))
                 );
 
                 // 2. Obtener el stage que ya existía previamente.
@@ -63,6 +66,8 @@ public class LoginController {
 
                 // 4. Poner en el escenario la nueva escena.
                 stage.setScene(escena);
+
+                stage.centerOnScreen();
 
                 // 5. Asegurarnos de que se vea.
                 stage.show();

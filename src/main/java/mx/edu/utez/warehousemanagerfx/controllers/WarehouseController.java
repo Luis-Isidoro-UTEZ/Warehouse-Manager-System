@@ -1,12 +1,13 @@
-package mx.edu.utez.warehousemanagerfx;
+package mx.edu.utez.warehousemanagerfx.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -35,7 +36,7 @@ public class WarehouseController {
 
     public void setData(Warehouse warehouse) {
         // Load and set the image
-        String fullPath = Objects.requireNonNull(getClass().getResource("/mx/edu/utez/warehousemanagerfx/img/" + warehouse.getImgSrc())).toExternalForm();
+        String fullPath = Objects.requireNonNull(getClass().getResource(ImageRoutes.THUMBNAILS_BASE + warehouse.getImgSrc())).toExternalForm();
         Image image = new Image(fullPath, true);
         img.setImage(image);
         imgBorder.setHeight(img.getFitHeight());

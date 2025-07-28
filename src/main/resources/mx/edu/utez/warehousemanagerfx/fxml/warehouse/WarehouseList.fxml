@@ -7,9 +7,9 @@
 <?import javafx.scene.shape.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="910.0"
-      styleClass="root" stylesheets="@styles/WarehouseList.css"
+      styleClass="root" stylesheets="@../../styles/WarehouseList.css"
       xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="mx.edu.utez.warehousemanagerfx.WarehouseController">
+      fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseController">
     <HBox prefWidth="910.0">
         <VBox alignment="CENTER" prefWidth="300.0">
             <padding>

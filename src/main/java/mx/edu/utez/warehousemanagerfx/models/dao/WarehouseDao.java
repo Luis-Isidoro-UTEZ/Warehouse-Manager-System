@@ -67,7 +67,7 @@ public class WarehouseDao {
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
+            Connection conn = OracleDatabaseConnectionManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query.toString());
 
             for (int i = 0; i < params.size(); i++) {
@@ -106,7 +106,7 @@ public class WarehouseDao {
         double min = 0, max = 0;
         String query = "SELECT MIN(" + columnName + ") AS min_value, MAX(" + columnName + ") AS max_value FROM WAREHOUSES";
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
+            Connection conn = OracleDatabaseConnectionManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

@@ -1,0 +1,107 @@
+/* AdminWindow.css */
+
+/* General background */
+.root {
+    -fx-background-color: #ffffff;
+}
+
+/* Header background */
+.header {
+    -fx-background-color: #335d7a;
+}
+
+/* Toolbar background */
+.toolbar{
+    -fx-background-color: #ffffff;
+}
+
+/* Large white labels in the header */
+.label-header-white {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-family: "Albert Sans ExtraBold";
+}
+
+/* Small white labels in the header */
+.label-subheader-white {
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans SemiBold";
+}
+
+/* Small white slogan label in the header */
+.label-slogan-white {
+    -fx-text-fill: white;
+    -fx-font-size: 8px;
+    -fx-font-family: "Albert Sans ExtraBold Italic";
+}
+
+/* Generic blue buttons */
+.button-blue {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Bold";
+}
+
+/* Logout button (red) */
+.button-red {
+    -fx-background-color: darkred;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Bold";
+}
+
+.table-view {
+    -fx-background-color: linear-gradient(#003459 0%, #C2EBFA 100%);
+    -fx-background-radius: 7px;
+    -fx-border-color: #328878;
+    -fx-border-radius: 7px;
+    -fx-border-width: 1px;
+}
+
+.table-view:focused {
+    -fx-background-color: linear-gradient(#335d7a 0%, #E7F7FD 100%);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent transparent #5ad9bb transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: white;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #193d2d;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #86e1d0;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}

@@ -5,14 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import mx.edu.utez.warehousemanagerfx.utils.FontLoader; // Import the FontLoader
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         /*// 1. Load fonts BEFORE creating the scene
@@ -22,7 +21,7 @@ public class HelloApplication extends Application {
         FontLoader.listAvailableFonts(); // Debugging*/
 
         // 3. Load the FXML and scene
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(FXMLRoutes.LOGIN));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(FXMLRoutes.LOGIN));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Warehouse Manager");
 

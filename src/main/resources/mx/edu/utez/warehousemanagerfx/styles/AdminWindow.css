@@ -1,0 +1,112 @@
+/* AdminWindow.css */
+
+/* General background */
+.root {
+    -fx-background-color: #ffffff;
+}
+
+/* Header background */
+.header {
+    -fx-background-color: #335d7a;
+}
+
+/* Toolbar background */
+.toolbar{
+    -fx-background-color: #ffffff;
+}
+
+/* Large white labels in the header */
+.label-header-white {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-family: "Albert Sans ExtraBold";
+}
+
+/* Small white labels in the header */
+.label-subheader-white {
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans SemiBold";
+}
+
+/* Small white slogan label in the header */
+.label-slogan-white {
+    -fx-text-fill: white;
+    -fx-font-size: 8px;
+    -fx-font-family: "Albert Sans ExtraBold Italic";
+}
+
+/* Generic blue buttons */
+.button-blue {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Bold";
+}
+
+/* Logout button (red) */
+.button-red {
+    -fx-background-color: darkred;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Bold";
+}
+
+/* Custom styled ChoiceBox */
+.choicebox-rounded {
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 20px;
+    -fx-border-color: #003459;
+}
+
+/* Section subtitle labels (e.g., "Price", "Size") */
+.label-section {
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-text-fill: black;
+}
+
+/* Blue toggle button */
+.toggle-button-blue {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-text-alignment: center;
+}
+
+/* Rounded TextField with blue border */
+.search-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-color: #003459;
+    -fx-border-radius: 20px;
+}
+
+/* Button with magnifier icon */
+.button-magnifier-icon {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+}
+
+/* Button with clear filter icon */
+.button-clear-filter-icon {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Regular";
+}
+
+/* Register blue button */
+.button-blue-register {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+}

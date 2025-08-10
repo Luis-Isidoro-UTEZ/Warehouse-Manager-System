@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0"
+      prefWidth="300.0"
+      styleClass="root" stylesheets="@../../styles/WarehouseCard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseController">
+    <VBox alignment="TOP_CENTER" prefHeight="320.0" prefWidth="300.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+        <ImageView fx:id="img" fitHeight="150.0" fitWidth="260.0">
+            <VBox.margin>
+                <Insets bottom="20.0"/>
+            </VBox.margin>
+            <clip>
+                <Rectangle fx:id="imgBorder" arcHeight="20.0" arcWidth="20.0" height="150.0" width="260.0"/>
+            </clip>
+        </ImageView>
+        <Label fx:id="name" styleClass="label-warehouse-card" prefHeight="50.0" prefWidth="260.0" text="Name: ">
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </Label>
+        <Label fx:id="price" styleClass="label-warehouse-card" prefHeight="50.0" prefWidth="260.0" text="Price: $$$">
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </Label>
+        <HBox prefHeight="45.0" prefWidth="300.0">
+            <VBox prefHeight="50.0" prefWidth="140.0">
+                <HBox.margin>
+                    <Insets right="5.0"/>
+                </HBox.margin>
+                <Label fx:id="size" prefHeight="50.0" prefWidth="140.0" styleClass="label-warehouse-card" text="Size: ">
+                    <padding>
+                        <Insets left="10.0" right="10.0"/>
+                    </padding>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Label>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="130.0">
+                <HBox.margin>
+                    <Insets left="5.0" right="5.0"/>
+                </HBox.margin>
+                <Label fx:id="status" prefHeight="50.0" prefWidth="130.0" styleClass="label-warehouse-card" text="Status">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="10.0" right="10.0"/>
+                    </padding>
+                </Label>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0">
+                <HBox.margin>
+                    <Insets/>
+                </HBox.margin>
+                <Button fx:id="moreButton" mnemonicParsing="false" prefWidth="50.0" styleClass="button-warehouse-card" text="...">
+                    <VBox.margin>
+                        <Insets left="5.0"/>
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </HBox>
+    </VBox>
+</Pane>

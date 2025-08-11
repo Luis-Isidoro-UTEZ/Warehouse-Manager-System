@@ -4,8 +4,10 @@ public class Property {
     // Attributes
     private int idProperty;
     private String propertyType;
+    private String country;
     private String state;
     private String municipality;
+    private String postalCode;
     private String neighborhood;
     private String addressDetail;
 
@@ -13,11 +15,13 @@ public class Property {
     public Property() {
     }
 
-    public Property(int idProperty, String propertyType, String state, String municipality, String neighborhood, String addressDetail) {
+    public Property(int idProperty, String propertyType, String country, String state, String municipality, String postalCode, String neighborhood, String addressDetail) {
         this.idProperty = idProperty;
         this.propertyType = propertyType;
+        this.country = country;
         this.state = state;
         this.municipality = municipality;
+        this.postalCode = postalCode;
         this.neighborhood = neighborhood;
         this.addressDetail = addressDetail;
     }
@@ -28,8 +32,10 @@ public class Property {
         return "Property{" +
                 "idProperty=" + idProperty +
                 ", propertyType='" + propertyType + '\'' +
+                ", country='" + country + '\'' +
                 ", state='" + state + '\'' +
                 ", municipality='" + municipality + '\'' +
+                ", postalCode='" + postalCode + '\'' +
                 ", neighborhood='" + neighborhood + '\'' +
                 ", addressDetail='" + addressDetail + '\'' +
                 '}';
@@ -52,6 +58,14 @@ public class Property {
         this.propertyType = propertyType;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getState() {
         return state;
     }
@@ -66,6 +80,14 @@ public class Property {
 
     public void setMunicipality(String municipality) {
         this.municipality = municipality;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getNeighborhood() {

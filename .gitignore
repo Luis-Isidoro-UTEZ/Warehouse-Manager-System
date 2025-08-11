@@ -8,6 +8,7 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+src/main/java/mx/edu/utez/warehousemanagerfx/utils/database/OracleDatabaseConnectionManager.java
 *.iws
 *.iml
 *.ipr
@@ -36,3 +37,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/.idea/dataSources.xml
+/src/main/java/mx/edu/utez/warehousemanagerfx/utils/database/OracleDatabaseConnectionManager.java

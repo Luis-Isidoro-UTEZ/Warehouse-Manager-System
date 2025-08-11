@@ -82,8 +82,16 @@
 }
 
 .table-column {
-     -fx-alignment: CENTER;
- }
+    -fx-alignment: CENTER;
+}
+
+/* Make the table itself transparent so the container provides the shape */
+.table-view.zebra-table {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent; /* border drawn by container */
+}
 
 /* Make the table itself transparent so the container provides the shape */
 .table-view.zebra-table {

@@ -1,7 +1,5 @@
 package mx.edu.utez.warehousemanagerfx.models;
 
-import mx.edu.utez.warehousemanagerfx.Branch;
-
 import java.time.LocalDate;
 
 public class Warehouse {

@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx;
+package mx.edu.utez.warehousemanagerfx.models;
 
 public class Property {
     // Attributes

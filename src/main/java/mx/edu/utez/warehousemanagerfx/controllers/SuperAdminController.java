@@ -9,8 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
-import mx.edu.utez.warehousemanagerfx.Branch;
-import mx.edu.utez.warehousemanagerfx.BranchDao;
+import mx.edu.utez.warehousemanagerfx.models.Branch;
+import mx.edu.utez.warehousemanagerfx.models.dao.BranchDao;
 
 import java.net.URL;
 import java.util.ArrayList;

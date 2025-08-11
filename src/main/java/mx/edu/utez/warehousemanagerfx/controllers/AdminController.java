@@ -173,13 +173,13 @@ public class AdminController implements Initializable {
 
         String orderColumn, orderDir;
         switch (orderBy) {
-            case "Size: High to Low":         orderColumn="SIZEQMETERS"; orderDir="DESC"; break;
-            case "Size: Low to High":         orderColumn="SIZEQMETERS"; orderDir="ASC";  break;
-            case "Rental Price: High to Low": orderColumn="RENTALPRICE"; orderDir="DESC"; break;
-            case "Rental Price: Low to High": orderColumn="RENTALPRICE"; orderDir="ASC";  break;
-            case "Sale Price: High to Low":   orderColumn="SALEPRICE";   orderDir="DESC"; break;
-            case "Sale Price: Low to High":   orderColumn="SALEPRICE";   orderDir="ASC";  break;
-            default:                          orderColumn="ID";          orderDir="ASC";
+            case "Size: High to Low":         orderColumn="Size_Sq_Meters"; orderDir="DESC"; break;
+            case "Size: Low to High":         orderColumn="Size_Sq_Meters"; orderDir="ASC";  break;
+            case "Rental Price: High to Low": orderColumn="Rental_Price";   orderDir="DESC"; break;
+            case "Rental Price: Low to High": orderColumn="Rental_Price";   orderDir="ASC";  break;
+            case "Sale Price: High to Low":   orderColumn="Sale_Price";     orderDir="DESC"; break;
+            case "Sale Price: Low to High":   orderColumn="Sale_Price";     orderDir="ASC";  break;
+            default:                          orderColumn="Id_Warehouse";   orderDir="ASC";
         }
 
         // Flags for the DAO
@@ -236,7 +236,7 @@ public class AdminController implements Initializable {
     private void setupSizeSlider() {
         WarehouseDao dao = new WarehouseDao();
         try {
-            double[] minMax = dao.getMinMax("SIZEQMETERS");
+            double[] minMax = dao.getMinMax("Size_Sq_Meters");
             sizeMinValue = minMax[0];
             sizeMaxValue = minMax[1];
             sizeRangeSlider.setMin(sizeMinValue);
@@ -255,7 +255,7 @@ public class AdminController implements Initializable {
 
     private void setupPriceSlider(boolean isMode) {
         WarehouseDao dao = new WarehouseDao();
-        String priceType = isMode ? "RENTALPRICE" : "SALEPRICE";
+        String priceType = isMode ? "Rental_Price" : "Sale_Price";
         try {
             double[] minMax = dao.getMinMax(priceType);
             priceMinValue = minMax[0];

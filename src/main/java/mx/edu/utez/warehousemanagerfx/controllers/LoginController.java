@@ -41,6 +41,7 @@ public class LoginController {
 
                 // 4. Poner en el escenario la nueva escena.
                 stage.setScene(escena);
+                stage.setResizable(false);
 
                 stage.centerOnScreen();
 
@@ -50,7 +51,7 @@ public class LoginController {
             } catch (Exception e) {
                 System.out.println("Ocurrió un Error al cargar la escena del Index del Super Admin");
             }
-        } else if (user.getText().equals("admin") && password.getText().equals("root")) {
+        } else if (user.getText().equals("Admin") && password.getText().equals("root")) {
             // Cambiar de pantalla
             try {
                 // 1. Necesito cargar mi nueva ventana.
@@ -66,6 +67,7 @@ public class LoginController {
 
                 // 4. Poner en el escenario la nueva escena.
                 stage.setScene(escena);
+                stage.setResizable(false);
 
                 stage.centerOnScreen();
 

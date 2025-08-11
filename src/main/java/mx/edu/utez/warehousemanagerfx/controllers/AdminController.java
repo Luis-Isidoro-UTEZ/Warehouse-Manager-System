@@ -2,24 +2,31 @@ package mx.edu.utez.warehousemanagerfx.controllers;
 
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import org.controlsfx.control.RangeSlider;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
@@ -277,6 +284,22 @@ public class AdminController implements Initializable {
             System.err.println("Error setting up price slider: " + e.getMessage());
             priceRangeSlider.setLowValue(0);
             priceRangeSlider.setHighValue(100);
+        }
+    }
+
+    @FXML
+    private void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(loginWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+            JOptionPane.showMessageDialog(null, "¡Hasta Pronto Admin!");
+        } catch (Exception e) {
+            System.out.println("Ocurrió un Error al cargar la escena del LoginWindow");
         }
     }
 }

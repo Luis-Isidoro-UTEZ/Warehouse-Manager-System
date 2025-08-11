@@ -35,7 +35,7 @@
                         <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" styleClass="button-red" text="Log out">
+                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="60.0" styleClass="button-red" text="Log out">
                             <HBox.margin>
                                 <Insets right="16.0" />
                             </HBox.margin>

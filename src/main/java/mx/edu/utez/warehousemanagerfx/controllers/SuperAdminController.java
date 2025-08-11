@@ -8,10 +8,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import mx.edu.utez.warehousemanagerfx.models.Branch;
-import mx.edu.utez.warehousemanagerfx.models.dao.BranchDao;
+import mx.edu.utez.warehousemanagerfx.models.BranchDao;
 
 import java.net.URL;
 import java.util.ArrayList;

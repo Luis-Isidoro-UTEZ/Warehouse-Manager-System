@@ -54,6 +54,14 @@
     -fx-font-family: "Albert Sans Bold";
 }
 
+/* Custom styled ChoiceBox */
+.choicebox-rounded {
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 20px;
+    -fx-border-color: #003459;
+}
+
 /* ====== Table (clean light theme) ====== */
 .table-view {
     -fx-background-color: transparent;

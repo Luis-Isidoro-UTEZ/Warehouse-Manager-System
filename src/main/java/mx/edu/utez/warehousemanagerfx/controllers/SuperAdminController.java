@@ -2,28 +2,39 @@ package mx.edu.utez.warehousemanagerfx.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.models.dao.BranchDao;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class SuperAdminController implements Initializable {
     @FXML
-    private StackPane tableContainer;
+    private ChoiceBox<String> orderByChoiceBox;
     @FXML
     private Button btnRegisterAdmin;
     @FXML
     private Button btnRegisterBranch;
+    @FXML
+    private StackPane tableContainer;
     @FXML
     private TableView<Branch> tblBranches;
     @FXML
@@ -41,9 +52,18 @@ public class SuperAdminController implements Initializable {
     @FXML
     private TableColumn<Branch, Void> colAction;
 
+    private final String[] orderByChoiceList = {"Available: High to Low", "Available: Low to High", "Rented: High to Low", "Rented: Low to High", "Sold: High to Low", "Sold: Low to High"};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Configure the initial Order By Choice Box
+        orderByChoiceBox.getItems().addAll(orderByChoiceList);
+        orderByChoiceBox.setValue("Order By"); // Default Value
+
+        // Detect changes in the status choice box
+        orderByChoiceBox.getSelectionModel().selectedItemProperty()
+                .addListener((o, a, b) -> loadTableView());
+
         // 1) Load data
         List<Branch> branches = new ArrayList<>();
         BranchDao dao = new BranchDao();
@@ -82,7 +102,6 @@ public class SuperAdminController implements Initializable {
                             // TODO: handle branch management action using b
                             System.out.println("Manage branch: " + (b != null ? b.getBranchCode() : "<null>"));
                         });
-
                     }
 
                     @Override
@@ -102,8 +121,8 @@ public class SuperAdminController implements Initializable {
         colAction.setCellFactory(cellFactory);
 
         // 3) Bind data
-        ObservableList<Branch> ObservableBranches = FXCollections.observableList(branches);
-        tblBranches.setItems(ObservableBranches);
+        ObservableList<Branch> observableBranches = FXCollections.observableList(branches);
+        tblBranches.setItems(observableBranches);
 
         tblBranches.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (tblBranches == null) return; // defensive check
@@ -124,7 +143,31 @@ public class SuperAdminController implements Initializable {
                 tblBranches.requestFocus();
             }
         });
+    }
 
+    private List<Branch> fetchFilteredBranches() {
+        BranchDao dao = new BranchDao();
+        String orderColumn, orderDir;
+        String orderBy = orderByChoiceBox.getValue();
+        switch (orderBy) {
+            case "Available: High to Low": orderColumn="Available_Count"; orderDir="DESC"; break;
+            case "Available: Low to High": orderColumn="Available_Count"; orderDir="ASC";  break;
+            case "Rented: High to Low":    orderColumn="Rented_Count";    orderDir="DESC"; break;
+            case "Rented: Low to High":    orderColumn="Rented_Count";    orderDir="ASC";  break;
+            case "Sold: High to Low":      orderColumn="Sold_Count";      orderDir="DESC"; break;
+            case "Sold: Low to High":      orderColumn="Sold_Count";      orderDir="ASC";  break;
+            default:                       orderColumn="Id_Branch";       orderDir="ASC";
+        }
+        return dao.readFilteredBranches(orderColumn, orderDir);
+    }
+
+    private void loadTableView() {
+        BranchDao dao = new BranchDao();
+        List<Branch> branches = new ArrayList<>();
+        branches = fetchFilteredBranches();
+        ObservableList<Branch> observableBranches = FXCollections.observableList(branches);
+        tblBranches.setItems(observableBranches);
+        tblBranches.refresh();
     }
 
     /**
@@ -132,8 +175,6 @@ public class SuperAdminController implements Initializable {
      * This ensures vertical zebra coloring per column.
      */
     // Keep column zebra on both filled and empty cells.
-// All code and comments in English as requested.
-
     private <T> void applyZebraCellFactory(TableColumn<Branch, T> column, String cssClass) {
         column.setCellFactory(col -> new TableCell<>() {
             @Override
@@ -156,5 +197,21 @@ public class SuperAdminController implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    private void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(loginWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+            JOptionPane.showMessageDialog(null, "¡Hasta Pronto SuperAdmin!");
+        } catch (Exception e) {
+            System.out.println("Ocurrió un Error al cargar la escena del LoginWindow");
+        }
     }
 }

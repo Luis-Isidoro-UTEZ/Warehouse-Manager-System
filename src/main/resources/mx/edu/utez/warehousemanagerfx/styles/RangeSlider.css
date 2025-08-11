@@ -1,0 +1,55 @@
+.range-slider .track {
+    -fx-background-color: #ccc;
+    -fx-background-radius: 3;
+}
+
+.range-slider .range-bar {
+    -fx-background-color: #335D7A;
+    -fx-background-radius: 3;
+}
+
+.range-slider .axis .tick-mark .text {
+    -fx-font-size: 5px;
+    -fx-font-family: "Albert Sans Regular";
+}
+
+/* Label for range-slider low/high values */
+.pick {
+    -fx-background-color: #003459;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0.2, 0, 2);
+    -fx-opacity: 0;
+    -fx-shape: "M10.0 0 Q20 10.0 10.0 20 Q0 10.0 10.0 0 Z";
+    -fx-pref-width: 60px; /* Tamaño fijo para evitar que crezca al cambiar de número */
+    -fx-pref-height: 40px; /* Tamaño fijo para evitar que crezca al cambiar de número */
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.range-slider .low-thumb,
+.range-slider .high-thumb {
+    -fx-background-color: #003459;
+    -fx-background-radius: 50%;
+    -fx-padding: 6;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0.2, 0, 1);
+    -fx-border-color: transparent;
+}
+
+.range-slider .low-thumb:pressed {
+    -fx-scale-x: 1.3;
+    -fx-scale-y: 1.3;
+    -fx-effect: dropshadow(gaussian, #64b5f6, 8, 0.4, 0, 0);
+}
+
+.range-slider .high-thumb:pressed {
+    -fx-scale-x: 1.3;
+    -fx-scale-y: 1.3;
+    -fx-effect: dropshadow(gaussian, #64b5f6, 8, 0.4, 0, 0);
+}

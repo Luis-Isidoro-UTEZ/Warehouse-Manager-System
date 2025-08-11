@@ -14,7 +14,27 @@
         <junit.version>5.10.2</junit.version>
     </properties>
 
-    <dependencies>
+    <dependencies> <!-- Archivo pom.xml -->
+        <dependency> <!-- Hubo cambios en esta dependencia -->
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId> <!-- Oracle Cloud es más compatible con jdbc 8 y Oracle 19c -->
+            <version>19.6.0.0</version>
+        </dependency>
+        <dependency> <!-- Tener estas dos dependencias en la integradora -->
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>
+            <version>19.6.0.0</version>
+        </dependency>
+        <dependency> <!-- JFoenix -->
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.10</version>
+        </dependency>
+        <dependency> <!-- ControlsFX -->
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.1.2</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -72,7 +92,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>mx.edu.utez.warehousemanagerfx/mx.edu.utez.warehousemanagerfx.HelloApplication
+                            <mainClass>mx.edu.utez.warehousemanagerfx/mx.edu.utez.warehousemanagerfx.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
@@ -85,5 +105,15 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <!-- Asegurar que los recursos se incluyan -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include> <!-- Incluye todos los archivos .ttf -->
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

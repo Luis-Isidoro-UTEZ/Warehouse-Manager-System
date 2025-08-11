@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="950.0" styleClass="root" stylesheets="@../../styles/SuperAdminWindow.css"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.edu.utez.warehousemanagerfx.controllers.SuperAdminController">
+    <top>
+        <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="140.0" prefWidth="950.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="950.0" styleClass="header">
+                    <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
+                        <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+                            <HBox.margin>
+                                <Insets left="25.0"/>
+                            </HBox.margin>
+                            <Image url="@../../img/logos/AppLogo.png"/>
+                        </ImageView>
+                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
+                                   textAlignment="CENTER">
+                                <VBox.margin>
+                                    <Insets left="9.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white"
+                                   text="SALES &amp; RENTALS">
+                                <VBox.margin>
+                                    <Insets left="5.0" top="-5.0"/>
+                                </VBox.margin>
+                            </Label>
+                        </VBox>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
+                               textAlignment="CENTER"/>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" styleClass="button-red"
+                                text="Log out">
+                            <HBox.margin>
+                                <Insets right="16.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue"
+                                text="Account">
+                            <HBox.margin>
+                                <Insets right="18.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                            <clip>
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
+                            </clip>
+                            <HBox.margin>
+                                <Insets right="12.0"/>
+                            </HBox.margin>
+                            <Image url="@../../img/avatars/UserPicture.png"/>
+                        </ImageView>
+                    </HBox>
+                </HBox>
+                <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
+                        <Button fx:id="btnRegisterAdmin" layoutX="14.0" layoutY="86.0" mnemonicParsing="false"
+                                prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Admin"/>
+                    </VBox>
+                    <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
+                        <Button fx:id="btnRegisterBranch" layoutX="126.0" layoutY="86.0" mnemonicParsing="false"
+                                prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Branch"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </AnchorPane>
+    </top>
+    <center>
+        <VBox prefWidth="950.0" BorderPane.alignment="CENTER">
+            <StackPane fx:id="tableContainer" styleClass="table-container">
+                <TableView fx:id="tblBranches" layoutY="126.0" prefHeight="440.0" prefWidth="910.0">
+                    <columns>
+                        <TableColumn fx:id="colBranchId" styleClass="start" prefWidth="130.0" text="ID BRANCH"/>
+                        <TableColumn fx:id="colCode" styleClass="col-b" prefWidth="130.0" text="CODE"/>
+                        <TableColumn fx:id="colAdminId" styleClass="col-a" prefWidth="130.0" text="ID ADMIN"/>
+                        <TableColumn fx:id="colAvailable" styleClass="col-b" prefWidth="130.0" text="Available"/>
+                        <TableColumn fx:id="colRented" styleClass="col-a" prefWidth="130.0" text="Rented"/>
+                        <TableColumn fx:id="colSold" styleClass="col-b" prefWidth="130.0" text="Sold"/>
+                        <TableColumn fx:id="colAction" styleClass="end" prefWidth="130.0" text="ACTION"/>
+                    </columns>
+                </TableView>
+            </StackPane>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0"/>
+            </padding>
+        </VBox>
+    </center>
+</BorderPane>

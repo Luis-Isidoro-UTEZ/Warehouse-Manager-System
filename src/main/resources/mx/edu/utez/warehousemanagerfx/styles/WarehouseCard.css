@@ -1,0 +1,29 @@
+/* WarehouseCard.css */
+
+/* General background */
+.root {
+    -fx-background-color: #CED8DF;
+    -fx-border-color: gray;
+    -fx-border-width: 0.1;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Warehouse Card Labels */
+.label-warehouse-card {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-text-fill: black;
+    -fx-padding: 0 10 0 10;
+}
+
+/* Button in warehouse card */
+.button-warehouse-card {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Bold";
+}

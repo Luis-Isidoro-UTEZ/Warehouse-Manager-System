@@ -1,56 +1,95 @@
 package mx.edu.utez.warehousemanagerfx.models;
 
+import java.time.LocalDate;
+
 public class Warehouse {
-
     // Attributes
-
-    private int id;
-    private String imgSrc;
-    private String name;
+    private int idWarehouse;
+    private String warehouseCode;
+    private LocalDate registrationDate;
+    private String warehouseName;
+    private String image;
     private double rentalPrice;
     private double salePrice;
-    private double size;
+    private double sizeSqMeters;
     private String status;
+    private Branch branch; // reference to Branch
 
-    // Constructor
-
+    // Constructor Methods
     public Warehouse() {
     }
 
-    public Warehouse(int id, String imgSrc, String name, double rentalPrice, double salePrice, double size, String status) {
-        this.id = id;
-        this.imgSrc = imgSrc;
-        this.name = name;
+    public Warehouse(int idWarehouse, String warehouseCode, LocalDate registrationDate,
+                     String warehouseName, String image, double rentalPrice, double salePrice,
+                     double sizeSqMeters, String status, Branch branch) {
+        this.idWarehouse = idWarehouse;
+        this.warehouseCode = warehouseCode;
+        this.registrationDate = registrationDate;
+        this.warehouseName = warehouseName;
+        this.image = image;
         this.rentalPrice = rentalPrice;
         this.salePrice = salePrice;
-        this.size = size;
+        this.sizeSqMeters = sizeSqMeters;
         this.status = status;
+        this.branch = branch;
+    }
+
+    // Class Methods
+    @Override
+    public String toString() {
+        return "Warehouse{" +
+                "idWarehouse=" + idWarehouse +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", image='" + image + '\'' +
+                ", rentalPrice=" + rentalPrice +
+                ", salePrice=" + salePrice +
+                ", sizeSqMeters=" + sizeSqMeters +
+                ", status='" + status + '\'' +
+                ", branch=" + branch +
+                '}';
     }
 
     // Getters & Setters
-
-    public int getId() {
-        return id;
+    public int getIdWarehouse() {
+        return idWarehouse;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdWarehouse(int idWarehouse) {
+        this.idWarehouse = idWarehouse;
     }
 
-    public String getImgSrc() {
-        return imgSrc;
+    public String getWarehouseCode() {
+        return warehouseCode;
     }
 
-    public void setImgSrc(String imgSrc) {
-        this.imgSrc = imgSrc;
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
     }
 
-    public String getName() {
-        return name;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public double getRentalPrice() {
@@ -69,12 +108,12 @@ public class Warehouse {
         this.salePrice = salePrice;
     }
 
-    public double getSize() {
-        return size;
+    public double getSizeSqMeters() {
+        return sizeSqMeters;
     }
 
-    public void setSize(double size) {
-        this.size = size;
+    public void setSizeSqMeters(double sizeSqMeters) {
+        this.sizeSqMeters = sizeSqMeters;
     }
 
     public String getStatus() {
@@ -83,5 +122,13 @@ public class Warehouse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 }

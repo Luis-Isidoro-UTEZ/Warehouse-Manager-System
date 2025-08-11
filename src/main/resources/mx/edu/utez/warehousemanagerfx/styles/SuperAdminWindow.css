@@ -93,6 +93,14 @@
     -fx-border-color: transparent; /* border drawn by container */
 }
 
+/* Make the table itself transparent so the container provides the shape */
+.table-view.zebra-table {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent; /* border drawn by container */
+}
+
 /* Remove the header strip tint; let each column header paint fully */
 .table-view .column-header-background {
     -fx-background-color: transparent;

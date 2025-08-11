@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -69,11 +70,11 @@ public class AdminController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Configure initial Status Choice Box
+        // Configure the initial Status Choice Box
         statusChoiceBox.getItems().addAll(statusChoiceList);
         statusChoiceBox.setValue("Status"); // Default Value
 
-        // Configure initial Order By Choice Box
+        // Configure the initial Order By Choice Box
         orderByChoiceBox.getItems().addAll(orderByChoiceList);
         orderByChoiceBox.setValue("Order By"); // Default Value
 
@@ -98,7 +99,7 @@ public class AdminController implements Initializable {
         orderByChoiceBox.getSelectionModel().selectedItemProperty()
                 .addListener((o, a, b) -> loadFilteredViewSync());
 
-        // Detect changes in Price Toggle controller to switch between Rental Price and Sale Price
+        // Detect changes in the Price Toggle controller to switch between Rental Price and Sale Price
         priceToggle.selectedProperty().addListener((o, a, b) -> {
             priceToggle.setText(b ? "Sale Price" : "Rental Price");
             setupPriceSlider(!b); // true -> sale, false -> rental
@@ -106,10 +107,8 @@ public class AdminController implements Initializable {
         });
 
         // Detect changes in the Size Range Slider and Price Range Slider controllers
-        sizeRangeSlider.lowValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
-        sizeRangeSlider.highValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
-        priceRangeSlider.lowValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
-        priceRangeSlider.highValueProperty().addListener((o, a, b) -> loadFilteredViewSync());
+        setupSliderReleaseEvents(sizeRangeSlider);
+        setupSliderReleaseEvents(priceRangeSlider);
 
         clearFiltersButton.setOnAction(e -> {
             statusChoiceBox.setValue("Status");
@@ -231,6 +230,13 @@ public class AdminController implements Initializable {
                 || sizeRangeSlider.getHighValue() < sizeMaxValue
                 || priceRangeSlider.getLowValue() > priceMinValue
                 || priceRangeSlider.getHighValue() < priceMaxValue;
+    }
+
+    // Function to record "drag out" behavior
+    private void setupSliderReleaseEvents(RangeSlider slider) {
+        slider.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            loadFilteredViewSync();
+        });
     }
 
     private void setupSizeSlider() {

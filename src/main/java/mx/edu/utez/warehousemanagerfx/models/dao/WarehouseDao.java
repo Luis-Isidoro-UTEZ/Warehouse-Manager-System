@@ -67,7 +67,7 @@ public class WarehouseDao {
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnection();
+            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
             PreparedStatement ps = conn.prepareStatement(query.toString());
 
             for (int i = 0; i < params.size(); i++) {
@@ -77,7 +77,7 @@ public class WarehouseDao {
             while (rs.next()) {
                 Warehouse w = new Warehouse();
                 w.setIdWarehouse(rs.getInt("Id_Warehouse"));
-                w.setWarehouseName(rs.getString("warehouseName"));
+                w.setWarehouseName(rs.getString("Warehouse_Name"));
                 w.setImage(rs.getString("Image"));
                 w.setRentalPrice(rs.getDouble("Rental_Price"));
                 w.setSalePrice(rs.getDouble("Sale_Price"));
@@ -94,19 +94,19 @@ public class WarehouseDao {
 
     // Read to get MIN/MAX
     /**
-     * Method to obtain the minimum and maximum size/price of the warehouses table
+     * Method to get the minimum and maximum size/price of the warehouses table
      * @return array with [minimum, maximum]
      * @throws SQLException if the query fails
      */
     public double[] getMinMax(String columnName) {
         List<String> allowedColumns = List.of("Size_Sq_Meters", "Rental_Price", "Sale_Price");
-        if (!allowedColumns.contains(columnName.toUpperCase())) {
+        if (!allowedColumns.contains(columnName)) {
             throw new IllegalArgumentException("Invalid column name: " + columnName);
         }
         double min = 0, max = 0;
         String query = "SELECT MIN(" + columnName + ") AS min_value, MAX(" + columnName + ") AS max_value FROM WAREHOUSE";
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnection();
+            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

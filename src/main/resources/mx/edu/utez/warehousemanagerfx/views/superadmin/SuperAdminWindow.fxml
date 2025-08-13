@@ -55,44 +55,29 @@
                     </HBox>
                 </HBox>
                 <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
-               <HBox prefHeight="100.0" prefWidth="670.0">
-                  <children>
-                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
-                        <children>
-                           <ChoiceBox fx:id="orderByChoiceBox" prefWidth="150.0" styleClass="choicebox-rounded" />
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               <HBox alignment="TOP_RIGHT" prefHeight="70.0" prefWidth="280.0">
-                  <children>
-                          <VBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
-                              <Button fx:id="btnRegisterAdmin" layoutX="14.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Admin" />
-                          </VBox>
-                          <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
-                              <Button fx:id="btnRegisterBranch" layoutX="126.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Branch" />
-                          </VBox>
-                  </children>
-               </HBox>
+                    <HBox prefHeight="100.0" prefWidth="670.0">
+                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
+                            <ChoiceBox fx:id="selectorView" prefWidth="150.0" styleClass="choicebox-rounded" value="Branches" />
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="200.0">
+                            <ChoiceBox fx:id="orderByChoiceBox" prefWidth="150.0" styleClass="choicebox-rounded" value="Order by" />
+                        </VBox>
+                    </HBox>
+                    <HBox alignment="TOP_RIGHT" prefHeight="70.0" prefWidth="280.0">
+                        <VBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
+                            <Button fx:id="btnRegisterAdmin" layoutX="14.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Admin" />
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
+                            <Button fx:id="btnRegisterBranch" layoutX="126.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Branch" />
+                        </VBox>
+                    </HBox>
                 </HBox>
             </VBox>
         </AnchorPane>
     </top>
     <center>
         <VBox prefWidth="950.0" BorderPane.alignment="CENTER">
-            <StackPane fx:id="tableContainer" styleClass="table-container">
-                <TableView fx:id="tblBranches" layoutY="126.0" prefHeight="440.0" prefWidth="910.0">
-                    <columns>
-                        <TableColumn fx:id="colBranchId" prefWidth="130.0" styleClass="start" text="ID BRANCH" />
-                        <TableColumn fx:id="colCode" prefWidth="130.0" styleClass="col-b" text="CODE" />
-                        <TableColumn fx:id="colAdminId" prefWidth="130.0" styleClass="col-a" text="ID ADMIN" />
-                        <TableColumn fx:id="colAvailable" prefWidth="130.0" styleClass="col-b" text="Available" />
-                        <TableColumn fx:id="colRented" prefWidth="130.0" styleClass="col-a" text="Rented" />
-                        <TableColumn fx:id="colSold" prefWidth="130.0" styleClass="col-b" text="Sold" />
-                        <TableColumn fx:id="colAction" prefWidth="130.0" styleClass="end" text="ACTION" />
-                    </columns>
-                </TableView>
-            </StackPane>
+            <StackPane fx:id="tableContainer" styleClass="table-container" prefHeight="440.0" prefWidth="910.0" />
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" />
             </padding>

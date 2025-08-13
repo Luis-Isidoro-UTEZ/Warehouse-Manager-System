@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane stylesheets="@../../styles/TableView.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.edu.utez.warehousemanagerfx.controllers.subviews.AdminTableController">
+    <TableView fx:id="tblAdmins" prefHeight="440.0" prefWidth="910.0" AnchorPane.topAnchor="0"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+        <columns>
+            <TableColumn fx:id="colAdminId" styleClass="start" text="ID ADMIN" prefWidth="130.0"/>
+            <TableColumn fx:id="colBranchId" styleClass="col-b" text="ID BRANCH" prefWidth="130.0"/>
+            <TableColumn fx:id="colName" styleClass="col-a" text="NAME" prefWidth="130.0"/>
+            <TableColumn fx:id="colEmail" styleClass="col-b" text="EMAIL" prefWidth="130.0"/>
+            <TableColumn fx:id="colPhone" styleClass="col-a" text="PHONE" prefWidth="130.0"/>
+            <TableColumn fx:id="colUsername" styleClass="col-b" text="USERNAME" prefWidth="130.0"/>
+            <TableColumn fx:id="colAction" styleClass="end" text="ACTION" prefWidth="130.0"/>
+        </columns>
+    </TableView>
+</Pane>

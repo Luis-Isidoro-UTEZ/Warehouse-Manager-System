@@ -13,6 +13,7 @@ public class Warehouse {
     private double salePrice;
     private double sizeSqMeters;
     private String status;
+    private boolean isDeleted;
     private Branch branch; // reference to Branch
 
     // Constructor Methods
@@ -21,7 +22,7 @@ public class Warehouse {
 
     public Warehouse(int idWarehouse, String warehouseCode, LocalDate registrationDate,
                      String warehouseName, String image, double rentalPrice, double salePrice,
-                     double sizeSqMeters, String status, Branch branch) {
+                     double sizeSqMeters, String status, boolean isDeleted, Branch branch) {
         this.idWarehouse = idWarehouse;
         this.warehouseCode = warehouseCode;
         this.registrationDate = registrationDate;
@@ -31,6 +32,7 @@ public class Warehouse {
         this.salePrice = salePrice;
         this.sizeSqMeters = sizeSqMeters;
         this.status = status;
+        this.isDeleted = isDeleted;
         this.branch = branch;
     }
 
@@ -122,6 +124,14 @@ public class Warehouse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Branch getBranch() {

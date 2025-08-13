@@ -7,6 +7,7 @@ module mx.edu.utez.warehousemanagerfx {
     requires com.jfoenix;
     requires org.controlsfx.controls;
     requires javafx.base;
+    requires javafx.graphics;
 
 
     opens mx.edu.utez.warehousemanagerfx to javafx.fxml;
@@ -15,6 +16,8 @@ module mx.edu.utez.warehousemanagerfx {
     exports mx.edu.utez.warehousemanagerfx.controllers;
     opens mx.edu.utez.warehousemanagerfx.models to javafx.fxml;
     exports mx.edu.utez.warehousemanagerfx.models;
-    exports mx.edu.utez.warehousemanagerfx.models.dao;
     opens mx.edu.utez.warehousemanagerfx.models.dao to javafx.fxml;
+    exports mx.edu.utez.warehousemanagerfx.models.dao;
+    exports mx.edu.utez.warehousemanagerfx.controllers.subviews;
+    opens mx.edu.utez.warehousemanagerfx.controllers.subviews to javafx.fxml;
 }

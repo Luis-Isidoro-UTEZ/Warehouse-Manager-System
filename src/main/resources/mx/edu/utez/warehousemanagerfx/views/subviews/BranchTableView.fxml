@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane stylesheets="@../../styles/TableView.css" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mx.edu.utez.warehousemanagerfx.controllers.subviews.BranchTableController">
+    <TableView fx:id="tblBranches" prefHeight="440.0" prefWidth="910.0" AnchorPane.topAnchor="0"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+        <columns>
+            <TableColumn fx:id="colBranchId" styleClass="start" text="ID BRANCH" prefWidth="130.0"/>
+            <TableColumn fx:id="colCode" styleClass="col-b" text="CODE" prefWidth="130.0"/>
+            <TableColumn fx:id="colAdminId" styleClass="col-a" text="ID ADMIN" prefWidth="130.0"/>
+            <TableColumn fx:id="colAvailable" styleClass="col-b" text="Available" prefWidth="130.0"/>
+            <TableColumn fx:id="colRented" styleClass="col-a" text="Rented" prefWidth="130.0"/>
+            <TableColumn fx:id="colSold" styleClass="col-b" text="Sold" prefWidth="130.0"/>
+            <TableColumn fx:id="colAction" styleClass="end" text="ACTION" prefWidth="130.0"/>
+        </columns>
+    </TableView>
+</Pane>

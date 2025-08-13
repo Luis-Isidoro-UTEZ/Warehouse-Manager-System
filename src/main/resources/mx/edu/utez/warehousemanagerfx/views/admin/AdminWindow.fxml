@@ -8,7 +8,10 @@
 <?import javafx.scene.shape.*?>
 <?import org.controlsfx.control.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.AdminController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.edu.utez.warehousemanagerfx.controllers.AdminController">
     <top>
         <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="140.0" prefWidth="950.0">
@@ -16,112 +19,131 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
                         <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
-                                <Insets left="25.0" />
+                                <Insets left="25.0"/>
                             </HBox.margin>
-                            <Image url="@../../img/logos/AppLogo.png" />
+                            <Image url="@../../img/logos/AppLogo.png"/>
                         </ImageView>
                         <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
-                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE " textAlignment="CENTER">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
+                                   textAlignment="CENTER">
                                 <VBox.margin>
-                                    <Insets left="9.0" />
+                                    <Insets left="9.0"/>
                                 </VBox.margin>
                             </Label>
-                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white" text="SALES &amp; RENTALS">
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white"
+                                   text="SALES &amp; RENTALS">
                                 <VBox.margin>
-                                    <Insets left="5.0" top="-5.0" />
+                                    <Insets left="5.0" top="-5.0"/>
                                 </VBox.margin>
                             </Label>
                         </VBox>
-                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
+                               textAlignment="CENTER"/>
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="60.0" styleClass="button-red" text="Log out">
+                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="60.0"
+                                styleClass="button-red" text="Log out">
                             <HBox.margin>
-                                <Insets right="16.0" />
+                                <Insets right="16.0"/>
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue" text="Account">
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue"
+                                text="Account">
                             <HBox.margin>
-                                <Insets right="18.0" />
+                                <Insets right="18.0"/>
                             </HBox.margin>
                         </Button>
                         <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                             <clip>
-                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
                             </clip>
                             <HBox.margin>
-                                <Insets right="12.0" />
+                                <Insets right="12.0"/>
                             </HBox.margin>
-                            <Image url="@../../img/avatars/UserPicture.png" />
+                            <Image url="@../../img/avatars/UserPicture.png"/>
                         </ImageView>
                     </HBox>
                 </HBox>
                 <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
                     <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="165.0" spacing="5.0">
                         <padding>
-                            <Insets left="14.0" />
+                            <Insets left="14.0"/>
                         </padding>
-                        <ChoiceBox fx:id="statusChoiceBox" prefHeight="25.0" prefWidth="150.0" styleClass="choicebox-rounded" value="Status" />
-                        <ChoiceBox fx:id="orderByChoiceBox" prefHeight="25.0" prefWidth="150.0" styleClass="choicebox-rounded" value="Order by" />
+                        <ChoiceBox fx:id="statusChoiceBox" prefHeight="25.0" prefWidth="150.0"
+                                   styleClass="choicebox-rounded" value="Status"/>
+                        <ChoiceBox fx:id="orderByChoiceBox" prefHeight="25.0" prefWidth="150.0"
+                                   styleClass="choicebox-rounded" value="Order by"/>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="160.0">
-                        <Label prefHeight="25.0" styleClass="label-section" text="Size" />
-                        <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@../../styles/RangeSlider.css" />
+                        <Label prefHeight="25.0" styleClass="label-section" text="Size"/>
+                        <RangeSlider fx:id="sizeRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20"
+                                     max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true"
+                                     stylesheets="@../../styles/RangeSlider.css"/>
                         <padding>
-                            <Insets left="10.0" right="10.0" />
+                            <Insets left="10.0" right="10.0"/>
                         </padding>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="170.0">
                         <padding>
-                            <Insets left="10.0" right="20.0" />
+                            <Insets left="10.0" right="20.0"/>
                         </padding>
-                        <ToggleButton fx:id="priceToggle" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" styleClass="toggle-button-blue" text="Rental Price" />
-                        <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20.0" max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" stylesheets="@../../styles/RangeSlider.css" />
+                        <ToggleButton fx:id="priceToggle" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0"
+                                      styleClass="toggle-button-blue" text="Rental Price"/>
+                        <RangeSlider fx:id="priceRangeSlider" blockIncrement="1" highValue="100" majorTickUnit="20.0"
+                                     max="100" min="0" prefWidth="140.0" showTickLabels="true" showTickMarks="true"
+                                     stylesheets="@../../styles/RangeSlider.css"/>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
-                        <Button fx:id="clearFiltersButton" prefHeight="27.0" prefWidth="120.0" styleClass="button-clear-filter-icon" text="Clear All Filters">
+                        <Button fx:id="clearFiltersButton" prefHeight="27.0" prefWidth="120.0"
+                                styleClass="button-clear-filter-icon" text="Clear All Filters">
                             <graphic>
                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                    <Image url="@../../img/icons/ClearFilter.png" />
+                                    <Image url="@../../img/icons/ClearFilter.png"/>
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="140.0" promptText="Search..." styleClass="search-field" />
+                        <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="140.0" promptText="Search..."
+                                   styleClass="search-field"/>
                     </VBox>
                     <VBox alignment="TOP_CENTER" prefHeight="70.0" prefWidth="70.0">
                         <padding>
-                            <Insets top="38.0" />
+                            <Insets top="38.0"/>
                         </padding>
-                        <Button fx:id="searchButton" prefHeight="25.0" prefWidth="65.0" styleClass="button-magnifier-icon" text="Buscar">
+                        <Button fx:id="searchButton" prefHeight="25.0" prefWidth="65.0"
+                                styleClass="button-magnifier-icon" text="Buscar">
                             <graphic>
                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                    <Image url="@../../img/icons/Magnifier.png" />
+                                    <Image url="@../../img/icons/Magnifier.png"/>
                                 </ImageView>
                             </graphic>
                         </Button>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="150.0">
-                        <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View" toggleColor="WHITE" toggleLineColor="#003459" />
+                        <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0"
+                                         selected="true" text="Card View" toggleColor="WHITE"
+                                         toggleLineColor="#003459"/>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="95.0">
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" styleClass="button-blue-register" text="Register &#10;Warehouse" />
+                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0"
+                                styleClass="button-blue-register" text="Register &#10;Warehouse"/>
                     </VBox>
                 </HBox>
             </VBox>
-            <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css" />
-            <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css" />
-            <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css" />
-            <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css" />
-            <ProgressIndicator fx:id="spinner" layoutX="478.0" layoutY="114.0" prefHeight="15.0" prefWidth="15.0" visible="false" />
+            <Label fx:id="sizeLowLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css"/>
+            <Label fx:id="sizeHighLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css"/>
+            <Label fx:id="priceLowLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css"/>
+            <Label fx:id="priceHighLabel" styleClass="pick" stylesheets="@../../styles/RangeSlider.css"/>
+            <ProgressIndicator fx:id="spinner" layoutX="478.0" layoutY="114.0" prefHeight="15.0" prefWidth="15.0"
+                               visible="false"/>
         </AnchorPane>
     </top>
     <center>
         <VBox BorderPane.alignment="CENTER">
-            <HBox prefHeight="50.0" />
+            <HBox prefHeight="50.0"/>
             <ScrollPane prefHeight="550.0">
                 <GridPane fx:id="warehousesGrid" alignment="TOP_CENTER" prefHeight="0.0" prefWidth="0.0">
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                 </GridPane>
             </ScrollPane>

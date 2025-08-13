@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx.models;
+package mx.edu.utez.warehousemanagerfx.modelos;
 
 import java.time.LocalDate;
 

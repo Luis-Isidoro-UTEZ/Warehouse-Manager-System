@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
-import mx.edu.utez.warehousemanagerfx.models.Warehouse;
+import mx.edu.utez.warehousemanagerfx.modelos.Warehouse;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
 import java.text.DecimalFormat;

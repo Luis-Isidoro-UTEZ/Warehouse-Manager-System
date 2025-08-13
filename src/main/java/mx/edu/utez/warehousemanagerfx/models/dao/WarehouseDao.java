@@ -64,6 +64,8 @@ public class WarehouseDao {
             params.add(minSize);
             params.add(maxSize);
         }
+        query.append(" AND ID_Branch = ?");
+        params.add(1);
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
         try {
@@ -86,6 +88,7 @@ public class WarehouseDao {
                 warehouses.add(w);
             }
             rs.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,6 +116,8 @@ public class WarehouseDao {
                 min = rs.getDouble("min_value");
                 max = rs.getDouble("max_value");
             }
+            rs.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

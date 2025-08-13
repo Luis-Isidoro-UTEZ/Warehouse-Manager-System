@@ -47,7 +47,7 @@ public class LoginController {
 
                 // 5. Asegurarnos de que se vea.
                 stage.show();
-                JOptionPane.showMessageDialog(null, "¡Bienvenido al Sistema SuperAdmin!");
+                JOptionPane.showMessageDialog(null, "¡Welcome SuperAdmin!");
             } catch (Exception e) {
                 System.out.println("Ocurrió un Error al cargar la escena del Index del Super Admin");
             }
@@ -73,10 +73,13 @@ public class LoginController {
 
                 // 5. Asegurarnos de que se vea.
                 stage.show();
-                JOptionPane.showMessageDialog(null, "¡Bienvenido al Sistema Admin!");
+                JOptionPane.showMessageDialog(null, "¡Welcome Admin!");
             } catch (Exception e) {
                 System.out.println("Ocurrió un Error al cargar la escena del Index del Admin");
             }
+        } else {
+            // El usuario no tiene cuenta.
+            JOptionPane.showMessageDialog(null, "Incorrect User or Password!", "Login Failed", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

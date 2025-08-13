@@ -1,6 +1,6 @@
-package mx.edu.utez.warehousemanagerfx.modelos.dao;
+package mx.edu.utez.warehousemanagerfx.models.dao;
 
-import mx.edu.utez.warehousemanagerfx.modelos.Branch;
+import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.utils.database.OracleDatabaseConnectionManager;
 
 import java.sql.Connection;

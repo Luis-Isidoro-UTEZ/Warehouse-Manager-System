@@ -15,8 +15,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import mx.edu.utez.warehousemanagerfx.modelos.Branch;
-import mx.edu.utez.warehousemanagerfx.modelos.dao.BranchDao;
+import mx.edu.utez.warehousemanagerfx.models.Branch;
+import mx.edu.utez.warehousemanagerfx.models.dao.BranchDao;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import javax.swing.*;

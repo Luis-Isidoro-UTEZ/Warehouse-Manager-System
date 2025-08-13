@@ -13,8 +13,8 @@ module mx.edu.utez.warehousemanagerfx {
     exports mx.edu.utez.warehousemanagerfx;
     opens mx.edu.utez.warehousemanagerfx.controllers to javafx.fxml;
     exports mx.edu.utez.warehousemanagerfx.controllers;
-    opens mx.edu.utez.warehousemanagerfx.modelos to javafx.fxml;
-    exports mx.edu.utez.warehousemanagerfx.modelos;
-    opens mx.edu.utez.warehousemanagerfx.modelos.dao to javafx.fxml;
-    exports mx.edu.utez.warehousemanagerfx.modelos.dao;
+    opens mx.edu.utez.warehousemanagerfx.models to javafx.fxml;
+    exports mx.edu.utez.warehousemanagerfx.models;
+    opens mx.edu.utez.warehousemanagerfx.models.dao to javafx.fxml;
+    exports mx.edu.utez.warehousemanagerfx.models.dao;
 }

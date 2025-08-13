@@ -21,7 +21,7 @@ public class Main extends Application {
         FontLoader.listAvailableFonts(); // Debugging*/
 
         // 3. Load the FXML and scene
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(FXMLRoutes.ADMIN));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(FXMLRoutes.LOGIN));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Warehouse Manager");
 

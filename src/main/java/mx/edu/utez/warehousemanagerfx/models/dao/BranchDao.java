@@ -1,7 +1,7 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
 import mx.edu.utez.warehousemanagerfx.models.Branch;
-import mx.edu.utez.warehousemanagerfx.utils.database.OracleDatabaseConnectionManager;
+import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class BranchDao {
     public List<Branch> readBranches() {
         List<Branch> branches = new ArrayList<>();
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
+            Connection conn = DatabaseConnectionFactory.getConnection();
             String query = "SELECT b.*, p.*, " +
                     "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Available') as available_count, " +
                     "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Rented') as rented_count, " +
@@ -63,7 +63,7 @@ public class BranchDao {
     public List<Branch> readFilteredBranches(String orderColumn, String orderDir) {
         List<Branch> branches = new ArrayList<>();
         try {
-            Connection conn = OracleDatabaseConnectionManager.getConnectionLocal();
+            Connection conn = DatabaseConnectionFactory.getConnection();
             String query = "SELECT b.*, p.*, " +
                     "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Available') as available_count, " +
                     "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Rented') as rented_count, " +

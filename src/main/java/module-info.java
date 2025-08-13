@@ -7,6 +7,7 @@ module mx.edu.utez.warehousemanagerfx {
     requires com.jfoenix;
     requires org.controlsfx.controls;
     requires javafx.base;
+    requires mx.edu.utez.warehousemanagerfx;
 
 
     opens mx.edu.utez.warehousemanagerfx to javafx.fxml;

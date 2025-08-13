@@ -67,17 +67,7 @@ public class AdminDao {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Administrator a = new Administrator();
-                a.setIdUser(rs.getInt("Id_Admin"));
-                a.setFullName(rs.getString("Full_Name"));
-                a.setEmail(rs.getString("Email"));
-                a.setPhone(rs.getString("Phone"));
-                a.setUsername(rs.getString("Username"));
-                a.setPasswordKey(rs.getString("Password_Key"));
-                a.setRoleType(rs.getString("Role_Type"));
-                int branchId = rs.getInt("Id_Branch");
-                a.setIdBranch(rs.wasNull() ? null : branchId);
-                a.setDeleted(rs.getInt("Is_Deleted") != 0);
+                Administrator a = mapResultSetToAdmin(rs);
                 administrators.add(a);
             }
             rs.close();
@@ -86,5 +76,150 @@ public class AdminDao {
             e.printStackTrace();
         }
         return administrators;
+    }
+
+    // READ: Get admin by ID
+    public Administrator readById(int idUser) {
+        String sql = "SELECT u.ID_USER AS Id_Admin, u.FULL_NAME AS Full_Name, u.EMAIL, u.PHONE, " +
+                "u.USERNAME, u.PASSWORD_KEY, u.ROLE_TYPE, a.ID_BRANCH, a.IS_DELETED " +
+                "FROM USER_ACCOUNT u " +
+                "JOIN ADMINISTRATOR a ON a.ID_USER = u.ID_USER " +
+                "WHERE u.ID_USER = ?";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUser);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToAdmin(rs);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // CREATE: Insert new admin (USER_ACCOUNT + ADMINISTRATOR)
+    public boolean create(Administrator admin) {
+        String sqlUser = "INSERT INTO USER_ACCOUNT (Full_Name, Email, Phone, Username, Password_Key, Role_Type) " +
+                "VALUES (?, ?, ?, ?, ?, 'ADMINISTRATOR')";
+
+        String sqlAdmin = "INSERT INTO ADMINISTRATOR (Id_User, Id_Branch) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Insert into USER_ACCOUNT
+            try (PreparedStatement psUser = conn.prepareStatement(sqlUser, new String[]{"ID_USER"})) {
+                psUser.setString(1, admin.getFullName());
+                psUser.setString(2, admin.getEmail());
+                psUser.setString(3, admin.getPhone());
+                psUser.setString(4, admin.getUsername());
+                psUser.setString(5, admin.getPasswordKey());
+                psUser.executeUpdate();
+
+                // Get generated Id_User
+                ResultSet rs = psUser.getGeneratedKeys();
+                if (rs.next()) {
+                    int generatedId = rs.getInt(1);
+                    admin.setIdUser(generatedId);
+                }
+                rs.close();
+            }
+
+            // Insert into ADMINISTRATOR
+            try (PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin)) {
+                psAdmin.setInt(1, admin.getIdUser());
+                if (admin.getIdBranch() != null) {
+                    psAdmin.setInt(2, admin.getIdBranch());
+                } else {
+                    psAdmin.setNull(2, java.sql.Types.INTEGER);
+                }
+                psAdmin.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // UPDATE: Modify admin data
+    public boolean update(Administrator admin) {
+        String sqlUser = "UPDATE USER_ACCOUNT SET Full_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ? " +
+                "WHERE Id_User = ?";
+
+        String sqlAdmin = "UPDATE ADMINISTRATOR SET Id_Branch = ?, Is_Deleted = ? WHERE Id_User = ?";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement psUser = conn.prepareStatement(sqlUser)) {
+                psUser.setString(1, admin.getFullName());
+                psUser.setString(2, admin.getEmail());
+                psUser.setString(3, admin.getPhone());
+                psUser.setString(4, admin.getUsername());
+                psUser.setString(5, admin.getPasswordKey());
+                psUser.setInt(6, admin.getIdUser());
+                psUser.executeUpdate();
+            }
+
+            try (PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin)) {
+                if (admin.getIdBranch() != null) {
+                    psAdmin.setInt(1, admin.getIdBranch());
+                } else {
+                    psAdmin.setNull(1, java.sql.Types.INTEGER);
+                }
+                psAdmin.setInt(2, admin.isDeleted() ? 1 : 0);
+                psAdmin.setInt(3, admin.getIdUser());
+                psAdmin.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // DELETE: Soft delete admin
+    public boolean delete(int idUser) {
+        String sql = "UPDATE ADMINISTRATOR SET Is_Deleted = 1 WHERE Id_User = ?";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idUser);
+            int affected = ps.executeUpdate();
+            return affected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Helper method to map ResultSet to Administrator object
+    private Administrator mapResultSetToAdmin(ResultSet rs) throws java.sql.SQLException {
+        Administrator a = new Administrator();
+        a.setIdUser(rs.getInt("Id_Admin"));
+        a.setFullName(rs.getString("Full_Name"));
+        a.setEmail(rs.getString("EMAIL"));
+        a.setPhone(rs.getString("PHONE"));
+        a.setUsername(rs.getString("USERNAME"));
+        a.setPasswordKey(rs.getString("PASSWORD_KEY"));
+        a.setRoleType(rs.getString("ROLE_TYPE"));
+        int branchId = rs.getInt("ID_BRANCH");
+        a.setIdBranch(rs.wasNull() ? null : branchId);
+        a.setDeleted(rs.getInt("IS_DELETED") != 0);
+        return a;
     }
 }

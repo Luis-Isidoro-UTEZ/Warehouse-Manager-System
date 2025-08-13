@@ -17,7 +17,7 @@ public class Branch extends Property {
     public Branch() {
     }
 
-    public Branch(int idProperty, String propertyType, String country, String state, String municipality, String postalCode, String neighborhood, String addressDetail,
+    public Branch(int idProperty, String propertyType, String country, String state, String municipality, int postalCode, String neighborhood, String addressDetail,
                   int idBranch, String branchCode, LocalDate registrationDate, boolean isDeleted) {
         super(idProperty, propertyType, country, state, municipality, postalCode, neighborhood, addressDetail);
         this.idBranch = idBranch;

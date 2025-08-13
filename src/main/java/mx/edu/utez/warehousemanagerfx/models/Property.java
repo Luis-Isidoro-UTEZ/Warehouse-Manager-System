@@ -7,7 +7,7 @@ public class Property {
     private String country;
     private String state;
     private String municipality;
-    private String postalCode;
+    private int postalCode;
     private String neighborhood;
     private String addressDetail;
 
@@ -15,7 +15,7 @@ public class Property {
     public Property() {
     }
 
-    public Property(int idProperty, String propertyType, String country, String state, String municipality, String postalCode, String neighborhood, String addressDetail) {
+    public Property(int idProperty, String propertyType, String country, String state, String municipality, int postalCode, String neighborhood, String addressDetail) {
         this.idProperty = idProperty;
         this.propertyType = propertyType;
         this.country = country;
@@ -82,11 +82,11 @@ public class Property {
         this.municipality = municipality;
     }
 
-    public String getPostalCode() {
+    public int getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
 

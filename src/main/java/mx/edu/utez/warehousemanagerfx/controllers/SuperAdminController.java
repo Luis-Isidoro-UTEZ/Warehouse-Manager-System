@@ -140,9 +140,9 @@ public class SuperAdminController implements Initializable {
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
-            JOptionPane.showMessageDialog(null, "¡Hasta Pronto SuperAdmin!");
+            JOptionPane.showMessageDialog(null, "See you soon, SuperAdmin!");
         } catch (Exception e) {
-            System.out.println("Ocurrió un Error al cargar la escena del LoginWindow");
+            System.out.println("Error! Could not return to the login screen.");
         }
     }
 }

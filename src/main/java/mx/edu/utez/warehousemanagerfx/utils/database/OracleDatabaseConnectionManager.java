@@ -11,18 +11,18 @@ import java.util.Properties;
 public class OracleDatabaseConnectionManager {
 
     // CLOUD
-    private static final String WALLET = "";
-    private static final String DB_NAME = "";
+    private static final String WALLET = "C:/Wallet_WarehouseManagement";
+    private static final String DB_NAME = "warehousemanagement_high";
     private static final String DB_URL = "jdbc:oracle:thin:@" + DB_NAME + "?TNS_ADMIN=" + WALLET;
-    private static final String DB_USER = "";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_USER = "ADMIN";
+    private static final String DB_PASSWORD = "UnrealEngine5!";
     private static final String CONN_FACTORY_CLASS_NAME = "oracle.jdbc.pool.OracleDataSource";
 
     // LOCAL
-    private static final String hostname = "";
+    private static final String hostname = "localhost";
     private static final String url = "jdbc:oracle:thin:@" + hostname + ":1521:XE";
-    private static final String username = "";
-    private static final String password = "";
+    private static final String username = "C##CARLOS";
+    private static final String password = "root";
 
     // Singleton: only one instance of the Pool
     private static PoolDataSource dataSource;

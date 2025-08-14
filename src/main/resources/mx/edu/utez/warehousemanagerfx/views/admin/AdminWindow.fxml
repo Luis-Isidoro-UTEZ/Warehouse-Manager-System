@@ -99,7 +99,7 @@
                         <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View" toggleColor="WHITE" toggleLineColor="#003459" />
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="70.0" prefWidth="95.0">
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" styleClass="button-blue-register" text="Register &#10;Warehouse" />
+                        <Button fx:id="buttonaddW" mnemonicParsing="false" onAction="#addWarehouse" prefHeight="40.0" prefWidth="90.0" styleClass="button-blue-register" text="Add Warehouse" />
                     </VBox>
                 </HBox>
             </VBox>

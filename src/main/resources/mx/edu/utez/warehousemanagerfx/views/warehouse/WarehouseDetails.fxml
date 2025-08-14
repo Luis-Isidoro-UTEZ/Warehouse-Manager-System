@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.AdminController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetails">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
@@ -62,7 +62,7 @@
          <children>
             <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="25.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../img/icons/ModalWarehouse.png" />
+                  <Image url="@../../img/thumbnails/Warehouse10.jpg" />
                </image></ImageView>
             <TextArea layoutX="25.0" layoutY="327.0" prefHeight="180.0" prefWidth="900.0" promptText="Big Warehouse" style="-fx-background-radius: 10;" />
             <VBox layoutX="325.0" layoutY="15.0" prefHeight="299.0" prefWidth="600.0" spacing="10.0">
@@ -82,8 +82,8 @@
                         </AnchorPane>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="240.0" spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 5;" text="Rent" />
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #C2EBFA; -fx-background-radius: 5;" text="Sell" />
+                              <Button fx:id="rentbutton" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 5;" text="Rent" />
+                              <Button fx:id="sellbutton" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #C2EBFA; -fx-background-radius: 5;" text="Sell" />
                            </children>
                         </HBox>
                      </children>

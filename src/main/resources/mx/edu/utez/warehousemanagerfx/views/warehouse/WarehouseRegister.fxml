@@ -108,7 +108,7 @@
    <bottom>
       <HBox alignment="TOP_RIGHT" prefHeight="220.0" prefWidth="950.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="170.0" style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
+            <Button fx:id="registerbutton" mnemonicParsing="false" onAction="#registerWarehouse" prefHeight="34.0" prefWidth="170.0" style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>

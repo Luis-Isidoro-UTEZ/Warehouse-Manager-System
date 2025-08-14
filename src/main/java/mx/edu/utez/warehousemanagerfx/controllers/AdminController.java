@@ -139,6 +139,38 @@ public class AdminController implements Initializable {
         loadFilteredViewSync();
     }
 
+    @FXML
+    private void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(loginWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
+        } catch (Exception e) {
+            System.out.println("Error! Could not return to the login screen.");
+        }
+    }
+
+    @FXML
+    private void addWarehouse(ActionEvent event) {
+        try {
+            Parent rwWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.WAREHOUSE_REGISTER)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(rwWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not load the add warehouse screen.");
+        }
+    }
+
     private void loadWarehouses(List<Warehouse> data, boolean isGridView) {
         warehousesGrid.getChildren().clear(); // Clears the current view
         int column = 0;
@@ -284,22 +316,6 @@ public class AdminController implements Initializable {
             System.err.println("Error setting up price slider: " + e.getMessage());
             priceRangeSlider.setLowValue(0);
             priceRangeSlider.setHighValue(100);
-        }
-    }
-
-    @FXML
-    private void logout(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
-        } catch (Exception e) {
-            System.out.println("Error! Could not return to the login screen.");
         }
     }
 }

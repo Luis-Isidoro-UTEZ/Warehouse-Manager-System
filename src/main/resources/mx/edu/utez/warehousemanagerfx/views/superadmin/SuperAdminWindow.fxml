@@ -60,10 +60,10 @@
                     </HBox>
                     <HBox alignment="TOP_RIGHT" prefHeight="70.0" prefWidth="280.0">
                         <VBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
-                            <Button fx:id="btnRegisterAdmin" layoutX="14.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Admin" />
+                            <Button fx:id="btnRegisterAdmin" layoutX="14.0" layoutY="86.0" mnemonicParsing="false" onAction="#registerAdmin" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Admin" />
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="70.0" prefWidth="140.0" spacing="5.0">
-                            <Button fx:id="btnRegisterBranch" layoutX="126.0" layoutY="86.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Branch" />
+                            <Button fx:id="btnRegisterBranch" layoutX="126.0" layoutY="86.0" mnemonicParsing="false" onAction="#registerBranch" prefHeight="28.0" prefWidth="100.0" styleClass="button-blue" text="Register Branch" />
                         </VBox>
                     </HBox>
                 </HBox>
@@ -72,7 +72,7 @@
     </top>
     <center>
         <VBox prefWidth="950.0" BorderPane.alignment="CENTER">
-            <StackPane fx:id="tableContainer" styleClass="table-container" prefHeight="440.0" prefWidth="910.0" />
+            <StackPane fx:id="tableContainer" prefHeight="440.0" prefWidth="910.0" styleClass="table-container" />
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" />
             </padding>

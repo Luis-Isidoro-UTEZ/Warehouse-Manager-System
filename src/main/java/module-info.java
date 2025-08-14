@@ -8,7 +8,6 @@ module mx.edu.utez.warehousemanagerfx {
     requires org.controlsfx.controls;
     requires javafx.base;
     requires javafx.graphics;
-    requires mx.edu.utez.warehousemanagerfx;
 
     opens mx.edu.utez.warehousemanagerfx to javafx.fxml;
     exports mx.edu.utez.warehousemanagerfx;

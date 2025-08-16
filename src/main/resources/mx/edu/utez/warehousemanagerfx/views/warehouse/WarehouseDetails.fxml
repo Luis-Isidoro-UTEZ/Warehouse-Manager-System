@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetails">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetailsController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
@@ -33,12 +33,12 @@
                         <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home">
+                        <Button mnemonicParsing="false" onAction="#goHomeAD" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home">
                             <HBox.margin>
                                 <Insets right="16.0" />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue" text="Account">
+                        <Button mnemonicParsing="false" onAction="#goAccount" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue" text="Account">
                             <HBox.margin>
                                 <Insets right="18.0" />
                             </HBox.margin>

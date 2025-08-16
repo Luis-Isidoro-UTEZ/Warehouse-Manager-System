@@ -17,7 +17,7 @@ The main objective is to facilitate warehouse management for the administrators 
 ---
 
 ## Key Points to Consider:
-- Only one administrator can manage a single branch, and a location may have no administrator.
+- Only one administrator can manage a single branch, and a branch may have no administrator.
 - Each branch is in a specific geographical area, but every branch contains multiple warehouses.
 
 ---

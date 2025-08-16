@@ -16,7 +16,7 @@ public final class DatabaseConnectionFactory {
     }
 
     // Default value: change here or at runtime using setMode(...)
-    private static volatile Mode currentMode = Mode.LOCAL;
+    private static volatile Mode currentMode = Mode.CLOUD;
 
     private DatabaseConnectionFactory() {
         // utility class - not instantiable

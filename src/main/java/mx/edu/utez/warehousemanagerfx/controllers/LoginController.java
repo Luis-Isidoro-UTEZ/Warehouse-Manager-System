@@ -1,6 +1,5 @@
 package mx.edu.utez.warehousemanagerfx.controllers;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -12,156 +11,208 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.*;
-import javafx.util.Duration;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.services.LoginService;
 import mx.edu.utez.warehousemanagerfx.services.LoginService.AuthResult;
+import mx.edu.utez.warehousemanagerfx.services.LoginService.AttemptResult;
+import mx.edu.utez.warehousemanagerfx.services.LoginService.DatabaseSource;
+import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import java.util.Objects;
 
+/**
+ * LoginController - versión con ProgressIndicator integrado.
+ */
 public class LoginController {
 
-    @FXML
-    private TextField user;
-    @FXML
-    private PasswordField password;
+    @FXML private TextField user;
+    @FXML private PasswordField password;
 
-    // En vez de Dialog, usamos Stage propio para el "Connecting..."
+    // Cambia a 0 para quitar pausas forzadas (flujo directo).
+    private static final long FORCED_PAUSE_MILLIS = 5000L;
+
     private Stage loadingStage;
+    private Label loadingIconLabel;             // icono (unicode)
+    private Label loadingMessageLabel;          // texto de estado
+    private ProgressIndicator loadingProgress;  // indicador de carga (estilo "gif")
+    private volatile boolean isAuthenticating = false;
 
     @FXML
     private void login(ActionEvent event) {
-        final String identifier = user.getText() == null ? "" : user.getText().trim();
-        final String rawPassword = password.getText() == null ? "" : password.getText();
+        if (isAuthenticating) return;
+        isAuthenticating = true;
+
+        final String identifier = (user.getText() == null) ? "" : user.getText().trim();
+        final String rawPassword = (password.getText() == null) ? "" : password.getText();
 
         if (identifier.isEmpty() || rawPassword.isEmpty()) {
             showWarningNonBlocking("Incomplete data", "Enter your username/email and password.");
+            isAuthenticating = false;
             return;
         }
 
         setInputsDisabled(true);
         Window owner = ((Node) event.getSource()).getScene().getWindow();
-        showLoadingStage(owner, "Connecting...", "Validating credentials. Please wait.");
 
-        Task<AuthResult> task = new Task<>() {
+        // Crear y mostrar loading modal grande (con progress indicator)
+        createLoadingStage(owner, "Connecting...", "Initializing authentication...");
+
+        LoginService service = new LoginService();
+
+        Task<AuthResult> authTask = new Task<>() {
             @Override
             protected AuthResult call() {
-                LoginService service = new LoginService();
-                return service.authenticate(identifier, rawPassword);
+                LoginService.AuthProgressListener listener = (type, arg) -> {
+                    if ("update".equals(type) && arg instanceof String) {
+                        String msg = (String) arg;
+                        Platform.runLater(() -> {
+                            loadingMessageLabel.setText(msg);
+                            setIconInfo();
+                            loadingProgress.setVisible(true);
+                        });
+                    } else if ("before".equals(type) && arg instanceof DatabaseSource) {
+                        DatabaseSource ds = (DatabaseSource) arg;
+                        Platform.runLater(() -> {
+                            loadingMessageLabel.setText("Connecting to database (" + prettyName(ds) + ")...");
+                            setIconInfo();
+                            loadingProgress.setVisible(true);
+                        });
+                        // 'after' realizará la pausa para mostrar resultado
+                    } else if ("after".equals(type) && arg instanceof AttemptResult) {
+                        AttemptResult ar = (AttemptResult) arg;
+                        Platform.runLater(() -> {
+                            if (ar.success) {
+                                loadingMessageLabel.setText("Connection to " + prettyName(ar.source) + " successful.");
+                                setIconSuccess();
+                                loadingProgress.setVisible(false); // ocultar progress cuando hay éxito
+                            } else {
+                                loadingMessageLabel.setText("Connection to " + prettyName(ar.source) + " failed: " + ar.errorType + ".");
+                                setIconError();
+                                // mantener el progress visible mientras se intenta la siguiente (UX)
+                                loadingProgress.setVisible(false);
+                            }
+                        });
+
+                        // FORZAR la pausa para que el usuario vea el paso (esto corre en el worker thread)
+                        try {
+                            if (FORCED_PAUSE_MILLIS > 0) Thread.sleep(FORCED_PAUSE_MILLIS);
+                        } catch (InterruptedException ignored) {}
+                    }
+                };
+
+                // Llamada principal: authenticate con listener
+                return service.authenticate(identifier, rawPassword, listener);
             }
         };
 
-        // Cierre garantizado del loading ante cualquier fin de la tarea
-        task.stateProperty().addListener((obs, old, state) -> {
-            if (state == Worker.State.SUCCEEDED || state == Worker.State.FAILED || state == Worker.State.CANCELLED) {
-                closeLoadingStageSafely();
-                // pequeño respiro para que la ventana realmente desaparezca antes de seguir
-                PauseTransition pt = new PauseTransition(Duration.millis(80));
-                pt.setOnFinished(ev -> setInputsDisabled(false));
-                pt.play();
+        // cerrar loading cuando termine (éxito/fracaso/cancel)
+        authTask.stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED || newState == Worker.State.FAILED || newState == Worker.State.CANCELLED) {
+                Platform.runLater(this::closeLoadingStageSafely);
             }
         });
 
-        task.setOnSucceeded(e -> {
-            AuthResult result = task.getValue();
+        authTask.setOnSucceeded(e -> {
+            AuthResult result = authTask.getValue();
+            setInputsDisabled(false);
+            isAuthenticating = false;
+
             if (result != null && result.success() && result.user() != null) {
-                UserAccount account = result.user();
-                String role = account.getRoleType();
+                DatabaseSource used = result.used();
+                if (used == DatabaseSource.CLOUD) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);
+                else if (used == DatabaseSource.LOCAL) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.LOCAL);
 
-                // Navegamos después de cerrar visualmente el loading
-                PauseTransition pt = new PauseTransition(Duration.millis(100));
-                pt.setOnFinished(ev -> {
-                    Platform.runLater(() -> {
-                        if ("SUPERADMINISTRATOR".equalsIgnoreCase(role)) {
-                            navigateTo(event, FXMLRoutes.SUPERADMIN);
-                            showInfoNonBlocking("Welcome", "Welcome SuperAdmin!");
-                        } else if ("ADMINISTRATOR".equalsIgnoreCase(role)) {
-                            navigateTo(event, FXMLRoutes.ADMIN);
-                            showInfoNonBlocking("Welcome", "Welcome Admin!");
-                        } else {
-                            showWarningNonBlocking("Access denied", "Your role does not have access.");
-                        }
-                    });
-                });
-                pt.play();
+                // Navegar primero, luego mostrar Welcome modal sobre la nueva pantalla.
+                boolean navigated = navigateAccordingToRoleAndThenShowWelcome(event, result.user(), used);
+                if (!navigated) {
+                    showErrorBlocking("Navigation error", "Could not open the requested screen after login.");
+                }
             } else {
-                PauseTransition pt = new PauseTransition(Duration.millis(100));
-                pt.setOnFinished(ev -> Platform.runLater(() -> {
-                    if (result == null) {
-                        showErrorNonBlocking("Error", "Authentication returned null result.");
-                        return;
-                    }
-                    switch (result.errorType()) {
-                        case NONE -> showWarningNonBlocking("Invalid credentials", "Incorrect username or password.");
-                        case CLOUD_NO_INTERNET -> showErrorNonBlocking(
-                                "No Internet connection",
-                                "There's no internet for the cloud database. An attempt was made to reconnect to the local database."
-                        );
-                        case CLOUD_UNAVAILABLE -> showErrorNonBlocking(
-                                "Cloud database unavailable",
-                                "Could not connect to the cloud database. An attempt was made to reconnect to the local database."
-                        );
-                        case LOCAL_UNAVAILABLE -> showErrorNonBlocking(
-                                "Local BD not available",
-                                "Could not connect to the local database. Please try again later or contact your administrator."
-                        );
-                        case BOTH_UNAVAILABLE -> showErrorNonBlocking(
-                                "No database service",
-                                "It was not possible to connect to either the cloud or local database."
-                        );
-                        default -> showErrorNonBlocking("Error", "An error occurred while authenticating. Please try again.");
-                    }
-                }));
-                pt.play();
+                isAuthenticating = false;
+                setInputsDisabled(false);
+
+                String reason;
+                if (result == null) reason = "Authentication returned null result.";
+                else reason = switch (result.errorType()) {
+                    case CLOUD_NO_INTERNET -> "No internet for the cloud database. An attempt was made to reconnect to the local database.";
+                    case CLOUD_UNAVAILABLE -> "Cloud database unavailable. An attempt was made to reconnect to the local database.";
+                    case LOCAL_UNAVAILABLE -> "Local database unavailable. Please contact your administrator.";
+                    case BOTH_UNAVAILABLE -> "It was not possible to connect to either the cloud or local database.";
+                    case LoginService.ErrorType.INVALID_CREDENTIALS -> "Incorrect username or password.";
+                    default -> "An error occurred while authenticating.";
+                };
+
+                showErrorBlocking("Connection result", reason);
             }
         });
 
-        task.setOnFailed(e -> {
-            PauseTransition pt = new PauseTransition(Duration.millis(100));
-            pt.setOnFinished(ev -> Platform.runLater(() ->
-                    showErrorNonBlocking("Unexpected error", "An error occurred while authenticating. Please try again.")
-            ));
-            pt.play();
+        authTask.setOnFailed(e -> {
+            isAuthenticating = false;
+            setInputsDisabled(false);
+            closeLoadingStageSafely();
+            Platform.runLater(() -> showErrorBlocking("Unexpected error", "An unexpected error occurred while authenticating. Please try again."));
         });
 
-        Thread th = new Thread(task, "login-auth-task");
+        Thread th = new Thread(authTask, "login-auth-task");
         th.setDaemon(true);
         th.start();
     }
 
-    public void logout(ActionEvent event) {
-        try {
-            Parent login = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN))
-            );
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(login));
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception ex) {
-            showErrorNonBlocking("Error", "Could not return to the login screen.");
-        }
-    }
+    private boolean navigateAccordingToRoleAndThenShowWelcome(ActionEvent event, UserAccount account, DatabaseSource used) {
+        String role = account.getRoleType();
+        String fxmlPath = null;
+        if ("SUPERADMINISTRATOR".equalsIgnoreCase(role)) fxmlPath = FXMLRoutes.SUPERADMIN;
+        else if ("ADMINISTRATOR".equalsIgnoreCase(role)) fxmlPath = FXMLRoutes.ADMIN;
 
-    private void navigateTo(ActionEvent event, String fxmlPath) {
+        if (fxmlPath == null) {
+            Platform.runLater(() -> showWarningNonBlocking("Access denied", "Your role does not have access."));
+            return false;
+        }
+
         try {
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource(fxmlPath))
-            );
+            // Asegurar modo global antes de cargar FXML
+            if (used == DatabaseSource.CLOUD) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);
+            else if (used == DatabaseSource.LOCAL) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.LOCAL);
+
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+
+            // **Usar la variante correcta que tú mismo ajustaste:**
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
-        } catch (Exception e) {
-            showErrorNonBlocking("Navigation error", "An error occurred while loading the window.");
+
+            // Ahora mostrar welcome modal sobre el nuevo stage
+            String usedText = (used == DatabaseSource.CLOUD) ? "Cloud" : (used == DatabaseSource.LOCAL ? "Local" : "Unknown");
+
+            Label main = new Label("Welcome " + account.getRoleType() + "!");
+            main.setWrapText(true);
+            main.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+            Label sub = new Label("Connected via: " + usedText);
+            sub.setWrapText(true);
+            sub.setStyle("-fx-font-style: italic; -fx-font-size: 11px; -fx-text-fill: #333333;");
+
+            VBox content = new VBox(8, main, sub);
+            content.setPadding(new Insets(6));
+
+            Alert welcome = new Alert(Alert.AlertType.INFORMATION);
+            welcome.initOwner(stage);
+            welcome.initModality(Modality.WINDOW_MODAL);
+            welcome.setTitle("Welcome");
+            welcome.setHeaderText(null);
+            welcome.getDialogPane().setContent(content);
+
+            welcome.showAndWait();
+            return true;
+        } catch (Exception ex) {
+            Platform.runLater(() -> showErrorBlocking("Navigation error", "An error occurred while loading the window: " + ex.getMessage()));
+            return false;
         }
     }
 
@@ -170,27 +221,30 @@ public class LoginController {
         password.setDisable(disabled);
     }
 
-    /* ========== Loading como Stage propio (más confiable que Dialog) ========== */
+    /* ===== Loading Stage: más ancho y con icono + ProgressIndicator ===== */
+    private void createLoadingStage(Window owner, String title, String initialMessage) {
+        loadingIconLabel = new Label("\u2139"); // ℹ
+        loadingIconLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #2b6cb0;");
 
-    private void showLoadingStage(Window owner, String title, String message) {
-        if (loadingStage != null && loadingStage.isShowing()) return;
+        loadingMessageLabel = new Label(initialMessage);
+        loadingMessageLabel.setWrapText(true);
+        loadingMessageLabel.setMaxWidth(180);
+        loadingMessageLabel.setMinHeight(Region.USE_PREF_SIZE);
 
-        Label header = new Label(message);
-        header.setWrapText(true);
+        // ProgressIndicator (indeterminado) - se mostrará mientras haya intento en curso
+        loadingProgress = new ProgressIndicator();
+        loadingProgress.setPrefSize(36, 36);
+        loadingProgress.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        loadingProgress.setVisible(true);
 
-        ProgressIndicator pi = new ProgressIndicator();
-        pi.setPrefSize(80, 80);
+        VBox textBox = new VBox(4, loadingMessageLabel);
+        HBox.setHgrow(textBox, Priority.ALWAYS);
 
-        Label lbl = new Label("Connecting to the database...");
-        lbl.setWrapText(true);
+        HBox content = new HBox(12, loadingIconLabel, textBox, loadingProgress);
+        content.setPadding(new Insets(16));
+        content.setPrefWidth(380);
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox row = new HBox(10, pi, spacer, new VBox(4, header, lbl));
-        row.setPadding(new Insets(12));
-
-        Scene scene = new Scene(new VBox(row));
+        Scene scene = new Scene(content);
         Stage stage = new Stage(StageStyle.UTILITY);
         stage.initOwner(owner);
         stage.initModality(Modality.WINDOW_MODAL);
@@ -198,59 +252,60 @@ public class LoginController {
         stage.setResizable(false);
         stage.setScene(scene);
 
+        stage.setMinWidth(400);
+        stage.setMinHeight(120);
+
         loadingStage = stage;
-        // Mostrar no bloqueante y siempre en el FX thread
-        Platform.runLater(() -> {
-            if (!loadingStage.isShowing()) loadingStage.show();
-        });
+        Platform.runLater(stage::show);
     }
 
     private void closeLoadingStageSafely() {
-        if (Platform.isFxApplicationThread()) {
-            closeLoadingStage();
-        } else {
-            Platform.runLater(this::closeLoadingStage);
-        }
+        if (Platform.isFxApplicationThread()) closeLoadingStage();
+        else Platform.runLater(this::closeLoadingStage);
     }
-
     private void closeLoadingStage() {
         if (loadingStage != null) {
-            try {
-                if (loadingStage.isShowing()) {
-                    loadingStage.hide();
-                }
-            } finally {
-                loadingStage = null;
-            }
+            try { if (loadingStage.isShowing()) loadingStage.hide(); }
+            finally { loadingStage = null; }
         }
     }
 
-    /* ========== Alertas no bloqueantes (evitan deadlocks visuales) ========== */
+    /* ===== Icon helpers ===== */
+    private void setIconInfo() {
+        if (loadingIconLabel == null) return;
+        Platform.runLater(() -> loadingIconLabel.setText("\u2139")); // ℹ
+    }
+    private void setIconError() {
+        if (loadingIconLabel == null) return;
+        Platform.runLater(() -> loadingIconLabel.setText("\u26A0")); // ⚠
+    }
+    private void setIconSuccess() {
+        if (loadingIconLabel == null) return;
+        Platform.runLater(() -> loadingIconLabel.setText("\u2714")); // ✔
+    }
 
-    private void showInfoNonBlocking(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initModality(Modality.WINDOW_MODAL);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
+    /* ===== Alerts blocking/no-blocking ===== */
+    private void showErrorBlocking(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        try { Stage stg = (Stage) user.getScene().getWindow(); alert.initOwner(stg); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
+        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.showAndWait();
     }
 
     private void showWarningNonBlocking(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initModality(Modality.WINDOW_MODAL);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
+        try { alert.initOwner((Stage) user.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
+        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.show();
     }
 
     private void showErrorNonBlocking(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.WINDOW_MODAL);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
+        try { alert.initOwner((Stage) user.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
+        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.show();
+    }
+
+    private static String prettyName(DatabaseSource ds) {
+        if (ds == DatabaseSource.CLOUD) return "cloud";
+        if (ds == DatabaseSource.LOCAL) return "local";
+        return "unknown";
     }
 }

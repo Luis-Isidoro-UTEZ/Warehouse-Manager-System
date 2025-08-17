@@ -20,7 +20,9 @@ public class WarehouseRegisterController {
     @FXML
     public TextField name;
     @FXML
-    public TextField price;
+    public TextField rentalPrice;
+    @FXML
+    public TextField salePrice;
     @FXML
     public TextField size;
     @FXML
@@ -30,7 +32,8 @@ public class WarehouseRegisterController {
     public void registerWarehouse(ActionEvent event) {
         Warehouse w = new Warehouse();
         w.setWarehouseName(name.getText());
-        w.setRentalPrice(Double.parseDouble(price.getText()));
+        w.setRentalPrice(Double.parseDouble(rentalPrice.getText()));
+        w.setSalePrice(Double.parseDouble(salePrice.getText()));
         w.setSizeSqMeters(Double.parseDouble(size.getText()));
         w.setImage(image.getText());
 
@@ -57,7 +60,7 @@ public class WarehouseRegisterController {
     }
 
     @FXML
-    private void goInfAccount(MouseEvent event) {
+    private void goInfoAccount(MouseEvent event) {
         try {
             Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

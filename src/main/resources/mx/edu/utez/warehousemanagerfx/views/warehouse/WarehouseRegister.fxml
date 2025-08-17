@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.register.WarehouseRegister">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.register.WarehouseRegisterController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
@@ -34,12 +34,12 @@
                         <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="60.0" styleClass="button-red" text="Log out">
+                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80d4f4;" styleClass="button-red" text="Home">
                             <HBox.margin>
                                 <Insets right="18.0" />
                             </HBox.margin>
                         </Button>
-                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="56.0" fitWidth="91.0" onMouseClicked="#goInfAccount" pickOnBounds="true" preserveRatio="true">
                             <clip>
                                 <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
                             </clip>

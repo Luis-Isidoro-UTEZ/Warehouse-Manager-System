@@ -7,8 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.controllers.subviews.AdminTableController;
@@ -29,10 +29,6 @@ public class SuperAdminController implements Initializable {
     private ChoiceBox<String> selectorView;
     @FXML
     private ChoiceBox<String> orderByChoiceBox;
-    @FXML
-    private Button btnRegisterAdmin;
-    @FXML
-    private Button btnRegisterBranch;
     @FXML
     private StackPane tableContainer;
 
@@ -66,6 +62,70 @@ public class SuperAdminController implements Initializable {
         // Listen to order changes and forward them to the subview controller
         orderByChoiceBox.getSelectionModel().selectedItemProperty()
                 .addListener((o, oldVal, newVal) -> notifyOrderingChanged(newVal));
+    }
+
+    @FXML
+    private void goInfAccountSA(MouseEvent event) {
+        try {
+            Parent infSAwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_SUPERADMIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(infSAwindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Error! Could not show the information account screen.");
+        }
+    }
+
+    @FXML
+    private void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(loginWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+            JOptionPane.showMessageDialog(null, "See you soon, SuperAdmin!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not return to the login screen.");
+        }
+    }
+
+    @FXML
+    private void registerAdmin(ActionEvent event) {
+        try {
+            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.REGISTER_ADMIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(rgAdWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not show the register admin screen.");
+        }
+    }
+
+    @FXML
+    private void registerBranch(ActionEvent event) {
+        try {
+            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.REGISTER_BRANCH)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(rgAdWindow);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not show the register branch screen.");
+        }
     }
 
     /**
@@ -127,22 +187,6 @@ public class SuperAdminController implements Initializable {
         // Forward to the Admin subview
         if (currentSubController instanceof AdminTableController) {
             ((AdminTableController) currentSubController).applyOrder(order);
-        }
-    }
-
-    @FXML
-    private void logout(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, SuperAdmin!");
-        } catch (Exception e) {
-            System.out.println("Error! Could not return to the login screen.");
         }
     }
 }

@@ -156,6 +156,21 @@ public class AdminController implements Initializable {
     }
 
     @FXML
+    private void goInfAccount(MouseEvent event) {
+        try {
+            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_ADMIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(infAdwindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Error! Could not show the information account screen.");
+        }
+    }
+
+    @FXML
     private void addWarehouse(ActionEvent event) {
         try {
             Parent rwWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.WAREHOUSE_REGISTER)));

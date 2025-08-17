@@ -21,4 +21,6 @@ module mx.edu.utez.warehousemanagerfx {
     exports mx.edu.utez.warehousemanagerfx.models.dao;
     opens mx.edu.utez.warehousemanagerfx.controllers.subviews to javafx.fxml;
     exports mx.edu.utez.warehousemanagerfx.controllers.subviews;
+    opens mx.edu.utez.warehousemanagerfx.controllers.inf to javafx.fxml;
+    exports mx.edu.utez.warehousemanagerfx.controllers.inf;
 }

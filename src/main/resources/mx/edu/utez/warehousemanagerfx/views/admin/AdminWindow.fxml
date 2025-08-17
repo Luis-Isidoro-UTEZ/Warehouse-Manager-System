@@ -40,7 +40,7 @@
                                 <Insets right="18.0" />
                             </HBox.margin>
                         </Button>
-                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="56.0" fitWidth="91.0" onMouseClicked="#goInfAccount" pickOnBounds="true" preserveRatio="true">
                             <clip>
                                 <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
                             </clip>

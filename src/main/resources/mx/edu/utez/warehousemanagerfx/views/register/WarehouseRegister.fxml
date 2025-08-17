@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.registers.WarehouseRegisterController">
+    <top>
+        <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="70.0" prefWidth="950.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="950.0" styleClass="header">
+                    <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
+                        <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+                            <HBox.margin>
+                                <Insets left="25.0" />
+                            </HBox.margin>
+                            <Image url="@../../img/logos/AppLogo.png" />
+                        </ImageView>
+                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE " textAlignment="CENTER">
+                                <VBox.margin>
+                                    <Insets left="9.0" />
+                                </VBox.margin>
+                            </Label>
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white" text="SALES &amp; RENTALS">
+                                <VBox.margin>
+                                    <Insets left="5.0" top="-5.0" />
+                                </VBox.margin>
+                            </Label>
+                        </VBox>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
+                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80d4f4;" styleClass="button-red" text="Home">
+                            <HBox.margin>
+                                <Insets right="18.0" />
+                            </HBox.margin>
+                        </Button>
+                        <ImageView fitHeight="56.0" fitWidth="91.0" onMouseClicked="#goInfoAccount" pickOnBounds="true" preserveRatio="true">
+                            <clip>
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
+                            </clip>
+                            <HBox.margin>
+                                <Insets right="12.0" />
+                            </HBox.margin>
+                            <Image url="@../../img/avatars/UserPicture.png" />
+                        </ImageView>
+                    </HBox>
+                </HBox>
+            </VBox>
+        </AnchorPane>
+    </top>
+    <center>
+        <Pane prefHeight="350.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="320.0" prefWidth="950.0" spacing="10.0">
+                <padding>
+                    <Insets left="10.0" right="15.0" />
+                </padding>
+                <Label text="Warehouse Name">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="name" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets top="-10.0" />
+                    </VBox.margin>
+                </TextField>
+                <Label layoutX="10.0" layoutY="10.0" text="Rental Price">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="rentalPrice" layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets top="-10.0" />
+                    </VBox.margin>
+                </TextField>
+            <Label layoutX="20.0" layoutY="91.0" text="Sale Price">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="salePrice" layoutX="20.0" layoutY="112.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here..." />
+                <Label layoutX="10.0" layoutY="53.0" text="Size">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="size" layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets top="-10.0" />
+                    </VBox.margin>
+                </TextField>
+                <Label layoutX="10.0" layoutY="53.0" text="Image">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="image" layoutX="10.0" layoutY="114.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets top="-10.0" />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </Pane>
+    </center>
+    <bottom>
+        <HBox alignment="TOP_RIGHT" prefHeight="181.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+            <Button fx:id="registerbutton" mnemonicParsing="false" onAction="#registerWarehouse" prefHeight="34.0" prefWidth="170.0" style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
+                <HBox.margin>
+                    <Insets right="30.0" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </bottom>
+</BorderPane>

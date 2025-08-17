@@ -1,5 +1,19 @@
 package mx.edu.utez.warehousemanagerfx.models;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+
+import javax.swing.*;
+import java.util.Objects;
+
 public class UserAccount {
     private int idUser;
     private String fullName;
@@ -49,5 +63,26 @@ public class UserAccount {
                 ", username='" + username + '\'' +
                 ", roleType='" + roleType + '\'' +
                 '}';
+    }
+
+    @FXML
+    public static void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(UserAccount.class.getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(loginWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
+        } catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Could not return to the login screen.");
+            alert.show();
+        }
     }
 }

@@ -58,42 +58,44 @@
         </AnchorPane>
     </top>
    <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="25.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../img/thumbnails/Warehouse10.jpg" />
-               </image></ImageView>
-            <TextArea layoutX="25.0" layoutY="327.0" prefHeight="180.0" prefWidth="900.0" promptText="Big Warehouse" style="-fx-background-radius: 10;" />
-            <VBox layoutX="325.0" layoutY="15.0" prefHeight="299.0" prefWidth="600.0" spacing="10.0">
-               <children>
-                  <TextField alignment="TOP_LEFT" prefHeight="90.0" prefWidth="579.0" promptText="Big Warehouse" style="-fx-background-radius: 10;">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </TextField>
-                  <TextField alignment="TOP_LEFT" prefHeight="90.0" prefWidth="579.0" promptText="Big Warehouse" style="-fx-background-radius: 10;" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                     <children>
-                        <AnchorPane prefHeight="64.0" prefWidth="315.0">
-                           <children>
-                              <TextField alignment="TOP_LEFT" layoutY="17.0" prefHeight="58.0" prefWidth="315.0" promptText="Big Warehouse" style="-fx-background-radius: 10;" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0" />
-                           </children>
-                        </AnchorPane>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="240.0" spacing="5.0">
-                           <children>
-                              <Button fx:id="rentbutton" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 5;" text="Rent" />
-                              <Button fx:id="sellbutton" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #C2EBFA; -fx-background-radius: 5;" text="Sell" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
-               </children>
+       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+           <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="25.0" layoutY="15.0" pickOnBounds="true"
+                      preserveRatio="true">
+               <Image url="@../../img/thumbnails/Warehouse10.jpg"/>
+           </ImageView>
+           <TextArea layoutX="25.0" layoutY="327.0" prefHeight="180.0" prefWidth="900.0" promptText="Big Warehouse"
+                     style="-fx-background-radius: 10;"/>
+           <VBox layoutX="325.0" layoutY="15.0" prefHeight="299.0" prefWidth="600.0" spacing="10.0">
                <padding>
-                  <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                   <Insets bottom="10.0" left="5.0" right="10.0" top="10.0"/>
                </padding>
-            </VBox>
-         </children>
-      </Pane>
+               <TextField alignment="TOP_LEFT" prefHeight="90.0" prefWidth="579.0" promptText="Big Warehouse"
+                          style="-fx-background-radius: 10;">
+                   <padding>
+                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                   </padding>
+               </TextField>
+               <TextField alignment="TOP_LEFT" prefHeight="90.0" prefWidth="579.0" promptText="Big Warehouse"
+                          style="-fx-background-radius: 10;"/>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                   <AnchorPane prefHeight="64.0" prefWidth="315.0">
+                       <TextField alignment="TOP_LEFT" layoutY="17.0" prefHeight="58.0" prefWidth="315.0"
+                                  promptText="Big Warehouse" style="-fx-background-radius: 10;"
+                                  AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="0.0"
+                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0"/>
+                   </AnchorPane>
+                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="240.0" spacing="5.0">
+                       <Button fx:id="rentbutton" onAction="#rentOrSell" mnemonicParsing="false" prefHeight="40.0"
+                               prefWidth="115.0"
+                               style="-fx-background-color: #80D4F4; -fx-background-radius: 5;"
+                               text="Rent"/>
+                       <Button fx:id="sellbutton" onAction="#rentOrSell" mnemonicParsing="false" prefHeight="40.0"
+                               prefWidth="115.0"
+                               style="-fx-background-color: #C2EBFA; -fx-background-radius: 5;"
+                               text="Sell"/>
+                   </HBox>
+               </HBox>
+           </VBox>
+       </Pane>
    </center>
 </BorderPane>

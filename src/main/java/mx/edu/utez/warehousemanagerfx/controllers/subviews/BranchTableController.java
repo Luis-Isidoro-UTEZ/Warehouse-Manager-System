@@ -60,7 +60,7 @@ public class BranchTableController implements Initializable {
                         btn.setOnAction(event -> {
                             Branch b = getTableView().getItems().get(getIndex());
                             // TODO: handle branch management action using b
-                            System.out.println("Manage branch: " + (b != null ? b.getBranchCode() : "<null>"));
+                            System.out.println("Manage branch: " + (b != null ? b.toString() : "<null>"));
                         });
                     }
 

@@ -32,7 +32,23 @@ public class WarehouseDetailsController {
     @FXML
     private void goAccount(ActionEvent event) {
         try {
-            Parent infAccWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_ADMIN)));
+            Parent infAccWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(infAccWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not return to the account information window.");
+        }
+    }
+
+    @FXML
+    private void rentOrSell(ActionEvent event) {
+        try {
+            Parent infAccWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.CLIENT_REGISTER)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(infAccWindow);
             stage.setScene(escena);

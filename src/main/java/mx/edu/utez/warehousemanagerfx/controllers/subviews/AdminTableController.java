@@ -60,7 +60,7 @@ public class AdminTableController implements Initializable {
                         btn.setOnAction(event -> {
                             Administrator a = getTableView().getItems().get(getIndex());
                             // TODO: handle branch management action using a
-                            System.out.println("Manage admin: " + (a != null ? a.getIdUser() : "<null>"));
+                            System.out.println("Manage admin: " + (a != null ? a.toString() : "<null>"));
                         });
                     }
 

@@ -13,9 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.controllers.subviews.AdminTableController;
 import mx.edu.utez.warehousemanagerfx.controllers.subviews.BranchTableController;
+import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -67,7 +67,7 @@ public class SuperAdminController implements Initializable {
     @FXML
     private void goInfAccountSA(MouseEvent event) {
         try {
-            Parent infSAwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_SUPERADMIN)));
+            Parent infSAwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_SUPERADMIN)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(infSAwindow);
             stage.setScene(escena);
@@ -81,19 +81,7 @@ public class SuperAdminController implements Initializable {
 
     @FXML
     private void logout(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, SuperAdmin!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error! Could not return to the login screen.");
-        }
+        UserAccount.logout(event);
     }
 
     @FXML

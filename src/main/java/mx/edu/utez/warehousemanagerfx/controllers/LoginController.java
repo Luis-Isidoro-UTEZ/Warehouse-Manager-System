@@ -17,12 +17,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
-import mx.edu.utez.warehousemanagerfx.services.LoginService;
-import mx.edu.utez.warehousemanagerfx.services.LoginService.AuthResult;
-import mx.edu.utez.warehousemanagerfx.services.LoginService.AttemptResult;
-import mx.edu.utez.warehousemanagerfx.services.LoginService.DatabaseSource;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.AuthResult;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.AttemptResult;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.DatabaseSource;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 
 import java.net.URL;
 import java.util.Objects;
@@ -154,6 +155,11 @@ public class LoginController implements Initializable {
             isAuthenticating = false;
 
             if (result != null && result.success() && result.user() != null) {
+                UserAccount account = result.user();
+
+                // 🔹 Guardar el usuario en sesión
+                SessionManager.setCurrentUser(account);  // <- Aquí guardas el user
+
                 DatabaseSource used = result.used();
                 // Ajustar modo global ANTES de cargar la siguiente pantalla
                 if (used == DatabaseSource.CLOUD) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);

@@ -95,10 +95,10 @@
                             </graphic>
                         </Button>
                     </VBox>
-                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="150.0">
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="130.0">
                         <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View" toggleColor="WHITE" toggleLineColor="#003459" />
                     </VBox>
-                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="95.0">
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="115.0">
                         <Button fx:id="buttonaddW" mnemonicParsing="false" onAction="#addWarehouse" prefHeight="40.0" prefWidth="90.0" styleClass="button-blue-register" text="Add Warehouse" />
                     </VBox>
                 </HBox>

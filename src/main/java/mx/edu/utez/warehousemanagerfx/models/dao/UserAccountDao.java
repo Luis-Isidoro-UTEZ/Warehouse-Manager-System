@@ -1,5 +1,7 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
+import mx.edu.utez.warehousemanagerfx.models.Administrator;
+import mx.edu.utez.warehousemanagerfx.models.SuperAdministrator;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 
@@ -172,24 +174,50 @@ public class UserAccountDao {
                 SELECT Id_User, Full_Name, Email, Phone, Username, Password_Key, Role_Type
                 FROM USER_ACCOUNT
                 WHERE (LOWER(Username) = LOWER(?) OR LOWER(Email) = LOWER(?))
+                AND Password_Key = ?
                 """;
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, identifier);
             ps.setString(2, identifier);
+            ps.setString(3, rawPassword);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                UserAccount user = new UserAccount(
-                        rs.getInt("Id_User"),
-                        rs.getString("Full_Name"),
-                        rs.getString("Email"),
-                        rs.getString("Phone"),
-                        rs.getString("Username"),
-                        rs.getString("Password_Key"),
-                        rs.getString("Role_Type")
-                );
-                rs.close();
-                con.close();
-                return Optional.of(user);
+                int idUser = rs.getInt("Id_User");
+                String fullName = rs.getString("Full_Name");
+                String email = rs.getString("Email");
+                String phone = rs.getString("Phone");
+                String username = rs.getString("Username");
+                String passwordKey = rs.getString("Password_Key");
+                String roleType = rs.getString("Role_Type");
+
+                // Verificar rol
+                if ("ADMINISTRATOR".equalsIgnoreCase(roleType)) {
+                    final String sqlAdmin = """
+                        SELECT Id_Branch, Is_Deleted
+                        FROM ADMINISTRATOR
+                        WHERE Id_User = ?
+                        """;
+                    try (PreparedStatement psAdmin = con.prepareStatement(sqlAdmin)) {
+                        psAdmin.setInt(1, idUser);
+                        try (ResultSet rsAdmin = psAdmin.executeQuery()) {
+                            if (rsAdmin.next()) {
+                                Administrator admin = new Administrator(
+                                        idUser, fullName, email, phone,
+                                        username, passwordKey, roleType,
+                                        rsAdmin.getInt("Id_Branch"),
+                                        rsAdmin.getBoolean("Is_Deleted")
+                                );
+                                return Optional.of(admin);
+                            }
+                        }
+                    }
+                } else if ("SUPERADMINISTRATOR".equalsIgnoreCase(roleType)) {
+                    SuperAdministrator superAdmin = new SuperAdministrator(
+                            idUser, fullName, email, phone,
+                            username, passwordKey, roleType
+                    );
+                    return Optional.of(superAdmin);
+                }
             }
             rs.close();
             con.close();

@@ -1,8 +1,10 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
+import mx.edu.utez.warehousemanagerfx.models.Administrator;
 import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
+import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -204,6 +206,8 @@ public class WarehouseDao {
             boolean useStatus,
             boolean useSlider
     ) {
+        Administrator admin = (Administrator) SessionManager.getCurrentUser();
+        int branchId = admin.getIdBranch();
         List<Warehouse> warehouses = new ArrayList<>();
         String priceCol = priceRental ? "Rental_Price" : "Sale_Price";
 
@@ -228,7 +232,7 @@ public class WarehouseDao {
             params.add(maxSize);
         }
         query.append(" AND ID_Branch = ?");
-        params.add(1);
+        params.add(branchId);
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
         try {

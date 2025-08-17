@@ -1,0 +1,27 @@
+/* AdminWindow.css */
+
+/* General background */
+.root {
+    -fx-background-color: #ffffff;
+}
+
+/* Right-pad background */
+.right-pad {
+    -fx-background-color: #FAFDFF;
+}
+
+.input {
+    -fx-background-radius: 10px;
+}
+
+.input-error {
+    -fx-border-color: darkred;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}
+
+/* Generic blue buttons */
+.button-blue {
+    -fx-background-color: skyblue;
+    -fx-background-radius: 20px;
+}

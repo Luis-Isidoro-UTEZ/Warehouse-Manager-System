@@ -7,8 +7,9 @@ public class Administrator extends UserAccount {
     public Administrator() {}
 
     public Administrator(int idUser, String fullName, String email, String phone, String username, String passwordKey, String roleType,
-                         Branch idBranch, boolean isDeleted) {
+                         Integer idBranch, boolean isDeleted) {
         super(idUser, fullName, email, phone, username, passwordKey, roleType);
+        this.idBranch = idBranch;
         this.isDeleted = isDeleted;
     }
 

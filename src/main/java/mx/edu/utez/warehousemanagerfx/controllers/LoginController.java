@@ -19,8 +19,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.util.Duration;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
-import mx.edu.utez.warehousemanagerfx.services.LoginService;
-import mx.edu.utez.warehousemanagerfx.services.LoginService.AuthResult;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService;
+import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.AuthResult;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import java.util.Objects;
@@ -133,21 +133,6 @@ public class LoginController {
         Thread th = new Thread(task, "login-auth-task");
         th.setDaemon(true);
         th.start();
-    }
-
-    public void logout(ActionEvent event) {
-        try {
-            Parent login = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN))
-            );
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(login));
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception ex) {
-            showErrorNonBlocking("Error", "Could not return to the login screen.");
-        }
     }
 
     private void navigateTo(ActionEvent event, String fxmlPath) {

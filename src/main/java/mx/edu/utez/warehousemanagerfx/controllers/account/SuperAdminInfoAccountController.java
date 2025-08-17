@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx.controllers.register;
+package mx.edu.utez.warehousemanagerfx.controllers.account;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +11,7 @@ import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import java.util.Objects;
 
-public class AdminRegisterController {
+public class SuperAdminInfoAccountController {
     @FXML
     private void goHomeSA(ActionEvent event) {
         try {
@@ -25,22 +25,6 @@ public class AdminRegisterController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error! Could not return to the admin window.");
-        }
-    }
-
-    @FXML
-    private void goAccountSA(ActionEvent event) {
-        try {
-            Parent AccountSA = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_SUPERADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(AccountSA);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error! Could not show to the superadmin window.");
         }
     }
 }

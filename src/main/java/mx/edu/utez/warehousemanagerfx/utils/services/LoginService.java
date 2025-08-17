@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx.services;
+package mx.edu.utez.warehousemanagerfx.utils.services;
 
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.models.dao.UserAccountDao;

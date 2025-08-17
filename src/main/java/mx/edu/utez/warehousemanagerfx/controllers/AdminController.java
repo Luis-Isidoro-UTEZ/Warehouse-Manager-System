@@ -16,13 +16,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import org.controlsfx.control.RangeSlider;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -141,24 +141,13 @@ public class AdminController implements Initializable {
 
     @FXML
     private void logout(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
-        } catch (Exception e) {
-            System.out.println("Error! Could not return to the login screen.");
-        }
+        UserAccount.logout(event);
     }
 
     @FXML
     private void goInfAccount(MouseEvent event) {
         try {
-            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_ADMIN)));
+            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(infAdwindow);
             stage.setScene(escena);

@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx.controllers.register;
+package mx.edu.utez.warehousemanagerfx.controllers.registers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -59,7 +59,7 @@ public class WarehouseRegisterController {
     @FXML
     private void goInfAccount(MouseEvent event) {
         try {
-            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INF_ACCOUNT_ADMIN)));
+            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(infAdwindow);
             stage.setScene(escena);

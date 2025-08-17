@@ -6,7 +6,10 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,24 +24,42 @@ import mx.edu.utez.warehousemanagerfx.services.LoginService.DatabaseSource;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
- * LoginController - versión con ProgressIndicator integrado.
+ * LoginController final:
+ * - TRY_DURATION_MS > FAIL_DURATION_MS
+ * - ProgressIndicator visible solo en 'trying' (info)
+ * - "No internet detected" se muestra en lugar de "Trying cloud" cuando aplica
+ * - Layout centrado y más estético
  */
-public class LoginController {
+public class LoginController implements Initializable {
 
     @FXML private TextField user;
     @FXML private PasswordField password;
 
-    // Cambia a 0 para quitar pausas forzadas (flujo directo).
-    private static final long FORCED_PAUSE_MILLIS = 5000L;
+    // Duraciones (millis)
+    private static final long TRY_DURATION_MS = 1500L;   // intentando -> más perceptible
+    private static final long FAIL_DURATION_MS = 1200L;  // falló -> más rápido
+    // Cambia cualquiera a 0 para que no haya pausa.
 
     private Stage loadingStage;
-    private Label loadingIconLabel;             // icono (unicode)
-    private Label loadingMessageLabel;          // texto de estado
-    private ProgressIndicator loadingProgress;  // indicador de carga (estilo "gif")
+    private Label iconLabel;
+    private Label messageLabel;
+    private ProgressIndicator progressIndicator;
     private volatile boolean isAuthenticating = false;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        user.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            user.getStyleClass().remove("input-error");
+        });
+        password.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            password.getStyleClass().remove("input-error");
+        });
+    }
 
     @FXML
     private void login(ActionEvent event) {
@@ -49,6 +70,12 @@ public class LoginController {
         final String rawPassword = (password.getText() == null) ? "" : password.getText();
 
         if (identifier.isEmpty() || rawPassword.isEmpty()) {
+            if (identifier.isEmpty()) {
+                user.getStyleClass().add("input-error");
+            }
+            if (rawPassword.isEmpty()) {
+                password.getStyleClass().add("input-error");
+            }
             showWarningNonBlocking("Incomplete data", "Enter your username/email and password.");
             isAuthenticating = false;
             return;
@@ -57,9 +84,7 @@ public class LoginController {
         setInputsDisabled(true);
         Window owner = ((Node) event.getSource()).getScene().getWindow();
 
-        // Crear y mostrar loading modal grande (con progress indicator)
         createLoadingStage(owner, "Connecting...", "Initializing authentication...");
-
         LoginService service = new LoginService();
 
         Task<AuthResult> authTask = new Task<>() {
@@ -69,46 +94,54 @@ public class LoginController {
                     if ("update".equals(type) && arg instanceof String) {
                         String msg = (String) arg;
                         Platform.runLater(() -> {
-                            loadingMessageLabel.setText(msg);
-                            setIconInfo();
-                            loadingProgress.setVisible(true);
+                            messageLabel.setText(msg);
+                            setIconInfo();             // info look
+                            progressIndicator.setVisible(false); // cuando es "No internet detected", no mostrar progress
                         });
+                        // mostrar mensaje de 'update' como fail breve o skip -> usar FAIL_DURATION_MS
+                        try { if (FAIL_DURATION_MS > 0) Thread.sleep(FAIL_DURATION_MS); } catch (InterruptedException ignored) {}
                     } else if ("before".equals(type) && arg instanceof DatabaseSource) {
                         DatabaseSource ds = (DatabaseSource) arg;
+                        // Determinar: si es cloud, verificar internet (NOTA: authenticate ya hace esa verificación y puede emitir update/after por su cuenta)
                         Platform.runLater(() -> {
-                            loadingMessageLabel.setText("Connecting to database (" + prettyName(ds) + ")...");
+                            messageLabel.setText("Connecting to database (" + prettyName(ds) + ")...");
                             setIconInfo();
-                            loadingProgress.setVisible(true);
+                            progressIndicator.setVisible(true); // solo en intentando
                         });
-                        // 'after' realizará la pausa para mostrar resultado
+                        // Intentos deben mostrarse más tiempo:
+                        try { if (TRY_DURATION_MS > 0) Thread.sleep(TRY_DURATION_MS); } catch (InterruptedException ignored) {}
                     } else if ("after".equals(type) && arg instanceof AttemptResult) {
                         AttemptResult ar = (AttemptResult) arg;
-                        Platform.runLater(() -> {
-                            if (ar.success) {
-                                loadingMessageLabel.setText("Connection to " + prettyName(ar.source) + " successful.");
+                        if (ar.success) {
+                            Platform.runLater(() -> {
+                                messageLabel.setText("Connection to " + prettyName(ar.source) + " successful.");
                                 setIconSuccess();
-                                loadingProgress.setVisible(false); // ocultar progress cuando hay éxito
-                            } else {
-                                loadingMessageLabel.setText("Connection to " + prettyName(ar.source) + " failed: " + ar.errorType + ".");
+                                progressIndicator.setVisible(false); // ocultar progress tras éxito
+                            });
+                            // dejar message visible un poco (TRY_DURATION_MS/2)
+                            try { if (TRY_DURATION_MS > 0) Thread.sleep(TRY_DURATION_MS/2); } catch (InterruptedException ignored) {}
+                        } else {
+                            Platform.runLater(() -> {
+                                // Si fue no-internet o unavailable, mostrar fail breve
+                                if (ar.errorType == LoginService.ErrorType.CLOUD_NO_INTERNET) {
+                                    messageLabel.setText("No internet detected for cloud. Skipping cloud.");
+                                } else {
+                                    messageLabel.setText("Connection to " + prettyName(ar.source) + " failed: " + ar.errorType + ".");
+                                }
                                 setIconError();
-                                // mantener el progress visible mientras se intenta la siguiente (UX)
-                                loadingProgress.setVisible(false);
-                            }
-                        });
-
-                        // FORZAR la pausa para que el usuario vea el paso (esto corre en el worker thread)
-                        try {
-                            if (FORCED_PAUSE_MILLIS > 0) Thread.sleep(FORCED_PAUSE_MILLIS);
-                        } catch (InterruptedException ignored) {}
+                                progressIndicator.setVisible(false); // no mostrar progress en fallos
+                            });
+                            // fallos más cortos
+                            try { if (FAIL_DURATION_MS > 0) Thread.sleep(FAIL_DURATION_MS); } catch (InterruptedException ignored) {}
+                        }
                     }
                 };
 
-                // Llamada principal: authenticate con listener
                 return service.authenticate(identifier, rawPassword, listener);
             }
         };
 
-        // cerrar loading cuando termine (éxito/fracaso/cancel)
+        // Cerrar loading al terminar (estado)
         authTask.stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED || newState == Worker.State.FAILED || newState == Worker.State.CANCELLED) {
                 Platform.runLater(this::closeLoadingStageSafely);
@@ -122,10 +155,10 @@ public class LoginController {
 
             if (result != null && result.success() && result.user() != null) {
                 DatabaseSource used = result.used();
+                // Ajustar modo global ANTES de cargar la siguiente pantalla
                 if (used == DatabaseSource.CLOUD) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);
                 else if (used == DatabaseSource.LOCAL) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.LOCAL);
 
-                // Navegar primero, luego mostrar Welcome modal sobre la nueva pantalla.
                 boolean navigated = navigateAccordingToRoleAndThenShowWelcome(event, result.user(), used);
                 if (!navigated) {
                     showErrorBlocking("Navigation error", "Could not open the requested screen after login.");
@@ -161,6 +194,8 @@ public class LoginController {
         th.start();
     }
 
+    /* ========== Navegación y Welcome (igual que antes) ========== */
+
     private boolean navigateAccordingToRoleAndThenShowWelcome(ActionEvent event, UserAccount account, DatabaseSource used) {
         String role = account.getRoleType();
         String fxmlPath = null;
@@ -173,33 +208,37 @@ public class LoginController {
         }
 
         try {
-            // Asegurar modo global antes de cargar FXML
+            // Ajustar modo global (ya hecho anteriormente, pero lo dejamos para seguridad)
             if (used == DatabaseSource.CLOUD) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);
             else if (used == DatabaseSource.LOCAL) DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.LOCAL);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
-
-            // **Usar la variante correcta que tú mismo ajustaste:**
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
 
-            // Ahora mostrar welcome modal sobre el nuevo stage
+            // Welcome modal centrado y elegante
             String usedText = (used == DatabaseSource.CLOUD) ? "Cloud" : (used == DatabaseSource.LOCAL ? "Local" : "Unknown");
 
             Label main = new Label("Welcome " + account.getRoleType() + "!");
+            main.setStyle("-fx-font-size: 16px; -fx-font-weight: 600;");
             main.setWrapText(true);
-            main.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+            main.setAlignment(Pos.CENTER);
 
             Label sub = new Label("Connected via: " + usedText);
+            sub.setStyle("-fx-font-style: italic; -fx-font-size: 12px; -fx-text-fill: #555;");
             sub.setWrapText(true);
-            sub.setStyle("-fx-font-style: italic; -fx-font-size: 11px; -fx-text-fill: #333333;");
+            sub.setAlignment(Pos.CENTER);
 
-            VBox content = new VBox(8, main, sub);
-            content.setPadding(new Insets(6));
+            VBox content = new VBox(10, main, sub);
+            content.setPadding(new Insets(12));
+            content.setAlignment(Pos.CENTER);
+
+            DialogPane dp = new DialogPane();
+            dp.setContent(content);
+            dp.getStylesheets().clear();
 
             Alert welcome = new Alert(Alert.AlertType.INFORMATION);
             welcome.initOwner(stage);
@@ -207,6 +246,7 @@ public class LoginController {
             welcome.setTitle("Welcome");
             welcome.setHeaderText(null);
             welcome.getDialogPane().setContent(content);
+            welcome.getDialogPane().setMinWidth(360);
 
             welcome.showAndWait();
             return true;
@@ -216,33 +256,30 @@ public class LoginController {
         }
     }
 
-    private void setInputsDisabled(boolean disabled) {
-        user.setDisable(disabled);
-        password.setDisable(disabled);
-    }
+    /* ========== UI loading stage: layout centrado y progress a la derecha del texto ========== */
 
-    /* ===== Loading Stage: más ancho y con icono + ProgressIndicator ===== */
     private void createLoadingStage(Window owner, String title, String initialMessage) {
-        loadingIconLabel = new Label("\u2139"); // ℹ
-        loadingIconLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #2b6cb0;");
+        iconLabel = new Label("\u2139"); // ℹ
+        iconLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #2b6cb0;");
 
-        loadingMessageLabel = new Label(initialMessage);
-        loadingMessageLabel.setWrapText(true);
-        loadingMessageLabel.setMaxWidth(180);
-        loadingMessageLabel.setMinHeight(Region.USE_PREF_SIZE);
+        messageLabel = new Label(initialMessage);
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #222;");
+        messageLabel.setMaxWidth(200);
 
-        // ProgressIndicator (indeterminado) - se mostrará mientras haya intento en curso
-        loadingProgress = new ProgressIndicator();
-        loadingProgress.setPrefSize(36, 36);
-        loadingProgress.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
-        loadingProgress.setVisible(true);
+        progressIndicator = new ProgressIndicator();
+        progressIndicator.setPrefSize(36, 36);
+        progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        progressIndicator.setVisible(false); // aparecerá solo en 'trying'
 
-        VBox textBox = new VBox(4, loadingMessageLabel);
-        HBox.setHgrow(textBox, Priority.ALWAYS);
+        // HBox: [icon] [text VBox] [spacer] [progress]
+        VBox textBox = new VBox(messageLabel);
+        textBox.setAlignment(Pos.CENTER_LEFT);
 
-        HBox content = new HBox(12, loadingIconLabel, textBox, loadingProgress);
+        HBox content = new HBox(14, iconLabel, textBox, progressIndicator);
         content.setPadding(new Insets(16));
-        content.setPrefWidth(380);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setStyle("-fx-background-color: #fff; -fx-border-color: #e6e6e6; -fx-border-radius: 6; -fx-background-radius: 6;");
 
         Scene scene = new Scene(content);
         Stage stage = new Stage(StageStyle.UTILITY);
@@ -252,8 +289,8 @@ public class LoginController {
         stage.setResizable(false);
         stage.setScene(scene);
 
-        stage.setMinWidth(400);
-        stage.setMinHeight(120);
+        stage.setMinWidth(350);
+        stage.setMinHeight(140);
 
         loadingStage = stage;
         Platform.runLater(stage::show);
@@ -265,26 +302,25 @@ public class LoginController {
     }
     private void closeLoadingStage() {
         if (loadingStage != null) {
-            try { if (loadingStage.isShowing()) loadingStage.hide(); }
-            finally { loadingStage = null; }
+            try { if (loadingStage.isShowing()) loadingStage.hide(); } finally { loadingStage = null; }
         }
     }
 
-    /* ===== Icon helpers ===== */
+    /* ========== icon helpers ========== */
     private void setIconInfo() {
-        if (loadingIconLabel == null) return;
-        Platform.runLater(() -> loadingIconLabel.setText("\u2139")); // ℹ
+        if (iconLabel == null) return;
+        Platform.runLater(() -> iconLabel.setText("\u2139")); // ℹ
     }
     private void setIconError() {
-        if (loadingIconLabel == null) return;
-        Platform.runLater(() -> loadingIconLabel.setText("\u26A0")); // ⚠
+        if (iconLabel == null) return;
+        Platform.runLater(() -> iconLabel.setText("\u26A0")); // ⚠
     }
     private void setIconSuccess() {
-        if (loadingIconLabel == null) return;
-        Platform.runLater(() -> loadingIconLabel.setText("\u2714")); // ✔
+        if (iconLabel == null) return;
+        Platform.runLater(() -> iconLabel.setText("\u2714")); // ✔
     }
 
-    /* ===== Alerts blocking/no-blocking ===== */
+    /* ========== Alerts blocking/no-blocking ========== */
     private void showErrorBlocking(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         try { Stage stg = (Stage) user.getScene().getWindow(); alert.initOwner(stg); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
@@ -307,5 +343,10 @@ public class LoginController {
         if (ds == DatabaseSource.CLOUD) return "cloud";
         if (ds == DatabaseSource.LOCAL) return "local";
         return "unknown";
+    }
+
+    private void setInputsDisabled(boolean disabled) {
+        user.setDisable(disabled);
+        password.setDisable(disabled);
     }
 }

@@ -4,13 +4,16 @@ import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.models.dao.UserAccountDao;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * LoginService mejorado:
+ * - authenticate(identifier, password, listener) decide si intentar cloud según hasInternetFast()
+ * - notifica eventos 'before' (solo cuando realmente va a intentar), 'update' (mensajes libres) y 'after' (AttemptResult)
+ */
 public class LoginService {
 
     public enum ErrorType {
@@ -32,31 +35,24 @@ public class LoginService {
         public static AuthResult error(ErrorType t) { return new AuthResult(false, null, t, DatabaseSource.NONE); }
     }
 
-    // Interfaz para informar progreso a quien llame (ej. el Controller).
     @FunctionalInterface
     public interface AuthProgressListener {
         /**
-         * Recibe notificaciones de progreso. Se ejecuta en el mismo hilo donde authenticate() corre
-         * (normalmente un worker thread), por eso el listener puede bloquear con Thread.sleep(...)
-         * para forzar la pausa visual que quieras en la UI (la UI itself se actualiza via Platform.runLater).
-         *
-         * type: "update" -> texto libre para mostrar,
-         * "before" -> se intentará la fuente indicada (arg = DatabaseSource),
-         * "after"  -> resultado del intento (arg boolean success),
-         *
-         * Puedes usar null como listener si no quieres notificaciones.
+         * type: "update" -> arg = String message
+         *       "before" -> arg = DatabaseSource that will be attempted
+         *       "after" -> arg = AttemptResult
          */
         void onProgress(String type, Object arg);
     }
 
     private final UserAccountDao dao = new UserAccountDao();
 
-    // Versión compat: mantiene comportamiento anterior (sin listener)
+    // Compatibilidad: authenticate sin listener
     public AuthResult authenticate(String identifier, String rawPassword) {
         return authenticate(identifier, rawPassword, null);
     }
 
-    // Nueva versión: puede recibir listener para recibir eventos de intento/resultado
+    // Autenticación principal con listener
     public AuthResult authenticate(String identifier, String rawPassword, AuthProgressListener listener) {
         Objects.requireNonNull(identifier);
         Objects.requireNonNull(rawPassword);
@@ -65,50 +61,52 @@ public class LoginService {
 
         try {
             if (initialMode == DatabaseConnectionFactory.Mode.CLOUD) {
-                // intento nube primero
-                if (listener != null) listener.onProgress("before", DatabaseSource.CLOUD);
-                AuthResult cloud = attemptCloud(identifier, rawPassword, listener);
-                if (cloud != null) return cloud; // success or invalid credentials
-
-                // si llegamos aquí, nube falló -> intentar local
-                if (listener != null) listener.onProgress("before", DatabaseSource.LOCAL);
-                AuthResult local = attemptLocal(identifier, rawPassword, listener);
-                if (local != null) return local;
-
-                return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
+                // --- Intento Cloud primero (pero solo si hay internet) ---
+                if (!hasInternetFast()) {
+                    if (listener != null) listener.onProgress("update", "No internet detected for cloud. Skipping cloud and trying local...");
+                    if (listener != null) listener.onProgress("after", new AttemptResult(DatabaseSource.CLOUD, false, ErrorType.CLOUD_NO_INTERNET));
+                    // Directamente intentar local
+                    if (listener != null) listener.onProgress("before", DatabaseSource.LOCAL);
+                    AuthResult local = attemptLocal(identifier, rawPassword, listener);
+                    if (local != null) return local;
+                    return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
+                } else {
+                    if (listener != null) listener.onProgress("before", DatabaseSource.CLOUD);
+                    AuthResult cloud = attemptCloud(identifier, rawPassword, listener);
+                    if (cloud != null) return cloud; // puede ser ok o invalid
+                    // si cloud devolvió null (problema de conexión), intentar local
+                    if (listener != null) listener.onProgress("before", DatabaseSource.LOCAL);
+                    AuthResult local = attemptLocal(identifier, rawPassword, listener);
+                    if (local != null) return local;
+                    return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
+                }
             } else {
-                // intento local primero
+                // --- Intento Local primero ---
                 if (listener != null) listener.onProgress("before", DatabaseSource.LOCAL);
                 AuthResult local = attemptLocal(identifier, rawPassword, listener);
                 if (local != null) return local;
 
-                // si local falla, intentar nube solo si hay internet
-                if (hasInternetFast()) {
+                // Local falló; si hay internet, intentar cloud (pero avisar si no hay internet)
+                if (!hasInternetFast()) {
+                    if (listener != null) listener.onProgress("update", "No internet detected for cloud. Cannot try cloud.");
+                    if (listener != null) listener.onProgress("after", new AttemptResult(DatabaseSource.CLOUD, false, ErrorType.CLOUD_NO_INTERNET));
+                    return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
+                } else {
                     if (listener != null) listener.onProgress("before", DatabaseSource.CLOUD);
                     AuthResult cloud = attemptCloud(identifier, rawPassword, listener);
                     if (cloud != null) return cloud;
-                } else {
-                    if (listener != null) listener.onProgress("update", "No internet to try Cloud.");
+                    return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
                 }
-
-                return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
             }
         } catch (Exception e) {
             return AuthResult.error(ErrorType.BOTH_UNAVAILABLE);
         }
     }
 
-    /* ---------- Métodos auxiliares que realizan el intento real ---------- */
+    /* ---------- intentos concretos (devuelven AuthResult si se pudo consultar, o null si hubo un fallo de conexión) ---------- */
 
-    // Devuelve AuthResult (ok or invalid) si la conexión y consulta se realizaron; devuelve null si hubo problema de conexión
     private AuthResult attemptCloud(String identifier, String rawPassword, AuthProgressListener listener) {
-        if (!hasInternetFast()) {
-            if (listener != null) listener.onProgress("update", "No internet available for Cloud.");
-            // informar error de internet
-            if (listener != null) listener.onProgress("after", new AttemptResult(DatabaseSource.CLOUD, false, ErrorType.CLOUD_NO_INTERNET));
-            return null;
-        }
-
+        // Nota: en esta versión, authenticate ya aseguró que hay internet antes de llamar attemptCloud.
         DatabaseConnectionFactory.Mode previous = DatabaseConnectionFactory.getMode();
         try {
             DatabaseConnectionFactory.setMode(DatabaseConnectionFactory.Mode.CLOUD);
@@ -154,18 +152,17 @@ public class LoginService {
         }
     }
 
-    // Ping rápido para saber si hay internet (mantener la implementación que ya tenías)
+    // Ping rápido para saber si hay internet
     public boolean hasInternetFast() {
-        // Reimplementa tu lógica original (o deja la que ya tenías).
         try (java.net.Socket socket = new java.net.Socket()) {
-            socket.connect(new java.net.InetSocketAddress("8.8.8.8", 53), 1000);
+            socket.connect(new java.net.InetSocketAddress("8.8.8.8", 53), 900); // 900ms timeout
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    // POJO para enviar un resultado de intento por el listener (no es parte de la API pública)
+    // POJO para enviar el resultado de cada intento al listener
     public static final class AttemptResult {
         public final DatabaseSource source;
         public final boolean success;

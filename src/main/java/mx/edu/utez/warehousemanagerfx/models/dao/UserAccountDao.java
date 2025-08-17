@@ -172,10 +172,12 @@ public class UserAccountDao {
                 SELECT Id_User, Full_Name, Email, Phone, Username, Password_Key, Role_Type
                 FROM USER_ACCOUNT
                 WHERE (LOWER(Username) = LOWER(?) OR LOWER(Email) = LOWER(?))
+                AND Password_Key = ?
                 """;
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, identifier);
             ps.setString(2, identifier);
+            ps.setString(3, rawPassword);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 UserAccount user = new UserAccount(

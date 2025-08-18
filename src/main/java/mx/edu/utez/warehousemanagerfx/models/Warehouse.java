@@ -14,15 +14,16 @@ public class Warehouse {
     private double sizeSqMeters;
     private String status;
     private boolean isDeleted;
-    private Branch branch; // reference to Branch
+    private int idProperty; // FK a PROPERTY
+    private int idBranch;   // FK a BRANCH
 
     // Constructor Methods
     public Warehouse() {
     }
 
-    public Warehouse(int idWarehouse, String warehouseCode, LocalDate registrationDate,
-                     String warehouseName, String image, double rentalPrice, double salePrice,
-                     double sizeSqMeters, String status, boolean isDeleted, Branch branch) {
+    public Warehouse(int idWarehouse, String warehouseCode, LocalDate registrationDate, String warehouseName, String image,
+                     double rentalPrice, double salePrice, double sizeSqMeters, String status, boolean isDeleted,
+                     int idProperty, int idBranch) {
         this.idWarehouse = idWarehouse;
         this.warehouseCode = warehouseCode;
         this.registrationDate = registrationDate;
@@ -33,10 +34,13 @@ public class Warehouse {
         this.sizeSqMeters = sizeSqMeters;
         this.status = status;
         this.isDeleted = isDeleted;
-        this.branch = branch;
+        this.idProperty = idProperty;
+        this.idBranch = idBranch;
     }
 
     // Class Methods
+
+
     @Override
     public String toString() {
         return "Warehouse{" +
@@ -49,7 +53,9 @@ public class Warehouse {
                 ", salePrice=" + salePrice +
                 ", sizeSqMeters=" + sizeSqMeters +
                 ", status='" + status + '\'' +
-                ", branch=" + branch +
+                ", isDeleted=" + isDeleted +
+                ", idProperty=" + idProperty +
+                ", idBranch=" + idBranch +
                 '}';
     }
 
@@ -134,11 +140,19 @@ public class Warehouse {
         isDeleted = deleted;
     }
 
-    public Branch getBranch() {
-        return branch;
+    public int getIdProperty() {
+        return idProperty;
     }
 
-    public void setBranch(Branch branch) {
-        this.branch = branch;
+    public void setIdProperty(int idProperty) {
+        this.idProperty = idProperty;
+    }
+
+    public int getIdBranch() {
+        return idBranch;
+    }
+
+    public void setIdBranch(int idBranch) {
+        this.idBranch = idBranch;
     }
 }

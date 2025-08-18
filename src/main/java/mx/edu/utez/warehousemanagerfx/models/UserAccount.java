@@ -3,10 +3,15 @@ package mx.edu.utez.warehousemanagerfx.models;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
@@ -75,7 +80,29 @@ public class UserAccount {
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
+
+            Label main = new Label("See you soon, Admin!");
+            main.setStyle("-fx-font-size: 16px; -fx-font-weight: 600;");
+            main.setWrapText(true);
+            main.setAlignment(Pos.CENTER);
+
+            VBox content = new VBox(10, main);
+            content.setPadding(new Insets(12));
+            content.setAlignment(Pos.CENTER);
+
+            DialogPane dp = new DialogPane();
+            dp.setContent(content);
+            dp.getStylesheets().clear();
+
+            Alert welcome = new Alert(Alert.AlertType.INFORMATION);
+            welcome.initOwner(stage);
+            welcome.initModality(Modality.WINDOW_MODAL);
+            welcome.setTitle("Welcome");
+            welcome.setHeaderText(null);
+            welcome.getDialogPane().setContent(content);
+            welcome.getDialogPane().setMinWidth(360);
+
+            welcome.showAndWait();
         } catch (Exception ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.WINDOW_MODAL);

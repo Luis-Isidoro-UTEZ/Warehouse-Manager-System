@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -8,25 +7,24 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="mx.edu.utez.warehousemanagerfx.controllers.registers.ClientRegisterController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
                 <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="950.0" styleClass="header">
                     <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
-                        <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true"
-                                   preserveRatio="true">
+                        <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
                                 <Insets left="25.0"/>
                             </HBox.margin>
                             <Image url="@../../img/logos/AppLogo.png"/>
                         </ImageView>
                         <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
-                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white"
-                                   text="WAREHOUSE " textAlignment="CENTER">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
+                                   textAlignment="CENTER">
                                 <VBox.margin>
                                     <Insets left="9.0"/>
                                 </VBox.margin>
@@ -38,25 +36,24 @@
                                 </VBox.margin>
                             </Label>
                         </VBox>
-                        <Label styleClass="label-slogan-white"
-                               text="More than a warehouse, &#10;an investment." textAlignment="CENTER"/>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
+                               textAlignment="CENTER"/>
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0"
-                                prefWidth="60.0" style="-fx-background-color: #80D4F4;"
-                                styleClass="button-red" text="Home" textFill="#1e0000">
+                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0"
+                                style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home"
+                                textFill="#1e0000">
                             <HBox.margin>
                                 <Insets right="16.0"/>
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0"
-                                styleClass="button-blue" text="Account">
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue"
+                                text="Account">
                             <HBox.margin>
                                 <Insets right="18.0"/>
                             </HBox.margin>
                         </Button>
-                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true"
-                                   preserveRatio="true">
+                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                             <clip>
                                 <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
                             </clip>
@@ -71,24 +68,14 @@
         </AnchorPane>
     </top>
     <center>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <bottom>
-                <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="950.0" BorderPane.alignment="CENTER">
-                    <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0"
-                            style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
-                        <HBox.margin>
-                            <Insets right="30.0"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </bottom>
-            <center>
-                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <VBox prefHeight="470.0" prefWidth="950.0" spacing="10.0">
-                        <padding>
-                            <Insets left="10.0" right="15.0"/>
-                        </padding>
-                        <Label text="Name/s">
+        <Pane BorderPane.alignment="CENTER">
+            <VBox prefWidth="950.0" spacing="10.0">
+                <padding>
+                    <Insets left="20.0" right="20.0"/>
+                </padding>
+                <HBox spacing="20.0">
+                    <VBox>
+                        <Label text="First Name:">
                             <VBox.margin>
                                 <Insets top="10.0"/>
                             </VBox.margin>
@@ -96,84 +83,122 @@
                                 <Font name="System Bold" size="15.0"/>
                             </font>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets top="-10.0"/>
-                            </VBox.margin>
-                        </TextField>
-                        <Label layoutX="10.0" layoutY="10.0" text="Last Name">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="5.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0"
-                                   promptText="Type here...">
-                            <VBox.margin>
-                                <Insets top="-10.0"/>
-                            </VBox.margin>
-                        </TextField>
-                        <Label layoutX="10.0" layoutY="53.0" text="Phone Number">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="5.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0"
-                                   promptText="Type here...">
-                            <VBox.margin>
-                                <Insets top="-10.0"/>
-                            </VBox.margin>
-                        </TextField>
-                        <Label layoutX="10.0" layoutY="53.0" text="Email">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="5.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField layoutX="10.0" layoutY="114.0" prefHeight="40.0" prefWidth="935.0"
-                                   promptText="Type here...">
-                            <VBox.margin>
-                                <Insets top="-10.0"/>
-                            </VBox.margin>
-                        </TextField>
-                        <Label layoutX="10.0" layoutY="140.0" text="Address">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="5.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField layoutX="20.0" layoutY="254.0" prefHeight="40.0" prefWidth="935.0"
-                                   promptText="Type here...">
-                            <VBox.margin>
-                                <Insets top="-10.0"/>
-                            </VBox.margin>
-                        </TextField>
-                        <Label layoutX="20.0" layoutY="233.0" text="Alternative Phone Number">
-                            <font>
-                                <Font name="System Bold" size="15.0"/>
-                            </font>
-                            <VBox.margin>
-                                <Insets top="5.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <TextField layoutX="20.0" layoutY="335.0" prefHeight="40.0" prefWidth="935.0"
-                                   promptText="Type here...">
-                            <VBox.margin>
-                                <Insets top="-10.0"/>
+                                <Insets/>
                             </VBox.margin>
                         </TextField>
                     </VBox>
-                </Pane>
-            </center>
-        </BorderPane>
+                    <VBox layoutX="10.0" layoutY="10.0">
+                        <Label text="Middle Name:">
+                            <VBox.margin>
+                                <Insets top="10.0"/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                        </Label>
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                </HBox>
+                <HBox layoutX="20.0" layoutY="10.0" spacing="20.0">
+                    <VBox>
+                        <Label text="Last Name:">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Label>
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                    <VBox layoutX="10.0" layoutY="10.0">
+                        <Label text="Second Last Name:">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                        </Label>
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here..."/>
+                    </VBox>
+                </HBox>
+                <HBox layoutX="30.0" layoutY="91.0" spacing="20.0">
+                    <VBox>
+                        <Label text="Email">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Label>
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                    <VBox layoutX="10.0" layoutY="10.0">
+                        <Label text="Phone Number">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Label>
+                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                </HBox>
+                <HBox layoutX="20.0" layoutY="91.0" spacing="20.0">
+                    <VBox>
+                        <Label text="Transaction Type:">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
+                        <ChoiceBox prefHeight="40.0" prefWidth="200.0"
+                                   style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #003459;"
+                                   value="Transaction Type">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </ChoiceBox>
+                    </VBox>
+                    <VBox layoutX="10.0" layoutY="10.0">
+                        <Label text="Payment Expiration Date:">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                        </Label>
+                        <DatePicker prefHeight="40.0" prefWidth="300.0"/>
+                    </VBox>
+                    <VBox layoutX="230.0" layoutY="10.0"/>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT">
+                    <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0"
+                            style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
+                        <HBox.margin>
+                            <Insets right="30.0"/>
+                        </HBox.margin>
+                    </Button>
+                </HBox>
+            </VBox>
+        </Pane>
     </center>
 </BorderPane>

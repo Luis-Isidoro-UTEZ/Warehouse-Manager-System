@@ -11,11 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.Main;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -42,8 +45,11 @@ public class WarehouseController {
     @FXML
     private Label status;
 
+    private Warehouse w;
+
     public void setData(Warehouse warehouse) {
         // Load and set the image
+        w = warehouse;
         String fullPath = Objects.requireNonNull(getClass().getResource(ImageRoutes.THUMBNAILS_BASE + warehouse.getImage())).toExternalForm();
         Image image = new Image(fullPath, true);
         img.setImage(image);
@@ -61,17 +67,19 @@ public class WarehouseController {
     @FXML
     private void showDetails(ActionEvent event) {
         try {
-            Parent showData = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.WAREHOUSE_DETAILS)));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.WAREHOUSE_DETAILS));
+            Parent warehouseDetailsWindow = loader.load();
+            WarehouseDetailsController controller = loader.getController();
+            controller.setWarehouse (w);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(showData);
+            Scene escena = new Scene(warehouseDetailsWindow);
             stage.setScene(escena);
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
-        } catch (Exception e) {
+        }catch(IOException e){
             e.printStackTrace();
             System.out.println("Error! Could not load the warehouse details screen.");
         }
     }
-
 }

@@ -7,6 +7,7 @@ import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,146 +17,90 @@ public class WarehouseDao {
 
     // --- CREATE ---
     public boolean createWarehouse(Warehouse w) {
-        String sql = "INSERT INTO WAREHOUSE (Warehouse_Code, Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Status, Id_Property, Id_Branch, Is_Deleted) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, w.getWarehouseCode());
-            ps.setDate(2, Date.valueOf(w.getRegistrationDate()));
-            ps.setString(3, w.getWarehouseName());
-            ps.setString(4, w.getImage());
-            ps.setDouble(5, w.getRentalPrice());
-            ps.setDouble(6, w.getSalePrice());
-            ps.setDouble(7, w.getSizeSqMeters());
-            ps.setString(8, w.getStatus());
-            ps.setInt(9, w.getBranch().getIdProperty()); // idProperty del branch
-            ps.setInt(10, w.getBranch().getIdBranch());
-            return ps.executeUpdate() > 0;
+        Administrator admin = (Administrator) SessionManager.getCurrentUser();
+        int branchId = admin.getIdBranch();
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false); // Transactional management
+
+            // 1️⃣ Get the idProperty and branchCode of the branch
+            String sqlBranch = "SELECT Id_Property, Branch_Code FROM BRANCH WHERE Id_Branch = ?";
+            int idProperty;
+            String branchCode;
+            try (PreparedStatement psBranch = conn.prepareStatement(sqlBranch)) {
+                psBranch.setInt(1, branchId);
+                try (ResultSet rs = psBranch.executeQuery()) {
+                    if (rs.next()) {
+                        idProperty = rs.getInt("Id_Property");
+                        branchCode = rs.getString("Branch_Code");
+                    } else {
+                        throw new SQLException("Branch not found with Id_Branch=" + branchId);
+                    }
+                }
+            }
+
+            // 2️⃣ Insert warehouse without warehouseCode or status
+            String sqlInsert = """
+            INSERT INTO WAREHOUSE
+            (Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Id_Property, Id_Branch, Is_Deleted)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+        """;
+            int generatedIdWarehouse;
+            try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, new String[]{"Id_Warehouse"})) {
+                psInsert.setDate(1, Date.valueOf(LocalDate.now()));
+                psInsert.setString(2, w.getWarehouseName());
+                psInsert.setString(3, (w.getImage() == null || w.getImage().isEmpty()) ? "ImageNotAvailable.jpg" : w.getImage());
+                psInsert.setDouble(4, w.getRentalPrice());
+                psInsert.setDouble(5, w.getSalePrice());
+                psInsert.setDouble(6, w.getSizeSqMeters());
+                psInsert.setInt(7, idProperty);
+                psInsert.setInt(8, branchId);
+
+                if (psInsert.executeUpdate() == 0) throw new SQLException("Creating warehouse failed.");
+
+                try (ResultSet rsKey = psInsert.getGeneratedKeys()) {
+                    if (rsKey.next()) {
+                        generatedIdWarehouse = rsKey.getInt(1);
+                    } else {
+                        throw new SQLException("Failed to retrieve generated Id_Warehouse.");
+                    }
+                }
+            }
+
+            // 3️⃣ Generate warehouseCode and update record
+            String warehouseCode = branchCode + "-" + generatedIdWarehouse;
+            String sqlUpdate = "UPDATE WAREHOUSE SET Warehouse_Code = ? WHERE Id_Warehouse = ?";
+            try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)) {
+                psUpdate.setString(1, warehouseCode);
+                psUpdate.setInt(2, generatedIdWarehouse);
+                psUpdate.executeUpdate();
+            }
+
+            conn.commit();
+            w.setIdWarehouse(generatedIdWarehouse);
+            w.setWarehouseCode(warehouseCode);
+            w.setIdBranch(branchId);
+            w.setIdProperty(idProperty);
+
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
-    }
-
-    // --- READ ALL / FILTERED ---
-    public List<Warehouse> readWarehouses(int branchId) {
-        List<Warehouse> list = new ArrayList<>();
-        String sql = "SELECT w.*, " +
-                "       b.Id_Branch, b.Branch_Code, b.Branch_Registration_Date, b.Is_Deleted AS Branch_Deleted, " +
-                "       p.Id_Property, p.Property_Type, p.Country, p.State, p.Municipality, p.Postal_Code, p.Neighborhood, p.Address_Detail " +
-                "FROM WAREHOUSE w " +
-                "JOIN BRANCH b ON w.Id_Branch = b.Id_Branch " +
-                "JOIN PROPERTY p ON w.Id_Property = p.Id_Property " +
-                "WHERE w.Is_Deleted = 0 AND b.Id_Branch = ?";
-
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, branchId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Warehouse w = new Warehouse();
-                w.setIdWarehouse(rs.getInt("Id_Warehouse"));
-                w.setWarehouseCode(rs.getString("Warehouse_Code"));
-                w.setRegistrationDate(rs.getDate("Warehouse_Registration_Date").toLocalDate());
-                w.setWarehouseName(rs.getString("Warehouse_Name"));
-                w.setImage(rs.getString("Image"));
-                w.setRentalPrice(rs.getDouble("Rental_Price"));
-                w.setSalePrice(rs.getDouble("Sale_Price"));
-                w.setSizeSqMeters(rs.getDouble("Size_Sq_Meters"));
-                w.setStatus(rs.getString("Status"));
-                w.setDeleted(rs.getInt("Is_Deleted") != 0);
-
-                Branch b = new Branch();
-                b.setIdBranch(rs.getInt("Id_Branch"));
-                b.setBranchCode(rs.getString("Branch_Code"));
-                b.setRegistrationDate(rs.getDate("Branch_Registration_Date").toLocalDate());
-                b.setDeleted(rs.getInt("Branch_Deleted") != 0);
-
-                // Property info
-                b.setIdProperty(rs.getInt("Id_Property"));
-                b.setPropertyType(rs.getString("Property_Type"));
-                b.setCountry(rs.getString("Country"));
-                b.setState(rs.getString("State"));
-                b.setMunicipality(rs.getString("Municipality"));
-                b.setPostalCode(rs.getInt("Postal_Code"));
-                b.setNeighborhood(rs.getString("Neighborhood"));
-                b.setAddressDetail(rs.getString("Address_Detail"));
-
-                w.setBranch(b);
-                list.add(w);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    // --- READ BY ID ---
-    public Warehouse readWarehouseById(int idWarehouse) {
-        String sql = "SELECT w.*, " +
-                "       b.Id_Branch, b.Branch_Code, b.Branch_Registration_Date, b.Is_Deleted AS Branch_Deleted, " +
-                "       p.Id_Property, p.Property_Type, p.Country, p.State, p.Municipality, p.Postal_Code, p.Neighborhood, p.Address_Detail " +
-                "FROM WAREHOUSE w " +
-                "JOIN BRANCH b ON w.Id_Branch = b.Id_Branch " +
-                "JOIN PROPERTY p ON w.Id_Property = p.Id_Property " +
-                "WHERE w.Id_Warehouse = ? AND w.Is_Deleted = 0";
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idWarehouse);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Warehouse w = new Warehouse();
-                w.setIdWarehouse(rs.getInt("Id_Warehouse"));
-                w.setWarehouseCode(rs.getString("Warehouse_Code"));
-                w.setRegistrationDate(rs.getDate("Warehouse_Registration_Date").toLocalDate());
-                w.setWarehouseName(rs.getString("Warehouse_Name"));
-                w.setImage(rs.getString("Image"));
-                w.setRentalPrice(rs.getDouble("Rental_Price"));
-                w.setSalePrice(rs.getDouble("Sale_Price"));
-                w.setSizeSqMeters(rs.getDouble("Size_Sq_Meters"));
-                w.setStatus(rs.getString("Status"));
-                w.setDeleted(rs.getInt("Is_Deleted") != 0);
-
-                Branch b = new Branch();
-                b.setIdBranch(rs.getInt("Id_Branch"));
-                b.setBranchCode(rs.getString("Branch_Code"));
-                b.setRegistrationDate(rs.getDate("Branch_Registration_Date").toLocalDate());
-                b.setDeleted(rs.getInt("Branch_Deleted") != 0);
-
-                b.setIdProperty(rs.getInt("Id_Property"));
-                b.setPropertyType(rs.getString("Property_Type"));
-                b.setCountry(rs.getString("Country"));
-                b.setState(rs.getString("State"));
-                b.setMunicipality(rs.getString("Municipality"));
-                b.setPostalCode(rs.getInt("Postal_Code"));
-                b.setNeighborhood(rs.getString("Neighborhood"));
-                b.setAddressDetail(rs.getString("Address_Detail"));
-
-                w.setBranch(b);
-                return w;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     // --- UPDATE ---
     public boolean updateWarehouse(Warehouse w) {
-        String sql = "UPDATE WAREHOUSE SET Warehouse_Code=?, Warehouse_Registration_Date=?, Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=?, Id_Property=?, Id_Branch=? WHERE Id_Warehouse=? AND Is_Deleted=0";
+        String sql = "UPDATE WAREHOUSE SET Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=? WHERE Id_Warehouse=? AND Is_Deleted=0";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, w.getWarehouseCode());
-            ps.setDate(2, Date.valueOf(w.getRegistrationDate()));
-            ps.setString(3, w.getWarehouseName());
-            ps.setString(4, w.getImage());
-            ps.setDouble(5, w.getRentalPrice());
-            ps.setDouble(6, w.getSalePrice());
-            ps.setDouble(7, w.getSizeSqMeters());
-            ps.setString(8, w.getStatus());
-            ps.setInt(9, w.getBranch().getIdProperty());
-            ps.setInt(10, w.getBranch().getIdBranch());
-            ps.setInt(11, w.getIdWarehouse());
+            ps.setString(1, w.getWarehouseName());
+            ps.setString(2, w.getImage());
+            ps.setDouble(3, w.getRentalPrice());
+            ps.setDouble(4, w.getSalePrice());
+            ps.setDouble(5, w.getSizeSqMeters());
+            ps.setString(6, w.getStatus());
+            ps.setInt(7, w.getIdWarehouse());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,20 +108,7 @@ public class WarehouseDao {
         }
     }
 
-    // --- SOFT DELETE ---
-    public boolean softDeleteWarehouse(int idWarehouse) {
-        String sql = "UPDATE WAREHOUSE SET Is_Deleted = 1 WHERE Id_Warehouse = ?";
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idWarehouse);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Read
+    // --- READ ---
     /**
      * Flexible method to get warehouses according to a combination of filters:
      * @param keyword     keyword for multi-field search
@@ -231,7 +163,7 @@ public class WarehouseDao {
             params.add(minSize);
             params.add(maxSize);
         }
-        query.append(" AND ID_Branch = ?");
+        query.append(" AND ID_Branch = ? AND Is_Deleted = 0");
         params.add(branchId);
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
@@ -246,12 +178,22 @@ public class WarehouseDao {
             while (rs.next()) {
                 Warehouse w = new Warehouse();
                 w.setIdWarehouse(rs.getInt("Id_Warehouse"));
+                w.setWarehouseCode(rs.getString("Warehouse_Code"));
+                // Convert SQL DATE → LocalDate
+                Date sqlDate = rs.getDate("Warehouse_Registration_Date");
+                if (sqlDate != null) {
+                    w.setRegistrationDate(sqlDate.toLocalDate());
+                }
                 w.setWarehouseName(rs.getString("Warehouse_Name"));
                 w.setImage(rs.getString("Image"));
                 w.setRentalPrice(rs.getDouble("Rental_Price"));
                 w.setSalePrice(rs.getDouble("Sale_Price"));
                 w.setSizeSqMeters(rs.getDouble("Size_Sq_Meters"));
                 w.setStatus(rs.getString("Status"));
+                // Is_Deleted is NUMBER(1), we convert it to boolean
+                w.setDeleted(rs.getInt("Is_Deleted") == 1);
+                w.setIdProperty(rs.getInt("Id_Property"));
+                w.setIdBranch(rs.getInt("Id_Branch"));
                 warehouses.add(w);
             }
             rs.close();
@@ -262,9 +204,9 @@ public class WarehouseDao {
         return warehouses;
     }
 
-    // Read to get MIN/MAX
+    // --- READ to get MIN/MAX ---
     /**
-     * Method to get the minimum and maximum size/price of the warehouses table
+     * Method to get the minimum and maximum size/price of the warehouse table
      * @return array with [minimum, maximum]
      * @throws SQLException if the query fails
      */
@@ -289,5 +231,31 @@ public class WarehouseDao {
             e.printStackTrace();
         }
         return new double[]{min, max};
+    }
+
+    // --- DELETE ---
+    public boolean deleteWarehouse(int idWarehouse) {
+        String sql = "DELETE FROM WAREHOUSE WHERE Id_Warehouse = ?";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idWarehouse);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // --- SOFT DELETE ---
+    public boolean softDeleteWarehouse(int idWarehouse) {
+        String sql = "UPDATE WAREHOUSE SET Is_Deleted = 1 WHERE Id_Warehouse = ?";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idWarehouse);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

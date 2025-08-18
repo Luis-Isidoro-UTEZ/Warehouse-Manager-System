@@ -40,7 +40,9 @@ public class WarehouseRegisterController {
         WarehouseDao dao = new WarehouseDao();
 
         if (dao.createWarehouse(w)) {
-            JOptionPane.showMessageDialog(null, "Warehouse created.");
+            JOptionPane.showMessageDialog(null, "The warehouse was successfully created.");
+        } else {
+            JOptionPane.showMessageDialog(null, "The warehouse was not created.");
         }
     }
 

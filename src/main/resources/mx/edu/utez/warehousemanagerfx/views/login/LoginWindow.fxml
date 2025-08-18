@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="@../../styles/LoginWindow.css" styleClass="root" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.LoginController">
+<AnchorPane stylesheets="@../../styles/Windows/LoginWindow.css" styleClass="root" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.LoginController">
     <HBox prefHeight="500.0" prefWidth="700.0">
         <VBox prefHeight="500.0" prefWidth="330.0">
             <ImageView fitHeight="500.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">

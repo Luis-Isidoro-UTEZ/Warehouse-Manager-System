@@ -1,0 +1,47 @@
+/* Custom styled ChoiceBox */
+.choicebox-rounded {
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 20px;
+    -fx-border-color: #003459;
+}
+
+/* Section subtitle labels (e.g., "Price", "Size") */
+.label-section {
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-text-fill: black;
+}
+
+/* Blue toggle button */
+.toggle-button-blue {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+    -fx-text-alignment: center;
+}
+
+/* Rounded TextField with blue border */
+.search-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-color: #003459;
+    -fx-border-radius: 20px;
+}
+
+/* Button with magnifier icon */
+.button-magnifier-icon {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+}
+
+/* Button with clear filter icon */
+.button-clear-filter-icon {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans Regular";
+}

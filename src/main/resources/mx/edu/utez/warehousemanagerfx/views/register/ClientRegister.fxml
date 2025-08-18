@@ -7,10 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="mx.edu.utez.warehousemanagerfx.controllers.registers.ClientRegisterController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/Windows/ClientRegisterWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.registers.ClientRegisterController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
@@ -18,49 +15,43 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
                         <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
-                                <Insets left="25.0"/>
+                                <Insets left="25.0" />
                             </HBox.margin>
-                            <Image url="@../../img/logos/AppLogo.png"/>
+                            <Image url="@../../img/logos/AppLogo.png" />
                         </ImageView>
                         <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
-                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
-                                   textAlignment="CENTER">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE " textAlignment="CENTER">
                                 <VBox.margin>
-                                    <Insets left="9.0"/>
+                                    <Insets left="9.0" />
                                 </VBox.margin>
                             </Label>
-                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white"
-                                   text="SALES &amp; RENTALS">
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white" text="SALES &amp; RENTALS">
                                 <VBox.margin>
-                                    <Insets left="5.0" top="-5.0"/>
+                                    <Insets left="5.0" top="-5.0" />
                                 </VBox.margin>
                             </Label>
                         </VBox>
-                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
-                               textAlignment="CENTER"/>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0"
-                                style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home"
-                                textFill="#1e0000">
+                        <Button onAction="#goHome" prefHeight="25.0" prefWidth="60.0" styleClass="button-blue" text="Home">
                             <HBox.margin>
-                                <Insets right="16.0"/>
+                                <Insets right="16.0" />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue"
-                                text="Account">
+                        <Button prefHeight="25.0" prefWidth="75.0" styleClass="button-blue" text="Account">
                             <HBox.margin>
-                                <Insets right="18.0"/>
+                                <Insets right="18.0" />
                             </HBox.margin>
                         </Button>
                         <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                             <clip>
-                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
                             </clip>
                             <HBox.margin>
-                                <Insets right="12.0"/>
+                                <Insets right="12.0" />
                             </HBox.margin>
-                            <Image url="@../../img/avatars/UserPicture.png"/>
+                            <Image url="@../../img/avatars/UserPicture.png" />
                         </ImageView>
                     </HBox>
                 </HBox>
@@ -71,36 +62,36 @@
         <Pane BorderPane.alignment="CENTER">
             <VBox prefWidth="950.0" spacing="10.0">
                 <padding>
-                    <Insets left="20.0" right="20.0"/>
+                    <Insets left="20.0" right="20.0" />
                 </padding>
                 <HBox spacing="20.0">
                     <VBox>
                         <Label text="First Name:">
                             <VBox.margin>
-                                <Insets top="10.0"/>
+                                <Insets top="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="firstName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </TextField>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="10.0">
                         <Label text="Middle Name:">
                             <VBox.margin>
-                                <Insets top="10.0"/>
+                                <Insets top="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="middleName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </TextField>
                     </VBox>
@@ -109,55 +100,55 @@
                     <VBox>
                         <Label text="Last Name:">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                             <VBox.margin>
-                                <Insets top="5.0"/>
+                                <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="lastName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </TextField>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="10.0">
                         <Label text="Second Last Name:">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here..."/>
+                        <TextField fx:id="secondLastName" prefHeight="40.0" prefWidth="445.0" promptText="Type here..." />
                     </VBox>
                 </HBox>
                 <HBox layoutX="30.0" layoutY="91.0" spacing="20.0">
                     <VBox>
                         <Label text="Email">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                             <VBox.margin>
-                                <Insets top="5.0"/>
+                                <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="email" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </TextField>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="10.0">
                         <Label text="Phone Number">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                             <VBox.margin>
-                                <Insets top="5.0"/>
+                                <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="phone" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </TextField>
                     </VBox>
@@ -166,39 +157,55 @@
                     <VBox>
                         <Label text="Transaction Type:">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </Label>
-                        <ChoiceBox prefHeight="40.0" prefWidth="200.0"
-                                   style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #003459;"
-                                   value="Transaction Type">
+                        <ChoiceBox fx:id="transactionType" prefHeight="40.0" prefWidth="200.0" styleClass="choicebox-rounded" value="Transaction Type">
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </ChoiceBox>
                     </VBox>
-                    <VBox layoutX="10.0" layoutY="10.0">
+                    <VBox fx:id="expirationDateControls" layoutX="10.0" layoutY="10.0" visible="false">
                         <Label text="Payment Expiration Date:">
                             <font>
-                                <Font name="System Bold" size="15.0"/>
+                                <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <DatePicker prefHeight="40.0" prefWidth="300.0"/>
+                        <DatePicker fx:id="paymentExpirationDate" editable="false" prefHeight="40.0" prefWidth="300.0" promptText="Select Date" />
                     </VBox>
-                    <VBox layoutX="230.0" layoutY="10.0"/>
                 </HBox>
                 <HBox alignment="CENTER_RIGHT">
-                    <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0"
-                            style="-fx-background-radius: 8; -fx-background-color: #80D4F4;" text="Register">
+                    <Button onAction="#registerClient" prefHeight="42.0" prefWidth="170.0" styleClass="button-blue" text="Register">
                         <HBox.margin>
-                            <Insets right="30.0"/>
+                            <Insets right="30.0" />
                         </HBox.margin>
                     </Button>
                 </HBox>
             </VBox>
         </Pane>
     </center>
+   <bottom>
+       <HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
+           <BorderPane.margin>
+               <Insets />
+           </BorderPane.margin>
+           <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+           </padding>
+           <Button onAction="#returnWarehouseDetails" prefHeight="42.0" prefWidth="100.0" styleClass="return-button" text="Return" textFill="WHITE">
+              <HBox.margin>
+                  <Insets right="30.0" />
+              </HBox.margin>
+              <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                      <Image url="@../../img/icons/ReturnIcon.png" />
+                  </ImageView>
+              </graphic>
+           </Button>
+       </HBox>
+   </bottom>
 </BorderPane>

@@ -1,0 +1,51 @@
+@import "../Header.css";
+
+/* Styles for all TextFields */
+.text-field {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #003459;
+}
+
+/* Error styles for TextFields with higher specificity */
+.text-field.input-error {
+    -fx-border-color: darkred;
+    -fx-border-width: 2px;
+}
+
+/* Custom styled ChoiceBox */
+.choicebox-rounded {
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 20px;
+    -fx-border-color: #003459;
+}
+
+/* Blue toggle button */
+.toggle-button-blue {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-style: normal;
+    -fx-text-alignment: center;
+}
+
+/* Register blue button */
+.button-blue-register {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-weight: bold;
+}
+
+.button-red-delete {
+    -fx-background-color: darkred;
+    -fx-background-radius: 10;
+    -fx-text-fill: WHITE;
+    -fx-font-size: 13px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-weight: bold;
+}

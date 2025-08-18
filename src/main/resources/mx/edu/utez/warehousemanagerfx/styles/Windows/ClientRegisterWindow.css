@@ -1,0 +1,65 @@
+@import "../Header.css";
+
+/* Styles for all TextFields */
+.text-field {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #003459;
+}
+
+/* Error styles for TextFields with higher specificity */
+.text-field.input-error {
+    -fx-border-color: darkred;
+    -fx-border-width: 2px;
+}
+
+/* Custom styled ChoiceBox */
+/* Use the default '.choice-box' class with your custom one */
+.choice-box.choicebox-rounded {
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-border-color: #003459;
+}
+
+/* Error styles for ChoiceBoxes with higher specificity */
+.choice-box.input-error {
+    -fx-border-color: darkred;
+    -fx-border-width: 2px;
+}
+
+.date-picker {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: #003459;
+}
+
+/* Styles specifically for the TextField inside the DatePicker */
+.date-picker .text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0;
+    -fx-border-color: lightgrey;
+    -fx-border-radius: 0;
+}
+
+/* Register blue button */
+.button-blue-register {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-weight: bold;
+}
+
+
+/* Return button */
+.return-button {
+    -fx-background-color: #003459;
+    -fx-background-radius: 10px;
+    -fx-text-fill: WHITE;
+    -fx-font-size: 13px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-weight: bold;
+}

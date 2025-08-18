@@ -7,10 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetailsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/Windows/WarehouseDetailsWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetailsController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="70.0" prefWidth="950.0">
@@ -18,48 +15,43 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="710.0">
                         <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
-                                <Insets left="25.0"/>
+                                <Insets left="25.0" />
                             </HBox.margin>
-                            <Image url="@../../img/logos/AppLogo.png"/>
+                            <Image url="@../../img/logos/AppLogo.png" />
                         </ImageView>
                         <VBox alignment="CENTER" prefHeight="70.0" prefWidth="138.0">
-                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE "
-                                   textAlignment="CENTER">
+                            <Label layoutX="81.0" layoutY="19.0" styleClass="label-header-white" text="WAREHOUSE " textAlignment="CENTER">
                                 <VBox.margin>
-                                    <Insets left="9.0"/>
+                                    <Insets left="9.0" />
                                 </VBox.margin>
                             </Label>
-                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white"
-                                   text="SALES &amp; RENTALS">
+                            <Label layoutX="97.0" layoutY="38.0" styleClass="label-subheader-white" text="SALES &amp; RENTALS">
                                 <VBox.margin>
-                                    <Insets left="5.0" top="-5.0"/>
+                                    <Insets left="5.0" top="-5.0" />
                                 </VBox.margin>
                             </Label>
                         </VBox>
-                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment."
-                               textAlignment="CENTER"/>
+                        <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#goHomeAD" prefHeight="25.0" prefWidth="60.0"
-                                style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home">
+                        <Button mnemonicParsing="false" onAction="#goHomeAD" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home">
                             <HBox.margin>
-                                <Insets right="16.0"/>
+                                <Insets right="16.0" />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#goAccount" prefHeight="25.0" prefWidth="75.0"
-                                styleClass="button-blue" text="Account">
+                        <Button mnemonicParsing="false" onAction="#goAccount" prefHeight="25.0" prefWidth="75.0" styleClass="button-blue" text="Account">
                             <HBox.margin>
-                                <Insets right="18.0"/>
+                                <Insets right="18.0" />
                             </HBox.margin>
                         </Button>
                         <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                             <clip>
-                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0"/>
+                                <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
                             </clip>
                             <HBox.margin>
-                                <Insets right="12.0"/>
+                                <Insets right="12.0" />
                             </HBox.margin>
-                            <Image url="@../../img/avatars/UserPicture.png"/>
+                            <Image url="@../../img/avatars/UserPicture.png" />
                         </ImageView>
                     </HBox>
                 </HBox>
@@ -72,52 +64,47 @@
                 <HBox prefHeight="230.0" prefWidth="950.0">
                     <VBox alignment="CENTER" prefWidth="340.0">
                         <padding>
-                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                         </padding>
                         <ImageView fx:id="img" fitHeight="200.0" fitWidth="300.0">
-                            <Image url="@../../img/thumbnails/Warehouse10.jpg"/>
+                            <Image url="@../../img/thumbnails/Warehouse10.jpg" />
                             <clip>
-                                <Rectangle fx:id="imgBorder" arcHeight="20.0" arcWidth="20.0" height="200.0"
-                                           width="300.0"/>
+                                <Rectangle fx:id="imgBorder" arcHeight="20.0" arcWidth="20.0" height="200.0" width="300.0" />
                             </clip>
                         </ImageView>
                     </VBox>
                     <VBox prefWidth="610.0" spacing="10.0">
                         <padding>
-                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                         </padding>
                         <HBox spacing="20.0">
                             <VBox>
                                 <Label text="Warehouse Code:">
                                     <VBox.margin>
-                                        <Insets left="10.0"/>
+                                        <Insets left="10.0" />
                                     </VBox.margin>
                                     <font>
-                                        <Font name="Albert Sans SemiBold" size="14.0"/>
+                                        <Font name="Albert Sans SemiBold" size="14.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="warehouseCode" alignment="TOP_LEFT" disable="true" editable="false"
-                                           prefHeight="40.0" prefWidth="275.0" promptText="Warehouse Code"
-                                           style="-fx-background-radius: 10;">
+                                <TextField fx:id="warehouseCode" alignment="TOP_LEFT" disable="true" editable="false" prefHeight="40.0" prefWidth="275.0" promptText="Warehouse Code" style="-fx-background-radius: 10;">
                                     <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                 </TextField>
                             </VBox>
                             <VBox layoutX="10.0" layoutY="10.0">
                                 <Label text="Date Registration:">
                                     <VBox.margin>
-                                        <Insets left="10.0"/>
+                                        <Insets left="10.0" />
                                     </VBox.margin>
                                     <font>
-                                        <Font name="Albert Sans SemiBold" size="14.0"/>
+                                        <Font name="Albert Sans SemiBold" size="14.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="registrationDate" alignment="TOP_LEFT" disable="true" editable="false"
-                                           prefHeight="40.0" prefWidth="275.0" promptText="Date Registration"
-                                           style="-fx-background-radius: 10;">
+                                <TextField fx:id="registrationDate" alignment="TOP_LEFT" disable="true" editable="false" prefHeight="40.0" prefWidth="275.0" promptText="Date Registration" style="-fx-background-radius: 10;">
                                     <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                 </TextField>
                             </VBox>
@@ -125,17 +112,15 @@
                         <VBox>
                             <Label text="Warehouse Name:">
                                 <font>
-                                    <Font name="Albert Sans SemiBold" size="14.0"/>
+                                    <Font name="Albert Sans SemiBold" size="14.0" />
                                 </font>
                                 <VBox.margin>
-                                    <Insets left="10.0"/>
+                                    <Insets left="10.0" />
                                 </VBox.margin>
                             </Label>
-                            <TextField fx:id="name" alignment="TOP_LEFT" editable="false" prefHeight="40.0"
-                                       prefWidth="570.0" promptText="Warehouse Name:"
-                                       style="-fx-background-radius: 10;">
+                            <TextField fx:id="name" alignment="TOP_LEFT" editable="false" prefHeight="40.0" prefWidth="570.0" promptText="Warehouse Name:" style="-fx-background-radius: 10;">
                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                 </padding>
                             </TextField>
                         </VBox>
@@ -143,28 +128,25 @@
                             <VBox prefHeight="58.0" prefWidth="455.0">
                                 <Label text="Image:">
                                     <VBox.margin>
-                                        <Insets left="10.0"/>
+                                        <Insets left="10.0" />
                                     </VBox.margin>
                                     <font>
-                                        <Font name="Albert Sans SemiBold" size="14.0"/>
+                                        <Font name="Albert Sans SemiBold" size="14.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="image" alignment="TOP_LEFT" editable="false" prefHeight="40.0"
-                                           prefWidth="275.0" promptText="Image" style="-fx-background-radius: 10;">
+                                <TextField fx:id="image" alignment="TOP_LEFT" editable="false" prefHeight="40.0" prefWidth="275.0" promptText="Image" style="-fx-background-radius: 10;">
                                     <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                 </TextField>
                             </VBox>
                             <HBox alignment="CENTER">
-                                <Button fx:id="chooseFile" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0"
-                                        style="-fx-background-color: #80D4F4; -fx-background-radius: 10;"
-                                        text="Choose File">
+                                <Button fx:id="chooseFile" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Choose File">
                                     <font>
-                                        <Font name="Albert Sans Regular" size="12.0"/>
+                                        <Font name="Albert Sans Regular" size="12.0" />
                                     </font>
                                     <HBox.margin>
-                                        <Insets top="18.0"/>
+                                        <Insets top="18.0" />
                                     </HBox.margin>
                                 </Button>
                             </HBox>
@@ -173,140 +155,121 @@
                 </HBox>
                 <HBox spacing="20.0">
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0"/>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
                     </padding>
                     <VBox>
                         <Label text="Rental Price:">
                             <VBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="Albert Sans SemiBold" size="14.0"/>
+                                <Font name="Albert Sans SemiBold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="rentalPrice" alignment="TOP_LEFT" editable="false" prefHeight="40.0"
-                                   prefWidth="290.0" promptText="Rental Price" style="-fx-background-radius: 10;">
+                        <TextField fx:id="rentalPrice" alignment="TOP_LEFT" editable="false" prefHeight="40.0" prefWidth="290.0" promptText="Rental Price" style="-fx-background-radius: 10;">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextField>
                     </VBox>
                     <VBox layoutX="10.0" layoutY="10.0">
                         <Label text="Sale Price:">
                             <VBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="Albert Sans SemiBold" size="14.0"/>
+                                <Font name="Albert Sans SemiBold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="salePrice" alignment="TOP_LEFT" editable="false" prefHeight="40.0"
-                                   prefWidth="290.0" promptText="Sale Price" style="-fx-background-radius: 10;">
+                        <TextField fx:id="salePrice" alignment="TOP_LEFT" editable="false" prefHeight="40.0" prefWidth="290.0" promptText="Sale Price" style="-fx-background-radius: 10;">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextField>
                     </VBox>
                     <VBox layoutX="305.0" layoutY="10.0">
                         <Label text="Size:">
                             <VBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="Albert Sans SemiBold" size="14.0"/>
+                                <Font name="Albert Sans SemiBold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="size" alignment="TOP_LEFT" editable="false" prefHeight="40.0"
-                                   prefWidth="290.0" promptText="Size" style="-fx-background-radius: 10;">
+                        <TextField fx:id="size" alignment="TOP_LEFT" editable="false" prefHeight="40.0" prefWidth="290.0" promptText="Size" style="-fx-background-radius: 10;">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextField>
                     </VBox>
                 </HBox>
                 <HBox spacing="20.0">
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0"/>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
                     </padding>
                     <VBox>
                         <Label text="Status:">
                             <VBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </VBox.margin>
                             <font>
-                                <Font name="Albert Sans SemiBold" size="14.0"/>
+                                <Font name="Albert Sans SemiBold" size="14.0" />
                             </font>
                         </Label>
-                        <ChoiceBox fx:id="status" disable="true" prefHeight="40.0" prefWidth="290.0"
-                                   style="-fx-background-radius: 20px; -fx-background-color: #ffffff; -fx-border-radius: 20px; -fx-border-color: #003459;"
-                                   value="Status">
+                        <ChoiceBox fx:id="status" disable="true" prefHeight="40.0" prefWidth="290.0" styleClass="choicebox-rounded" value="Status">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                             <VBox.margin>
-                                <Insets/>
+                                <Insets />
                             </VBox.margin>
                         </ChoiceBox>
                     </VBox>
                     <VBox>
                         <padding>
-                            <Insets top="18.0"/>
+                            <Insets top="18.0" />
                         </padding>
                         <HBox.margin>
-                            <Insets/>
+                            <Insets />
                         </HBox.margin>
-                        <Button fx:id="edit" mnemonicParsing="false" onAction="#editWarehouse" prefHeight="40.0"
-                                prefWidth="115.0" style="-fx-background-color: lightgreen; -fx-background-radius: 10;"
-                                text="Edit">
+                        <Button fx:id="edit" mnemonicParsing="false" onAction="#editWarehouse" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: lightgreen; -fx-background-radius: 10;" text="Edit">
                             <font>
-                                <Font name="Albert Sans Bold" size="12.0"/>
+                                <Font name="Albert Sans Bold" size="12.0" />
                             </font>
                         </Button>
                     </VBox>
                     <VBox layoutX="690.0" layoutY="10.0">
                         <padding>
-                            <Insets top="18.0"/>
+                            <Insets top="18.0" />
                         </padding>
                         <HBox.margin>
-                            <Insets right="80.0"/>
+                            <Insets right="80.0" />
                         </HBox.margin>
-                        <Button mnemonicParsing="false" onAction="#deleteWarehouse" prefHeight="40.0"
-                                prefWidth="115.0" style="-fx-background-color: darkred; -fx-background-radius: 10;"
-                                text="Delete" textFill="WHITE">
-                            <font>
-                                <Font name="Albert Sans Bold" size="13.0"/>
-                            </font>
-                        </Button>
+                        <Button onAction="#deleteWarehouse" prefHeight="40.0" prefWidth="115.0" styleClass="button-red-delete" text="Delete" />
                     </VBox>
-                    <VBox layoutX="10.0" layoutY="10.0">
-                        <padding>
-                            <Insets top="18.0"/>
-                        </padding>
-                        <Button mnemonicParsing="false" onAction="#rentOrSell" prefHeight="40.0"
-                                prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;"
-                                text="Rent"/>
-                    </VBox>
-                    <VBox layoutX="305.0" layoutY="10.0">
-                        <padding>
-                            <Insets top="18.0"/>
-                        </padding>
-                        <Button mnemonicParsing="false" onAction="#rentOrSell" prefHeight="40.0"
-                                prefWidth="115.0" style="-fx-background-color: #C2EBFA; -fx-background-radius: 10;"
-                                text="Sell"/>
-                    </VBox>
+               <VBox layoutX="690.0" layoutY="10.0">
+                  <padding>
+                     <Insets top="18.0" />
+                  </padding>
+                  <children>
+                     <Button mnemonicParsing="false" onAction="#rentOrSell" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Rent/Sell" />
+                  </children>
+                  <HBox.margin>
+                     <Insets left="135.0" />
+                  </HBox.margin>
+               </VBox>
                 </HBox>
                 <HBox prefHeight="120.0">
                     <VBox>
                         <Label text="Details:">
                             <font>
-                                <Font name="Albert Sans SemiBold" size="14.0"/>
+                                <Font name="Albert Sans SemiBold" size="14.0" />
                             </font>
                         </Label>
-                        <TextArea fx:id="details" editable="false" prefHeight="180.0" prefWidth="910.0"
-                                  style="-fx-background-radius: 10;"/>
+                        <TextArea fx:id="details" editable="false" prefHeight="180.0" prefWidth="910.0" style="-fx-background-radius: 10;" />
                     </VBox>
                     <padding>
-                        <Insets left="20.0" right="20.0"/>
+                        <Insets left="20.0" right="20.0" />
                     </padding>
                 </HBox>
             </VBox>

@@ -141,7 +141,7 @@
                                 </TextField>
                             </VBox>
                             <HBox alignment="CENTER">
-                                <Button fx:id="chooseFile" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Choose File">
+                                <Button fx:id="chooseImage" disable="true" mnemonicParsing="false" onAction="#uploadImage" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Choose Image">
                                     <font>
                                         <Font name="Albert Sans Regular" size="12.0" />
                                     </font>

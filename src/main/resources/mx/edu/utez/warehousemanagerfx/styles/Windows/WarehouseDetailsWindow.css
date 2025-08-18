@@ -21,14 +21,23 @@
     -fx-border-color: #003459;
 }
 
-/* Blue toggle button */
-.toggle-button-blue {
-    -fx-background-color: #80D4F4;
-    -fx-background-radius: 10px;
-    -fx-font-size: 10px;
-    -fx-font-family: "Albert Sans";
-    -fx-font-style: normal;
-    -fx-text-alignment: center;
+/* Edit/Update toggle button */
+.edit-button {
+    -fx-background-color: lightgreen;
+    -fx-text-fill: black;
+    -fx-background-radius: 10;
+    -fx-font-family: 'Albert Sans';
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.update-button {
+    -fx-background-color: darkgreen;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-family: 'Albert Sans';
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
 }
 
 /* Register blue button */

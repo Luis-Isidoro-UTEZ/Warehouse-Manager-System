@@ -1,11 +1,14 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
 import mx.edu.utez.warehousemanagerfx.models.Administrator;
-import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,6 +50,12 @@ public class WarehouseDao {
         """;
             int generatedIdWarehouse;
             try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, new String[]{"Id_Warehouse"})) {
+              // Copy image if path is selected
+                if (w.getImage() != null && !w.getImage().isEmpty()) {
+                    String fileName = copyImageToUploads(w.getImage());
+                    w.setImage(fileName); // Save only the name in the DB
+                }
+
                 psInsert.setDate(1, Date.valueOf(LocalDate.now()));
                 psInsert.setString(2, w.getWarehouseName());
                 psInsert.setString(3, (w.getImage() == null || w.getImage().isEmpty()) ? "ImageNotAvailable.jpg" : w.getImage());
@@ -65,6 +74,8 @@ public class WarehouseDao {
                         throw new SQLException("Failed to retrieve generated Id_Warehouse.");
                     }
                 }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             // 3️⃣ Generate warehouseCode and update record
@@ -87,6 +98,21 @@ public class WarehouseDao {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private String copyImageToUploads(String sourcePath) throws IOException {
+        File source = new File(sourcePath);
+
+        // "uploads" folder outside of resources (for writing)
+        String targetDir = "uploads/thumbnails/";
+        new File(targetDir).mkdirs(); // create if does not exist
+
+        String fileName = System.currentTimeMillis() + "_" + source.getName();
+        File target = new File(targetDir + fileName);
+
+        Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        return fileName; // Save only the name in the DB
     }
 
     // --- UPDATE ---

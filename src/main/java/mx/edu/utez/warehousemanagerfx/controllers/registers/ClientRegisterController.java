@@ -154,16 +154,6 @@ public class ClientRegisterController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "Could not return to the admin window.");
-        }
+        Administrator.goHome(event, firstName);
     }
 }

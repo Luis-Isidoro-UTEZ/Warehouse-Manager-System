@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
@@ -20,9 +21,14 @@ import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.Alerts;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
-import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -35,7 +41,7 @@ public class WarehouseDetailsController implements Initializable {
     @FXML
     private TextField name;
     @FXML
-    private ImageView img;
+    private ImageView img; // To preview the selected image
     @FXML
     private TextField image;
     @FXML
@@ -50,6 +56,10 @@ public class WarehouseDetailsController implements Initializable {
     private Button edit;
     @FXML
     private TextArea details;
+    @FXML
+    public Button chooseImage;
+
+    private String selectedImagePath; // Temporary route to upload
 
     private final String[] statusChoiceList = {"Available", "Rented", "Sold", "Rent Only", "Sale Only"};
     private Warehouse w;
@@ -91,7 +101,7 @@ public class WarehouseDetailsController implements Initializable {
             if (path == null) {
                 // Image not found, use default image
                 source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("img/thumbnails/ImageNotAvailable.jpg")));
-                System.err.println("Imagen no encontrada: " + w.getImage());
+                System.err.println("Image not found: " + w.getImage());
             } else {
                 source = new Image(path);
             }
@@ -100,28 +110,46 @@ public class WarehouseDetailsController implements Initializable {
         img.setImage(source);
     }
 
+    @FXML
+    public void uploadImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivos de imagen", "*.png", "*.jpg", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(name.getScene().getWindow());
+
+        if (selectedFile != null) {
+            // We only save the name + extension
+            String fileName = selectedFile.getName();
+            image.setText(fileName);
+            w.setImage(fileName);
+
+            // Copy the image to the thumbnails directory inside resources
+            Path destination = Paths.get("src/main/resources/mx/edu/utez/warehousemanagerfx/img/thumbnails/" + fileName);
+            try {
+                Files.copy(selectedFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void editWarehouse(){
         name.setEditable(true);
-        image.setEditable(true);
+        chooseImage.setDisable(false);
         rentalPrice.setEditable(true);
         salePrice.setEditable(true);
         size.setEditable(true);
         status.setDisable(false);
         details.setEditable(true);
         edit.setText("Update");
-        edit.setStyle(
-                "-fx-background-color: darkgreen;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-font-family: 'Albert Sans';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-font-size: 13px;"
-        );
+        edit.getStyleClass().remove("edit-button");
+        edit.getStyleClass().add("update-button");
     }
 
     private void updateWarehouse() {
         String nameW = name.getText();
-        String imageV = image.getText();
+        String imageW = image.getText();
         double rentalPriceV = Double.parseDouble(rentalPrice.getText());
         double salePriceV = Double.parseDouble(salePrice.getText());
         double sizeV = Double.parseDouble(size.getText());
@@ -129,7 +157,7 @@ public class WarehouseDetailsController implements Initializable {
 
         // Put new things on the object
         w.setWarehouseName(nameW);
-        w.setImage(imageV);
+        w.setImage(imageW);
         w.setRentalPrice(rentalPriceV);
         w.setSalePrice(salePriceV);
         w.setSizeSqMeters(sizeV);
@@ -144,24 +172,13 @@ public class WarehouseDetailsController implements Initializable {
         status.setDisable(true);
         details.setEditable(false);
         edit.setText("Edit");
-        edit.setStyle(
-                "-fx-background-color: lightgreen;" +
-                        "-fx-text-fill: black;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-font-family: 'Albert Sans';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-font-size: 13px;"
-        );
-
+        edit.getStyleClass().remove("update-button");
+        edit.getStyleClass().add("edit-button");
         // Update the DB
         if(dao.updateWarehouse(w)){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-            alert.setTitle("Successful update!"); alert.setHeaderText(null); alert.setContentText("The warehouse was updated successfully."); alert.show();
+            Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful update!", "The warehouse was updated successfully.");
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-            alert.setTitle("Error!"); alert.setHeaderText(null); alert.setContentText("The warehouse was not updated."); alert.show();
+            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be updated.");
         }
     }
 
@@ -171,13 +188,9 @@ public class WarehouseDetailsController implements Initializable {
         if (confirmDelete()) {
             if (dao.softDeleteWarehouse(w.getIdWarehouse())) {
                 goHomeAD(event);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-                alert.setTitle("Successful removal!"); alert.setHeaderText(null); alert.setContentText("The warehouse was successfully deleted."); alert.show();
+                Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful deletion!", "The warehouse was successfully deleted.");
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-                alert.setTitle("Error!"); alert.setHeaderText(null); alert.setContentText("The warehouse was not deleted."); alert.show();
+                Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be deleted.");
             }
         }
     }

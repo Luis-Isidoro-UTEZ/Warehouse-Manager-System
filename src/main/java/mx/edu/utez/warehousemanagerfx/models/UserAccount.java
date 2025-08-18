@@ -21,7 +21,10 @@ import java.util.Objects;
 
 public class UserAccount {
     private int idUser;
-    private String fullName;
+    String firstName;
+    String middleName;
+    String lastName;
+    String secondLastName;
     private String email;
     private String phone;
     private String username;
@@ -31,10 +34,13 @@ public class UserAccount {
     public UserAccount() {
     }
 
-    public UserAccount(int idUser, String fullName, String email, String phone,
-                       String username, String passwordKey, String roleType) {
+    public UserAccount(int idUser, String firstName, String middleName, String lastName, String secondLastName,
+                       String email, String phone, String username, String passwordKey, String roleType) {
         this.idUser = idUser;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.secondLastName = secondLastName;
         this.email = email;
         this.phone = phone;
         this.username = username;
@@ -45,8 +51,30 @@ public class UserAccount {
     // Getters y setters
     public int getIdUser() { return idUser; }
     public void setIdUser(int idUser) { this.idUser = idUser; }
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getMiddleName() {
+        return middleName;
+    }
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getSecondLastName() {
+        return secondLastName;
+    }
+    public void setSecondLastName(String secondLastName) {
+        this.secondLastName = secondLastName;
+    }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPhone() { return phone; }
@@ -58,25 +86,13 @@ public class UserAccount {
     public String getRoleType() { return roleType; }
     public void setRoleType(String roleType) { this.roleType = roleType; }
 
-    @Override
-    public String toString() {
-        return "UserAccount{" +
-                "idUser=" + idUser +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", username='" + username + '\'' +
-                ", roleType='" + roleType + '\'' +
-                '}';
-    }
-
     @FXML
     public static void logout(ActionEvent event) {
         try {
             Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(UserAccount.class.getResource(FXMLRoutes.LOGIN)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
+            Scene scene = new Scene(loginWindow);
+            stage.setScene(scene);
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
@@ -103,7 +119,8 @@ public class UserAccount {
             welcome.getDialogPane().setMinWidth(360);
 
             welcome.showAndWait();
-        } catch (Exception ex) {
+        } catch (Exception e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.WINDOW_MODAL);
             alert.setTitle("Error");

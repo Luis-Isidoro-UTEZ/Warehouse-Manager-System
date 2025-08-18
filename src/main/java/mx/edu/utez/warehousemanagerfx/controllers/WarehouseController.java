@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
+import mx.edu.utez.warehousemanagerfx.utils.Alerts;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
@@ -79,7 +81,7 @@ public class WarehouseController {
             stage.show();
         }catch(IOException e){
             e.printStackTrace();
-            System.out.println("Error! Could not load the warehouse details screen.");
+            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the warehouse details window.");
         }
     }
 }

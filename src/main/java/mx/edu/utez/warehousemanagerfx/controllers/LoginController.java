@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
+import mx.edu.utez.warehousemanagerfx.utils.Alerts;
 import mx.edu.utez.warehousemanagerfx.utils.services.LoginService;
 import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.AuthResult;
 import mx.edu.utez.warehousemanagerfx.utils.services.LoginService.AttemptResult;
@@ -76,7 +77,7 @@ public class LoginController implements Initializable {
             if (rawPassword.isEmpty()) {
                 password.getStyleClass().add("input-error");
             }
-            showWarningNonBlocking("Incomplete data", "Enter your username/email and password.");
+            Alerts.showAlert(Alert.AlertType.WARNING, user, "Incomplete data", "Enter your username/email and password.");
             isAuthenticating = false;
             return;
         }
@@ -166,7 +167,7 @@ public class LoginController implements Initializable {
 
                 boolean navigated = navigateAccordingToRoleAndThenShowWelcome(event, result.user(), used);
                 if (!navigated) {
-                    showErrorBlocking("Navigation error", "Could not open the requested screen after login.");
+                    Alerts.showAlert(Alert.AlertType.ERROR, user, "Navigation error", "Could not open the requested screen after login.");
                 }
             } else {
                 isAuthenticating = false;
@@ -183,7 +184,7 @@ public class LoginController implements Initializable {
                     default -> "An error occurred while authenticating.";
                 };
 
-                showErrorBlocking("Connection result", reason);
+                Alerts.showAlert(Alert.AlertType.ERROR, user, "Connection result", reason);
             }
         });
 
@@ -191,7 +192,7 @@ public class LoginController implements Initializable {
             isAuthenticating = false;
             setInputsDisabled(false);
             closeLoadingStageSafely();
-            Platform.runLater(() -> showErrorBlocking("Unexpected error", "An unexpected error occurred while authenticating. Please try again."));
+            Platform.runLater(() -> Alerts.showAlert(Alert.AlertType.ERROR, user, "Unexpected error", "An unexpected error occurred while authenticating. Please try again."));
         });
 
         Thread th = new Thread(authTask, "login-auth-task");
@@ -208,7 +209,7 @@ public class LoginController implements Initializable {
         else if ("ADMINISTRATOR".equalsIgnoreCase(role)) fxmlPath = FXMLRoutes.ADMIN;
 
         if (fxmlPath == null) {
-            Platform.runLater(() -> showWarningNonBlocking("Access denied", "Your role does not have access."));
+            Platform.runLater(() -> Alerts.showAlert(Alert.AlertType.WARNING, user, "Access denied", "Your role does not have access."));
             return false;
         }
 
@@ -256,7 +257,7 @@ public class LoginController implements Initializable {
             welcome.showAndWait();
             return true;
         } catch (Exception ex) {
-            Platform.runLater(() -> showErrorBlocking("Navigation error", "An error occurred while loading the window: " + ex.getMessage()));
+            Platform.runLater(() -> Alerts.showAlert(Alert.AlertType.ERROR, user, "Navigation error", "An error occurred while loading the window: " + ex.getMessage()));
             return false;
         }
     }
@@ -323,25 +324,6 @@ public class LoginController implements Initializable {
     private void setIconSuccess() {
         if (iconLabel == null) return;
         Platform.runLater(() -> iconLabel.setText("\u2714")); // ✔
-    }
-
-    /* ========== Alerts blocking/no-blocking ========== */
-    private void showErrorBlocking(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        try { Stage stg = (Stage) user.getScene().getWindow(); alert.initOwner(stg); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.showAndWait();
-    }
-
-    private void showWarningNonBlocking(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        try { alert.initOwner(user.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.show();
-    }
-
-    private void showErrorNonBlocking(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        try { alert.initOwner(user.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-        alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(content); alert.show();
     }
 
     private static String prettyName(DatabaseSource ds) {

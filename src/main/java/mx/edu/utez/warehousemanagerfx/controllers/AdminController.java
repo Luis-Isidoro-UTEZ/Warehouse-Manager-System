@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.models.Administrator;
 import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
@@ -145,18 +146,8 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    private void goInfAccount(MouseEvent event) {
-        try {
-            Parent infAdwindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(infAdwindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Error! Could not show the information account screen.");
-        }
+    private void goInfAccount(ActionEvent event) {
+        Administrator.goInfoAccount(event, searchTextField);
     }
 
     @FXML

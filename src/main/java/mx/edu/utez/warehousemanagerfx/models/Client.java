@@ -2,15 +2,21 @@ package mx.edu.utez.warehousemanagerfx.models;
 
 public class Client {
     private int idClient;
-    private String fullName;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String secondLastName;
     private String email;
     private String phone;
 
     public Client() {}
 
-    public Client(int idClient, String fullName, String email, String phone) {
+    public Client(int idClient, String firstName, String middleName, String lastName, String secondLastName, String email, String phone) {
         this.idClient = idClient;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.secondLastName = secondLastName;
         this.email = email;
         this.phone = phone;
     }
@@ -23,12 +29,36 @@ public class Client {
         this.idClient = idClient;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getSecondLastName() {
+        return secondLastName;
+    }
+
+    public void setSecondLastName(String secondLastName) {
+        this.secondLastName = secondLastName;
     }
 
     public String getEmail() {
@@ -51,7 +81,10 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "idClient=" + idClient +
-                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", secondLastName='" + secondLastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';

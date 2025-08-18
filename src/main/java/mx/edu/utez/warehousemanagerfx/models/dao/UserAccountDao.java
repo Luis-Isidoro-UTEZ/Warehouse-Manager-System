@@ -16,17 +16,20 @@ import java.util.Optional;
 public class UserAccountDao {
     // --- CREATE ---
     public boolean createUser(UserAccount user) {
-        String sql = "INSERT INTO USER_ACCOUNT (Full_Name, Email, Phone, Username, Password_Key, Role_Type) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USER_ACCOUNT (First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone, Username, Password_Key, Role_Type) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, user.getFullName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPhone());
-            ps.setString(4, user.getUsername());
-            ps.setString(5, user.getPasswordKey());
-            ps.setString(6, user.getRoleType());
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getMiddleName());
+            ps.setString(3, user.getLastName());
+            ps.setString(4, user.getSecondLastName());
+            ps.setString(5, user.getEmail());
+            ps.setString(6, user.getPhone());
+            ps.setString(7, user.getUsername());
+            ps.setString(8, user.getPasswordKey());
+            ps.setString(9, user.getRoleType());
 
             return ps.executeUpdate() > 0;
 
@@ -48,7 +51,10 @@ public class UserAccountDao {
             while (rs.next()) {
                 UserAccount user = new UserAccount(
                         rs.getInt("Id_User"),
-                        rs.getString("Full_Name"),
+                        rs.getString("First_Name"),
+                        rs.getString("Middle_Name"),
+                        rs.getString("Last_Name"),
+                        rs.getString("Second_Last_Name"),
                         rs.getString("Email"),
                         rs.getString("Phone"),
                         rs.getString("Username"),
@@ -76,7 +82,10 @@ public class UserAccountDao {
             if (rs.next()) {
                 UserAccount user = new UserAccount(
                         rs.getInt("Id_User"),
-                        rs.getString("Full_Name"),
+                        rs.getString("First_Name"),
+                        rs.getString("Middle_Name"),
+                        rs.getString("Last_Name"),
+                        rs.getString("Second_Last_Name"),
                         rs.getString("Email"),
                         rs.getString("Phone"),
                         rs.getString("Username"),
@@ -112,7 +121,10 @@ public class UserAccountDao {
                 // Aquí debes validar la contraseña hash si tienes un sistema de hashing
                 UserAccount user = new UserAccount(
                         rs.getInt("Id_User"),
-                        rs.getString("Full_Name"),
+                        rs.getString("First_Name"),
+                        rs.getString("Middle_Name"),
+                        rs.getString("Last_Name"),
+                        rs.getString("Second_Last_Name"),
                         rs.getString("Email"),
                         rs.getString("Phone"),
                         rs.getString("Username"),
@@ -132,18 +144,21 @@ public class UserAccountDao {
 
     // --- UPDATE ---
     public boolean updateUser(UserAccount user) {
-        String sql = "UPDATE USER_ACCOUNT SET Full_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ?, Role_Type = ? " +
+        String sql = "UPDATE USER_ACCOUNT SET First_Name = ?, Middle_Name = ?, Last_Name = ?, Second_Last_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ?, Role_Type = ? " +
                 "WHERE Id_User = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, user.getFullName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPhone());
-            ps.setString(4, user.getUsername());
-            ps.setString(5, user.getPasswordKey());
-            ps.setString(6, user.getRoleType());
-            ps.setInt(7, user.getIdUser());
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getMiddleName());
+            ps.setString(3, user.getLastName());
+            ps.setString(4, user.getSecondLastName());
+            ps.setString(5, user.getEmail());
+            ps.setString(6, user.getPhone());
+            ps.setString(7, user.getUsername());
+            ps.setString(8, user.getPasswordKey());
+            ps.setString(9, user.getRoleType());
+            ps.setInt(10, user.getIdUser());
 
             return ps.executeUpdate() > 0;
 
@@ -171,7 +186,7 @@ public class UserAccountDao {
     public Optional<UserAccount> findByIdentifierAndPassword(Connection con, String identifier, String rawPassword) {
         try {
             final String sql = """
-                SELECT Id_User, Full_Name, Email, Phone, Username, Password_Key, Role_Type
+                SELECT Id_User, First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone, Username, Password_Key, Role_Type
                 FROM USER_ACCOUNT
                 WHERE (LOWER(Username) = LOWER(?) OR LOWER(Email) = LOWER(?))
                 AND Password_Key = ?
@@ -183,38 +198,44 @@ public class UserAccountDao {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int idUser = rs.getInt("Id_User");
-                String fullName = rs.getString("Full_Name");
+                String firstName = rs.getString("First_Name");
+                String middleName = rs.getString("Middle_Name");
+                String lastName = rs.getString("Last_Name");
+                String secondLastName = rs.getString("Second_Last_Name");
                 String email = rs.getString("Email");
                 String phone = rs.getString("Phone");
                 String username = rs.getString("Username");
                 String passwordKey = rs.getString("Password_Key");
                 String roleType = rs.getString("Role_Type");
 
-                // Verificar rol
+                // Verify role
                 if ("ADMINISTRATOR".equalsIgnoreCase(roleType)) {
                     final String sqlAdmin = """
                         SELECT Id_Branch, Is_Deleted
                         FROM ADMINISTRATOR
-                        WHERE Id_User = ?
+                        WHERE Id_Admin = ?
                         """;
                     try (PreparedStatement psAdmin = con.prepareStatement(sqlAdmin)) {
                         psAdmin.setInt(1, idUser);
                         try (ResultSet rsAdmin = psAdmin.executeQuery()) {
                             if (rsAdmin.next()) {
                                 Administrator admin = new Administrator(
-                                        idUser, fullName, email, phone,
-                                        username, passwordKey, roleType,
+                                        idUser, firstName, middleName, lastName, secondLastName,
+                                        email, phone, username, passwordKey, roleType,
                                         rsAdmin.getInt("Id_Branch"),
                                         rsAdmin.getBoolean("Is_Deleted")
                                 );
                                 return Optional.of(admin);
+                            } else {
+                                // No row exists in ADMINISTRATOR for this Id_Admin -> treat as error or empty
+                                return Optional.empty();
                             }
                         }
                     }
                 } else if ("SUPERADMINISTRATOR".equalsIgnoreCase(roleType)) {
                     SuperAdministrator superAdmin = new SuperAdministrator(
-                            idUser, fullName, email, phone,
-                            username, passwordKey, roleType
+                            idUser, firstName, middleName, lastName, secondLastName,
+                            email, phone, username, passwordKey, roleType
                     );
                     return Optional.of(superAdmin);
                 }
@@ -222,7 +243,9 @@ public class UserAccountDao {
             rs.close();
             con.close();
         } catch (Exception e) {
-            throw new RuntimeException("Error al consultar usuario", e);
+            // Re-throw with the original exception so that LoginService logs the stacktrace
+            throw new RuntimeException("Error in DAO findByIdentifierAndPassword. \n" +
+                    "Error querying user.", e);
         }
         return Optional.empty();
     }

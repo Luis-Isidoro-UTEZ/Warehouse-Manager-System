@@ -34,7 +34,7 @@ public class AdminDao {
         String orderExpr;
         switch (orderColumn) {
             case "Id_Admin":
-                orderExpr = "u.ID_USER";
+                orderExpr = "a.ID_ADMIN";
                 break;
             case "Name":
                 orderExpr = "u.FULL_NAME";
@@ -61,7 +61,7 @@ public class AdminDao {
                             "  a.ID_BRANCH     AS Id_Branch, " +
                             "  a.IS_DELETED    AS Is_Deleted " +
                             "FROM USER_ACCOUNT u " +
-                            "JOIN ADMINISTRATOR a ON a.ID_USER = u.ID_USER " +
+                            "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
                             "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' " +
                             "ORDER BY " + orderExpr + " " + dir;
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -83,7 +83,7 @@ public class AdminDao {
         String sql = "SELECT u.ID_USER AS Id_Admin, u.FULL_NAME AS Full_Name, u.EMAIL, u.PHONE, " +
                 "u.USERNAME, u.PASSWORD_KEY, u.ROLE_TYPE, a.ID_BRANCH, a.IS_DELETED " +
                 "FROM USER_ACCOUNT u " +
-                "JOIN ADMINISTRATOR a ON a.ID_USER = u.ID_USER " +
+                "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
                 "WHERE u.ID_USER = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
@@ -104,21 +104,24 @@ public class AdminDao {
 
     // CREATE: Insert new admin (USER_ACCOUNT + ADMINISTRATOR)
     public boolean create(Administrator admin) {
-        String sqlUser = "INSERT INTO USER_ACCOUNT (Full_Name, Email, Phone, Username, Password_Key, Role_Type) " +
-                "VALUES (?, ?, ?, ?, ?, 'ADMINISTRATOR')";
+        String sqlUser = "INSERT INTO USER_ACCOUNT (First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone, Username, Password_Key, Role_Type) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ADMINISTRATOR')";
 
-        String sqlAdmin = "INSERT INTO ADMINISTRATOR (Id_User, Id_Branch) VALUES (?, ?)";
+        String sqlAdmin = "INSERT INTO ADMINISTRATOR (ID_ADMIN, Id_Branch) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection()) {
             conn.setAutoCommit(false);
 
             // Insert into USER_ACCOUNT
             try (PreparedStatement psUser = conn.prepareStatement(sqlUser, new String[]{"ID_USER"})) {
-                psUser.setString(1, admin.getFullName());
-                psUser.setString(2, admin.getEmail());
-                psUser.setString(3, admin.getPhone());
-                psUser.setString(4, admin.getUsername());
-                psUser.setString(5, admin.getPasswordKey());
+                psUser.setString(1, admin.getFirstName());
+                psUser.setString(2, admin.getMiddleName());
+                psUser.setString(3, admin.getLastName());
+                psUser.setString(4, admin.getSecondLastName());
+                psUser.setString(5, admin.getEmail());
+                psUser.setString(6, admin.getPhone());
+                psUser.setString(7, admin.getUsername());
+                psUser.setString(8, admin.getPasswordKey());
                 psUser.executeUpdate();
 
                 // Get generated Id_User
@@ -132,7 +135,7 @@ public class AdminDao {
 
             // Insert into ADMINISTRATOR
             try (PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin)) {
-                psAdmin.setInt(1, admin.getIdUser());
+                psAdmin.setInt(1, admin.getIdAdmin());
                 if (admin.getIdBranch() != null) {
                     psAdmin.setInt(2, admin.getIdBranch());
                 } else {
@@ -152,21 +155,24 @@ public class AdminDao {
 
     // UPDATE: Modify admin data
     public boolean update(Administrator admin) {
-        String sqlUser = "UPDATE USER_ACCOUNT SET Full_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ? " +
+        String sqlUser = "UPDATE USER_ACCOUNT SET First_Name = ?, Middle_Name = ?, Last_Name = ?, Second_Last_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ? " +
                 "WHERE Id_User = ?";
 
-        String sqlAdmin = "UPDATE ADMINISTRATOR SET Id_Branch = ?, Is_Deleted = ? WHERE Id_User = ?";
+        String sqlAdmin = "UPDATE ADMINISTRATOR SET Id_Branch = ?, Is_Deleted = ? WHERE Id_Admin = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection()) {
             conn.setAutoCommit(false);
 
             try (PreparedStatement psUser = conn.prepareStatement(sqlUser)) {
-                psUser.setString(1, admin.getFullName());
-                psUser.setString(2, admin.getEmail());
-                psUser.setString(3, admin.getPhone());
-                psUser.setString(4, admin.getUsername());
-                psUser.setString(5, admin.getPasswordKey());
-                psUser.setInt(6, admin.getIdUser());
+                psUser.setString(1, admin.getFirstName());
+                psUser.setString(2, admin.getMiddleName());
+                psUser.setString(3, admin.getLastName());
+                psUser.setString(4, admin.getSecondLastName());
+                psUser.setString(5, admin.getEmail());
+                psUser.setString(6, admin.getPhone());
+                psUser.setString(7, admin.getUsername());
+                psUser.setString(8, admin.getPasswordKey());
+                psUser.setInt(9, admin.getIdAdmin());
                 psUser.executeUpdate();
             }
 
@@ -191,13 +197,13 @@ public class AdminDao {
     }
 
     // DELETE: Soft delete admin
-    public boolean delete(int idUser) {
-        String sql = "UPDATE ADMINISTRATOR SET Is_Deleted = 1 WHERE Id_User = ?";
+    public boolean delete(int idAdmin) {
+        String sql = "UPDATE ADMINISTRATOR SET Is_Deleted = 1 WHERE Id_Admin = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idUser);
+            ps.setInt(1, idAdmin);
             int affected = ps.executeUpdate();
             return affected > 0;
 
@@ -211,7 +217,10 @@ public class AdminDao {
     private Administrator mapResultSetToAdmin(ResultSet rs) throws java.sql.SQLException {
         Administrator a = new Administrator();
         a.setIdUser(rs.getInt("Id_Admin"));
-        a.setFullName(rs.getString("Full_Name"));
+        a.setFirstName(rs.getString("First_Name"));
+        a.setMiddleName(rs.getString("Middle_Name"));
+        a.setLastName(rs.getString("Last_Name"));
+        a.setSecondLastName(rs.getString("Second_Last_Name"));
         a.setEmail(rs.getString("EMAIL"));
         a.setPhone(rs.getString("PHONE"));
         a.setUsername(rs.getString("USERNAME"));

@@ -13,8 +13,11 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
+import mx.edu.utez.warehousemanagerfx.controllers.registers.ClientRegisterController;
+import mx.edu.utez.warehousemanagerfx.models.Administrator;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
+import mx.edu.utez.warehousemanagerfx.utils.Alerts;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import javax.swing.*;
@@ -158,7 +161,7 @@ public class WarehouseDetailsController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-            alert.setTitle("Error"); alert.setHeaderText(null); alert.setContentText("The warehouse was not updated."); alert.show();
+            alert.setTitle("Error!"); alert.setHeaderText(null); alert.setContentText("The warehouse was not updated."); alert.show();
         }
     }
 
@@ -174,7 +177,7 @@ public class WarehouseDetailsController implements Initializable {
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-                alert.setTitle("Error"); alert.setHeaderText(null); alert.setContentText("The warehouse was not deleted."); alert.show();
+                alert.setTitle("Error!"); alert.setHeaderText(null); alert.setContentText("The warehouse was not deleted."); alert.show();
             }
         }
     }
@@ -190,48 +193,29 @@ public class WarehouseDetailsController implements Initializable {
     @FXML
     private void rentOrSell(ActionEvent event) {
         try {
-            Parent infAccWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.CLIENT_REGISTER)));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.CLIENT_REGISTER));
+            Parent clientRegisterWindow = loader.load();
+            ClientRegisterController controller = loader.getController();
+            controller.setCurrentWarehouse(w);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(infAccWindow);
+            Scene escena = new Scene(clientRegisterWindow);
             stage.setScene(escena);
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error! Could not return to the account information window.");
+            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the client register window to rent/sell the warehouse.");
         }
     }
 
     @FXML
     private void goHomeAD(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error! Could not return to the admin window.");
-        }
+        Administrator.goHome(event, name);
     }
 
     @FXML
     private void goAccount(ActionEvent event) {
-        try {
-            Parent infAccWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(infAccWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error! Could not return to the account information window.");
-        }
+        Administrator.goInfoAccount(event, name);
     }
 }

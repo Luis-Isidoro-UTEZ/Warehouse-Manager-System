@@ -7,21 +7,21 @@ public class WarehouseTransaction {
     private String transactionType;
     private LocalDate transactionDate;
     private LocalDate paymentExpirationDate;
-    private Warehouse warehouse;
-    private Client client;
-    private Administrator admin;
+    private int idWarehouse;
+    private int idClient;
+    private int idAdmin;
 
     public WarehouseTransaction() {}
 
     public WarehouseTransaction(int idTransaction, String transactionType, LocalDate transactionDate, LocalDate paymentExpirationDate,
-                                Warehouse warehouse, Client client, Administrator admin) {
+                                int idWarehouse, int idClient, int idAdmin) {
         this.idTransaction = idTransaction;
         this.transactionType = transactionType;
         this.transactionDate = transactionDate;
         this.paymentExpirationDate = paymentExpirationDate;
-        this.warehouse = warehouse;
-        this.client = client;
-        this.admin = admin;
+        this.idWarehouse = idWarehouse;
+        this.idClient = idClient;
+        this.idAdmin = idAdmin;
     }
 
     public int getIdTransaction() {
@@ -56,28 +56,28 @@ public class WarehouseTransaction {
         this.paymentExpirationDate = paymentExpirationDate;
     }
 
-    public Warehouse getWarehouse() {
-        return warehouse;
+    public int getIdWarehouse() {
+        return idWarehouse;
     }
 
-    public void setWarehouse(Warehouse warehouse) {
-        this.warehouse = warehouse;
+    public void setIdWarehouse(int idWarehouse) {
+        this.idWarehouse = idWarehouse;
     }
 
-    public Client getClient() {
-        return client;
+    public int getIdClient() {
+        return idClient;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
     }
 
-    public Administrator getAdmin() {
-        return admin;
+    public int getIdAdmin() {
+        return idAdmin;
     }
 
-    public void setAdmin(Administrator admin) {
-        this.admin = admin;
+    public void setIdAdmin(int idAdmin) {
+        this.idAdmin = idAdmin;
     }
 
     @Override
@@ -87,9 +87,9 @@ public class WarehouseTransaction {
                 ", transactionType='" + transactionType + '\'' +
                 ", transactionDate=" + transactionDate +
                 ", paymentExpirationDate=" + paymentExpirationDate +
-                ", warehouse=" + (warehouse != null ? warehouse.getWarehouseCode() : "null") +
-                ", client=" + (client != null ? client.getFullName() : "null") +
-                ", admin=" + (admin != null ? admin.getFullName() : "null") +
+                ", idWarehouse=" + idWarehouse +
+                ", idClient=" + idClient +
+                ", idAdmin=" + idAdmin +
                 '}';
     }
 }

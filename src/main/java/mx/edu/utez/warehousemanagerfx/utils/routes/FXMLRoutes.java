@@ -10,6 +10,7 @@ public class FXMLRoutes {
     public static final String WAREHOUSE_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/WarehouseRegister.fxml";
     public static final String WAREHOUSE_DETAILS = "/mx/edu/utez/warehousemanagerfx/views/warehouse/WarehouseDetails.fxml";
     public static final String CLIENT_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/ClientRegister.fxml";
+    public static final String CLIENT_ASSIGNATION = "/mx/edu/utez/warehousemanagerfx/views/edits/ClientTransactionEdit.fxml";
     public static final String INFO_ACCOUNT_ADMIN =  "/mx/edu/utez/warehousemanagerfx/views/account/InfAccountAD.fxml";
     // SUPERADMIN
     public static final String SUPERADMIN = "/mx/edu/utez/warehousemanagerfx/views/superadmin/SuperAdminWindow.fxml";

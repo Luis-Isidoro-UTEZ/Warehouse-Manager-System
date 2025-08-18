@@ -1,4 +1,4 @@
-package mx.edu.utez.warehousemanagerfx.controllers.registers;
+package mx.edu.utez.warehousemanagerfx.controllers.edits;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,19 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
 import mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetailsController;
-import mx.edu.utez.warehousemanagerfx.models.Administrator;
-import mx.edu.utez.warehousemanagerfx.models.Client;
-import mx.edu.utez.warehousemanagerfx.models.Warehouse;
-import mx.edu.utez.warehousemanagerfx.models.WarehouseTransaction;
+import mx.edu.utez.warehousemanagerfx.models.*;
 import mx.edu.utez.warehousemanagerfx.models.dao.ClientDao;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseTransactionDao;
@@ -30,10 +24,10 @@ import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ClientRegisterController implements Initializable {
+public class ClientTransactionEditController implements Initializable {
     @FXML
     private TextField firstName;
     @FXML
@@ -84,16 +78,32 @@ public class ClientRegisterController implements Initializable {
         }
     }
 
-    public void setCurrentWarehouse(Warehouse w) {
+    public void setCurrentClientAssignation(Warehouse w) {
         this.w = w;
+        int idClient = w.getIdClient();
+        ClientDao clientDao = new ClientDao();
+        Optional<Client> c = clientDao.readById(idClient);
+        c.ifPresent(client -> {
+            firstName.setText(client.getFirstName());
+            middleName.setText(client.getMiddleName());
+            lastName.setText(client.getLastName());
+            secondLastName.setText(client.getSecondLastName());
+            email.setText(client.getEmail());
+            phone.setText(client.getPhone());
+        });
+        if (w.getStatus().equals("Rented")) {
+            transactionType.setValue("Rent");
+            expirationDateControls.setVisible(true);
+            WarehouseTransactionDao wtDao = new WarehouseTransactionDao();
+            WarehouseTransaction wt = wtDao.readTransactionById(idClient);
+            paymentExpirationDate.setValue(wt.getPaymentExpirationDate());
+        } else if (w.getStatus().equals("Sold")) {
+            transactionType.setValue("Sale");
+        }
     }
 
     @FXML
-    public void registerClient(ActionEvent event) {
-        if (w == null) {
-            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "No warehouse selected for this client.");
-            return;
-        }
+    public void editClientAssignation(ActionEvent event) {
         // Validate if any fields are empty
         if (Validations.isInputFieldsEmpty(inputNodes, firstName)) return;
         // If all validations pass, proceed with object creation
@@ -137,6 +147,28 @@ public class ClientRegisterController implements Initializable {
             Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The " + transaction + " could not be made.");
         }
     }
+/*
+    @FXML
+    private void deleteWarehouse(ActionEvent event) {
+        WarehouseDao dao = new WarehouseDao();
+        if (confirmDelete()) {
+            if (dao.softDeleteWarehouse(w.getIdWarehouse())) {
+                goHomeAD(event);
+                Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful deletion!", "The warehouse was successfully deleted.");
+            } else {
+                Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be deleted.");
+            }
+        }
+    }
+
+    private boolean confirmDelete() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
+        alert.setTitle("Confirm deletion"); alert.setHeaderText("Hello"); alert.setContentText("Are you sure you want to delete that record?");
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+*/
 
     @FXML
     private void returnWarehouseDetails(ActionEvent event) {

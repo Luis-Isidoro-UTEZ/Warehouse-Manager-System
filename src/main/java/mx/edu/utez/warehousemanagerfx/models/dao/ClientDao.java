@@ -66,8 +66,8 @@ public class ClientDao {
     }
 
     // --- READ BY ID ---
-    public Optional<Client> findById(int idClient) {
-        String sql = "SELECT Id_Client, Full_Name, Email, Phone FROM CLIENT WHERE Id_Client = ?";
+    public Optional<Client> readById(int idClient) {
+        String sql = "SELECT Id_Client, First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone FROM CLIENT WHERE Id_Client = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

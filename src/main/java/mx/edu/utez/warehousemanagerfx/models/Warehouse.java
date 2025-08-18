@@ -16,6 +16,7 @@ public class Warehouse {
     private boolean isDeleted;
     private int idProperty; // FK a PROPERTY
     private int idBranch;   // FK a BRANCH
+    private int idClient;   // FK a WAREHOUSE
 
     // Constructor Methods
     public Warehouse() {
@@ -23,7 +24,7 @@ public class Warehouse {
 
     public Warehouse(int idWarehouse, String warehouseCode, LocalDate registrationDate, String warehouseName, String image,
                      double rentalPrice, double salePrice, double sizeSqMeters, String status, boolean isDeleted,
-                     int idProperty, int idBranch) {
+                     int idProperty, int idBranch, int idClient) {
         this.idWarehouse = idWarehouse;
         this.warehouseCode = warehouseCode;
         this.registrationDate = registrationDate;
@@ -36,6 +37,7 @@ public class Warehouse {
         this.isDeleted = isDeleted;
         this.idProperty = idProperty;
         this.idBranch = idBranch;
+        this.idClient = idClient;
     }
 
     // Class Methods
@@ -56,6 +58,7 @@ public class Warehouse {
                 ", isDeleted=" + isDeleted +
                 ", idProperty=" + idProperty +
                 ", idBranch=" + idBranch +
+                ", idClient=" + idClient +
                 '}';
     }
 
@@ -154,5 +157,13 @@ public class Warehouse {
 
     public void setIdBranch(int idBranch) {
         this.idBranch = idBranch;
+    }
+
+    public int getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
     }
 }

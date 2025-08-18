@@ -1,10 +1,11 @@
 package mx.edu.utez.warehousemanagerfx.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
+import mx.edu.utez.warehousemanagerfx.controllers.edits.ClientTransactionEditController;
 import mx.edu.utez.warehousemanagerfx.controllers.registers.ClientRegisterController;
 import mx.edu.utez.warehousemanagerfx.models.Administrator;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
@@ -45,6 +47,8 @@ public class WarehouseDetailsController implements Initializable {
     @FXML
     private TextField image;
     @FXML
+    public Button chooseImage;
+    @FXML
     private TextField rentalPrice;
     @FXML
     private TextField salePrice;
@@ -55,26 +59,44 @@ public class WarehouseDetailsController implements Initializable {
     @FXML
     private Button edit;
     @FXML
-    private TextArea details;
+    private Button action;
     @FXML
-    public Button chooseImage;
+    private TextArea details;
 
     private String selectedImagePath; // Temporary route to upload
 
-    private final String[] statusChoiceList = {"Available", "Rented", "Sold", "Rent Only", "Sale Only"};
+    private final ObservableList<String> statusChoiceList =
+            FXCollections.observableArrayList("Available", "Rent Only", "Sale Only");
+    private boolean isRentedOrSold;
     private Warehouse w;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Configure the initial Status Choice Box
-        status.getItems().addAll(statusChoiceList);
-
         // Detect changes in the edit button to edit and update.
         edit.setOnAction(e -> {
             if (edit.getText().equals("Edit")) {
                 editWarehouse();
             } else {
                 updateWarehouse();
+            }
+        });
+        // Detect changes in the status choice box
+        status.getSelectionModel().selectedItemProperty()
+                .addListener((o, a, b) -> {
+                    if(b.equals("Rented") || b.equals("Sold")) {
+                        action.setText("Show Client");
+                    } else {
+                        action.setText("Rent/Sell");
+                    }
+                });
+
+        // Detect changes in the edit button to edit and update.
+        action.setOnAction(e -> {
+            if (status.getValue().equals("Available")) {
+                rentOrSell();
+            } else {
+                action.setText("Show Client");
+                goToClientAssignation();
             }
         });
     }
@@ -108,6 +130,13 @@ public class WarehouseDetailsController implements Initializable {
         }
 
         img.setImage(source);
+
+        if (w.getStatus().equals("Rented") || w.getStatus().equals("Sold")) {
+            isRentedOrSold = true;
+            status.getItems().add(w.getStatus()); // solo agrega Rented o Sold
+        } else {
+            status.getItems().addAll(statusChoiceList);
+        }
     }
 
     @FXML
@@ -116,13 +145,15 @@ public class WarehouseDetailsController implements Initializable {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Archivos de imagen", "*.png", "*.jpg", "*.jpeg")
         );
-        File selectedFile = fileChooser.showOpenDialog(name.getScene().getWindow());
+        File selectedFile = fileChooser.showOpenDialog(chooseImage.getScene().getWindow());
 
         if (selectedFile != null) {
             // We only save the name + extension
             String fileName = selectedFile.getName();
             image.setText(fileName);
             w.setImage(fileName);
+            Image selectedImageFile = new Image(selectedFile.toURI().toString());
+            img.setImage(selectedImageFile);
 
             // Copy the image to the thumbnails directory inside resources
             Path destination = Paths.get("src/main/resources/mx/edu/utez/warehousemanagerfx/img/thumbnails/" + fileName);
@@ -140,11 +171,17 @@ public class WarehouseDetailsController implements Initializable {
         rentalPrice.setEditable(true);
         salePrice.setEditable(true);
         size.setEditable(true);
-        status.setDisable(false);
+        status.setDisable(isRentedOrSold);
         details.setEditable(true);
         edit.setText("Update");
-        edit.getStyleClass().remove("edit-button");
-        edit.getStyleClass().add("update-button");
+        edit.setStyle(
+                "-fx-background-color: darkgreen;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-font-family: 'Albert Sans';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 13px;"
+        );
     }
 
     private void updateWarehouse() {
@@ -169,11 +206,17 @@ public class WarehouseDetailsController implements Initializable {
         rentalPrice.setEditable(false);
         salePrice.setEditable(false);
         size.setEditable(false);
-        status.setDisable(true);
+        status.setDisable(!isRentedOrSold);
         details.setEditable(false);
         edit.setText("Edit");
-        edit.getStyleClass().remove("update-button");
-        edit.getStyleClass().add("edit-button");
+        edit.setStyle(
+                "-fx-background-color: lightgreen;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-font-family: 'Albert Sans';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 13px;"
+        );
         // Update the DB
         if(dao.updateWarehouse(w)){
             Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful update!", "The warehouse was updated successfully.");
@@ -203,16 +246,33 @@ public class WarehouseDetailsController implements Initializable {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    @FXML
-    private void rentOrSell(ActionEvent event) {
+    private void rentOrSell() {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.CLIENT_REGISTER));
             Parent clientRegisterWindow = loader.load();
             ClientRegisterController controller = loader.getController();
             controller.setCurrentWarehouse(w);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(clientRegisterWindow);
-            stage.setScene(escena);
+            Stage stage = (Stage) warehouseCode.getScene().getWindow();
+            Scene scene = new Scene(clientRegisterWindow);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the client register window to rent/sell the warehouse.");
+        }
+    }
+
+    private void goToClientAssignation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.CLIENT_ASSIGNATION));
+            Parent clientTransactionEditWindow = loader.load();
+            ClientTransactionEditController controller = loader.getController();
+            controller.setCurrentClientAssignation(w);
+            Stage stage = (Stage) warehouseCode.getScene().getWindow();
+            Scene scene = new Scene(clientTransactionEditWindow);
+            stage.setScene(scene);
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();

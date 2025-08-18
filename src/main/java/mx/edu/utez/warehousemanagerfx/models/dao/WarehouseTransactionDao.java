@@ -91,16 +91,19 @@ public class WarehouseTransactionDao {
 
     // --- READ BY ID ---
     public WarehouseTransaction readTransactionById(int id) {
-        String sql = "SELECT tx.Id_Transaction, tx.Transaction_Type, tx.Transaction_Date, tx.Payment_Expiration_Date, " +
-                "w.Id_Warehouse, w.Warehouse_Code, " +
-                "c.Id_Client, c.Full_Name AS Client_Name, " +
-                "a.Id_User AS Admin_Id, a.Full_Name AS Admin_Name " +
+        String sql = "SELECT " +
+                "    tx.Id_Transaction, " +
+                "    tx.Transaction_Type, " +
+                "    tx.Transaction_Date, " +
+                "    tx.Payment_Expiration_Date, " +
+                "    w.Id_Warehouse, " +
+                "    c.Id_Client, " +
+                "    adm.Id_Admin " +
                 "FROM WAREHOUSE_TRANSACTION tx " +
                 "JOIN WAREHOUSE w ON tx.Id_Warehouse = w.Id_Warehouse " +
                 "JOIN CLIENT c ON tx.Id_Client = c.Id_Client " +
-                "JOIN ADMINISTRATOR adm ON tx.Id_Admin = adm.Id_User " +
-                "JOIN USER_ACCOUNT a ON adm.Id_User = a.Id_User " +
-                "WHERE tx.Id_Transaction = ?";
+                "JOIN ADMINISTRATOR adm ON tx.Id_Admin = adm.Id_Admin " +
+                "WHERE tx.Id_Client = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -118,21 +121,15 @@ public class WarehouseTransactionDao {
 
                 Warehouse w = new Warehouse();
                 w.setIdWarehouse(rs.getInt("Id_Warehouse"));
-                w.setWarehouseCode(rs.getString("Warehouse_Code"));
                 wt.setIdWarehouse(w.getIdWarehouse());
 
                 Client c = new Client();
                 c.setIdClient(rs.getInt("Id_Client"));
-                c.setFirstName(rs.getString("Client_Name"));
                 wt.setIdClient(c.getIdClient());
 
                 Administrator a = new Administrator();
-                a.setIdUser(rs.getInt("Id_Admin"));
-                a.setFirstName(rs.getString("First_Name"));
-                a.setMiddleName(rs.getString("Middle_Name"));
-                a.setLastName(rs.getString("Last_Name"));
-                a.setSecondLastName(rs.getString("Second_Last_Name"));
-                wt.setIdAdmin(a.getIdUser());
+                a.setIdAdmin(rs.getInt("Id_Admin"));
+                wt.setIdAdmin(a.getIdAdmin());
 
                 return wt;
             }

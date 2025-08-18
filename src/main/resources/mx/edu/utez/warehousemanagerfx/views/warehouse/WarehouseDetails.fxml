@@ -252,7 +252,7 @@
                      <Insets top="18.0" />
                   </padding>
                   <children>
-                     <Button mnemonicParsing="false" onAction="#rentOrSell" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Rent/Sell" />
+                     <Button fx:id="action" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" style="-fx-background-color: #80D4F4; -fx-background-radius: 10;" text="Rent/Sell" />
                   </children>
                   <HBox.margin>
                      <Insets left="135.0" />
@@ -260,7 +260,7 @@
                </VBox>
                 </HBox>
                 <HBox prefHeight="120.0">
-                    <VBox>
+                    <VBox visible="false">
                         <Label text="Details:">
                             <font>
                                 <Font name="Albert Sans SemiBold" size="14.0" />

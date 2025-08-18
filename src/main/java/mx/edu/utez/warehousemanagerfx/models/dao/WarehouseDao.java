@@ -42,15 +42,15 @@ public class WarehouseDao {
                 }
             }
 
-            // 2️⃣ Insert warehouse without warehouseCode or status
+            // 2️⃣ Insert warehouse without warehouseCode, including idClient
             String sqlInsert = """
             INSERT INTO WAREHOUSE
-            (Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Id_Property, Id_Branch, Is_Deleted)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+            (Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Id_Property, Id_Branch, Id_Client, Is_Deleted)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
         """;
             int generatedIdWarehouse;
             try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, new String[]{"Id_Warehouse"})) {
-              // Copy image if path is selected
+                // Copy image if path is selected
                 if (w.getImage() != null && !w.getImage().isEmpty()) {
                     String fileName = copyImageToUploads(w.getImage());
                     w.setImage(fileName); // Save only the name in the DB
@@ -64,6 +64,13 @@ public class WarehouseDao {
                 psInsert.setDouble(6, w.getSizeSqMeters());
                 psInsert.setInt(7, idProperty);
                 psInsert.setInt(8, branchId);
+
+                // Handle Id_Client - can be null
+                if (w.getIdClient() > 0) {
+                    psInsert.setInt(9, w.getIdClient());
+                } else {
+                    psInsert.setNull(9, Types.INTEGER);
+                }
 
                 if (psInsert.executeUpdate() == 0) throw new SQLException("Creating warehouse failed.");
 
@@ -117,7 +124,7 @@ public class WarehouseDao {
 
     // --- UPDATE ---
     public boolean updateWarehouse(Warehouse w) {
-        String sql = "UPDATE WAREHOUSE SET Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=? WHERE Id_Warehouse=? AND Is_Deleted=0";
+        String sql = "UPDATE WAREHOUSE SET Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=?, Id_Client=? WHERE Id_Warehouse=? AND Is_Deleted=0";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, w.getWarehouseName());
@@ -126,7 +133,43 @@ public class WarehouseDao {
             ps.setDouble(4, w.getSalePrice());
             ps.setDouble(5, w.getSizeSqMeters());
             ps.setString(6, w.getStatus());
-            ps.setInt(7, w.getIdWarehouse());
+
+            // Handle Id_Client - can be null
+            if (w.getIdClient() > 0) {
+                ps.setInt(7, w.getIdClient());
+            } else {
+                ps.setNull(7, Types.INTEGER);
+            }
+
+            ps.setInt(8, w.getIdWarehouse());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // --- UPDATE CLIENT ASSIGNMENT ---
+    /**
+     * Method to assign or unassign a client to a warehouse
+     * @param idWarehouse warehouse ID
+     * @param idClient client ID (0 or null to unassign)
+     * @param newStatus new status for the warehouse
+     * @return true if successful
+     */
+    public boolean assignClientToWarehouse(int idWarehouse, Integer idClient, String newStatus) {
+        String sql = "UPDATE WAREHOUSE SET Id_Client=?, Status=? WHERE Id_Warehouse=? AND Is_Deleted=0";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (idClient != null && idClient > 0) {
+                ps.setInt(1, idClient);
+            } else {
+                ps.setNull(1, Types.INTEGER);
+            }
+            ps.setString(2, newStatus);
+            ps.setInt(3, idWarehouse);
+
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -220,6 +263,15 @@ public class WarehouseDao {
                 w.setDeleted(rs.getInt("Is_Deleted") == 1);
                 w.setIdProperty(rs.getInt("Id_Property"));
                 w.setIdBranch(rs.getInt("Id_Branch"));
+
+                // Handle Id_Client - can be null
+                int idClient = rs.getInt("Id_Client");
+                if (!rs.wasNull()) {
+                    w.setIdClient(idClient);
+                } else {
+                    w.setIdClient(0); // or whatever default value you prefer
+                }
+
                 warehouses.add(w);
             }
             rs.close();
@@ -242,7 +294,7 @@ public class WarehouseDao {
             throw new IllegalArgumentException("Invalid column name: " + columnName);
         }
         double min = 0, max = 0;
-        String query = "SELECT MIN(" + columnName + ") AS min_value, MAX(" + columnName + ") AS max_value FROM WAREHOUSE";
+        String query = "SELECT MIN(" + columnName + ") AS min_value, MAX(" + columnName + ") AS max_value FROM WAREHOUSE WHERE Is_Deleted = 0";
         try {
             Connection conn = DatabaseConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(query);

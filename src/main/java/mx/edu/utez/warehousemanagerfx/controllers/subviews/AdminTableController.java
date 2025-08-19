@@ -20,10 +20,10 @@ public class AdminTableController implements Initializable {
     @FXML private TableView<Administrator> tblAdmins;
     @FXML private TableColumn<Administrator, Integer> colAdminId;
     @FXML private TableColumn<Administrator, Integer> colBranchId;
+    @FXML private TableColumn<Administrator, String> colUsername;
     @FXML private TableColumn<Administrator, String> colName;
     @FXML private TableColumn<Administrator, String> colEmail;
     @FXML private TableColumn<Administrator, String> colPhone;
-    @FXML private TableColumn<Administrator, String> colUsername;
     @FXML private TableColumn<Administrator, Void> colAction;
 
     private String currentOrder = "Id_Admin ASC"; // default
@@ -31,19 +31,19 @@ public class AdminTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Bind columns
-        colAdminId.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+        colAdminId.setCellValueFactory(new PropertyValueFactory<>("idAdmin"));
         colBranchId.setCellValueFactory(new PropertyValueFactory<>("idBranch"));
-        colName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         // We alternate col-a / col-b to create vertical zebra columns.
         applyZebraCellFactory(colAdminId, "col-a");
         applyZebraCellFactory(colBranchId, "col-b");
-        applyZebraCellFactory(colName, "col-a");
-        applyZebraCellFactory(colEmail, "col-b");
-        applyZebraCellFactory(colPhone, "col-a");
-        applyZebraCellFactory(colUsername, "col-b");
+        applyZebraCellFactory(colUsername, "col-a");
+        applyZebraCellFactory(colName, "col-b");
+        applyZebraCellFactory(colEmail, "col-a");
+        applyZebraCellFactory(colPhone, "col-b");
         // Action button cell factory (chip style)
         Callback<TableColumn<Administrator, Void>, TableCell<Administrator, Void>> cellFactory = new Callback<>() {
             @Override

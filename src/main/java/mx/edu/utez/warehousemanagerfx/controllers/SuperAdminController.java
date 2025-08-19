@@ -87,7 +87,7 @@ public class SuperAdminController implements Initializable {
     @FXML
     private void registerAdmin(ActionEvent event) {
         try {
-            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.REGISTER_ADMIN)));
+            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.ADMIN_REGISTER)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(rgAdWindow);
             stage.setScene(escena);
@@ -103,7 +103,7 @@ public class SuperAdminController implements Initializable {
     @FXML
     private void registerBranch(ActionEvent event) {
         try {
-            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.REGISTER_BRANCH)));
+            Parent rgAdWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.BRANCH_REGISTER)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(rgAdWindow);
             stage.setScene(scene);

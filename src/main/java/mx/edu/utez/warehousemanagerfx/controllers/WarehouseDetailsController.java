@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,6 +22,7 @@ import mx.edu.utez.warehousemanagerfx.models.Administrator;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.Alerts;
+import mx.edu.utez.warehousemanagerfx.utils.Validations;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 
 import java.io.File;
@@ -31,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -69,9 +72,21 @@ public class WarehouseDetailsController implements Initializable {
             FXCollections.observableArrayList("Available", "Rent Only", "Sale Only");
     private boolean isRentedOrSold;
     private Warehouse w;
+    // List of all input nodes that can have an "input-error" style and that have to be validated
+    private List<Node> inputNodes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        inputNodes = List.of(name, rentalPrice, salePrice, size);
+        // Add a focused property listener to each node to remove the error style
+        for (Node node : inputNodes) {
+            node.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                // Remove the error style when the node gains focus
+                if (newVal) {
+                    node.getStyleClass().remove("input-error");
+                }
+            });
+        }
         // Detect changes in the edit button to edit and update.
         edit.setOnAction(e -> {
             if (edit.getText().equals("Edit")) {
@@ -185,6 +200,19 @@ public class WarehouseDetailsController implements Initializable {
     }
 
     private void updateWarehouse() {
+        // 1. Validate if any fields are empty
+        if (Validations.isInputFieldsEmpty(inputNodes, name)) return;
+        // 2. Validate numerical fields
+        if (!Validations.validateDoubleField(rentalPrice, "Rental Price")) {
+            return;
+        }
+        if (!Validations.validateDoubleField(salePrice, "Sale Price")) {
+            return;
+        }
+        if (!Validations.validateDoubleField(size, "Size")) {
+            return;
+        }
+        // If all validations pass, proceed with object creation
         String nameW = name.getText();
         String imageW = image.getText();
         double rentalPriceV = Double.parseDouble(rentalPrice.getText());

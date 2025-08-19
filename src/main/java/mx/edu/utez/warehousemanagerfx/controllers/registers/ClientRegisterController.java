@@ -96,6 +96,8 @@ public class ClientRegisterController implements Initializable {
         }
         // Validate if any fields are empty
         if (Validations.isInputFieldsEmpty(inputNodes, firstName)) return;
+        // Validate phone
+        if (!Validations.validatePhoneField(phone)) return;
         // If all validations pass, proceed with object creation
         Client c = new Client();
         c.setFirstName(firstName.getText());
@@ -129,9 +131,7 @@ public class ClientRegisterController implements Initializable {
                 WarehouseDao warehouseDao = new WarehouseDao();
                 warehouseDao.updateWarehouse(w);
                 goHome(event);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                try { alert.initOwner(firstName.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-                alert.setTitle("Registration successful!"); alert.setHeaderText(null); alert.setContentText("The " + transaction + " was successful."); alert.show();
+                Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Registration successful!", "The " + transaction + " was successful.");
             }
         } else {
             Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The " + transaction + " could not be made.");

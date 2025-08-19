@@ -86,6 +86,22 @@ public class UserAccount {
     public String getRoleType() { return roleType; }
     public void setRoleType(String roleType) { this.roleType = roleType; }
 
+    @Override
+    public String toString() {
+        return "UserAccount{" +
+                "idUser=" + idUser +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", secondLastName='" + secondLastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", username='" + username + '\'' +
+                ", passwordKey='" + passwordKey + '\'' +
+                ", roleType='" + roleType + '\'' +
+                '}';
+    }
+
     @FXML
     public static void logout(ActionEvent event) {
         try {

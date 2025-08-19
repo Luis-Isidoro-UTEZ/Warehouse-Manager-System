@@ -33,12 +33,15 @@ public class Branch extends Property {
     @Override
     public String toString() {
         return "Branch{" +
+                "propertyData=" + super.toString() +
                 "idBranch=" + idBranch +
                 ", branchCode='" + branchCode + '\'' +
-                ", registrationDate=" + registrationDate + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", isDeleted=" + isDeleted +
                 ", availableCount=" + availableCount +
                 ", rentedCount=" + rentedCount +
                 ", soldCount=" + soldCount +
+                ", idAdmin=" + idAdmin +
                 '}';
     }
 

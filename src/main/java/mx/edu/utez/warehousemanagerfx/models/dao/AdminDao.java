@@ -16,6 +16,106 @@ import java.util.List;
  */
 public class AdminDao {
 
+    public class DuplicateCheckResult {
+        private boolean emailExists;
+        private boolean phoneExists;
+        private boolean usernameExists;
+
+        public DuplicateCheckResult(boolean emailExists, boolean phoneExists, boolean usernameExists) {
+            this.emailExists = emailExists;
+            this.phoneExists = phoneExists;
+            this.usernameExists = usernameExists;
+        }
+
+        public boolean isEmailExists() { return emailExists; }
+        public boolean isPhoneExists() { return phoneExists; }
+        public boolean isUsernameExists() { return usernameExists; }
+
+        public boolean anyDuplicate() {
+            return emailExists || phoneExists || usernameExists;
+        }
+    }
+
+    public DuplicateCheckResult checkDuplicate(String email, String phone, String username) {
+        boolean emailExists = false;
+        boolean phoneExists = false;
+        boolean usernameExists = false;
+
+        String sql = "SELECT EMAIL, PHONE, USERNAME FROM USER_ACCOUNT WHERE ROLE_TYPE = 'ADMINISTRATOR' AND (EMAIL = ? OR PHONE = ? OR USERNAME = ?)";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, phone);
+            ps.setString(3, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    if (email.equalsIgnoreCase(rs.getString("EMAIL"))) emailExists = true;
+                    if (phone.equals(rs.getString("PHONE"))) phoneExists = true;
+                    if (username.equals(rs.getString("USERNAME"))) usernameExists = true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new DuplicateCheckResult(emailExists, phoneExists, usernameExists);
+    }
+
+    // CREATE: Insert new admin (USER_ACCOUNT + ADMINISTRATOR)
+    public boolean create(Administrator admin) {
+        String sqlUser = "INSERT INTO USER_ACCOUNT (First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone, Username, Password_Key, Role_Type) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ADMINISTRATOR')";
+
+        String sqlAdmin = "INSERT INTO ADMINISTRATOR (ID_ADMIN, Id_Branch) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Insert into USER_ACCOUNT
+            try (PreparedStatement psUser = conn.prepareStatement(sqlUser, new String[]{"ID_USER"})) {
+                psUser.setString(1, admin.getFirstName());
+                psUser.setString(2, admin.getMiddleName());
+                psUser.setString(3, admin.getLastName());
+                psUser.setString(4, admin.getSecondLastName());
+                psUser.setString(5, admin.getEmail());
+                psUser.setString(6, admin.getPhone());
+                psUser.setString(7, admin.getUsername());
+                psUser.setString(8, admin.getPasswordKey());
+                psUser.executeUpdate();
+
+                // Get generated Id_User
+                ResultSet rs = psUser.getGeneratedKeys();
+                if (rs.next()) {
+                    int generatedId = rs.getInt(1);
+                    admin.setIdUser(generatedId);
+                    admin.setIdAdmin(generatedId);
+                }
+                rs.close();
+            }
+
+            // Insert into ADMINISTRATOR
+            try (PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin)) {
+                psAdmin.setInt(1, admin.getIdUser());
+                if (admin.getIdBranch() != null) {
+                    psAdmin.setInt(2, admin.getIdBranch());
+                } else {
+                    psAdmin.setNull(2, java.sql.Types.INTEGER);
+                }
+                psAdmin.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Reads admins applying ORDER BY.
      * Expected labels from UI:
@@ -37,7 +137,7 @@ public class AdminDao {
                 orderExpr = "a.ID_ADMIN";
                 break;
             case "Name":
-                orderExpr = "u.FULL_NAME";
+                orderExpr = "u.FIRST_NAME";
                 break;
             case "Status":
                 orderExpr = "(CASE WHEN a.IS_DELETED = 0 THEN 1 ELSE 0 END)";
@@ -51,15 +151,18 @@ public class AdminDao {
             Connection conn = DatabaseConnectionFactory.getConnection();
             String sql =
                     "SELECT " +
-                            "  u.ID_USER       AS Id_Admin, " +
-                            "  u.FULL_NAME     AS Full_Name, " +
-                            "  u.EMAIL         AS Email, " +
-                            "  u.PHONE         AS Phone, " +
-                            "  u.USERNAME      AS Username, " +
-                            "  u.PASSWORD_KEY  AS Password_Key, " +
-                            "  u.ROLE_TYPE     AS Role_Type, " +
-                            "  a.ID_BRANCH     AS Id_Branch, " +
-                            "  a.IS_DELETED    AS Is_Deleted " +
+                            "  u.ID_USER             AS Id_User, " +
+                            "  u.FIRST_NAME          AS First_Name, " +
+                            "  u.MIDDLE_NAME         AS Middle_Name, " +
+                            "  u.LAST_NAME           AS Last_Name, " +
+                            "  u.SECOND_LAST_NAME    AS Second_Last_Name, " +
+                            "  u.EMAIL               AS Email, " +
+                            "  u.PHONE               AS Phone, " +
+                            "  u.USERNAME            AS Username, " +
+                            "  u.PASSWORD_KEY        AS Password_Key, " +
+                            "  u.ROLE_TYPE           AS Role_Type, " +
+                            "  a.ID_BRANCH           AS Id_Branch, " +
+                            "  a.IS_DELETED          AS Is_Deleted " +
                             "FROM USER_ACCOUNT u " +
                             "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
                             "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' " +
@@ -102,57 +205,6 @@ public class AdminDao {
         return null;
     }
 
-    // CREATE: Insert new admin (USER_ACCOUNT + ADMINISTRATOR)
-    public boolean create(Administrator admin) {
-        String sqlUser = "INSERT INTO USER_ACCOUNT (First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone, Username, Password_Key, Role_Type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ADMINISTRATOR')";
-
-        String sqlAdmin = "INSERT INTO ADMINISTRATOR (ID_ADMIN, Id_Branch) VALUES (?, ?)";
-
-        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
-            conn.setAutoCommit(false);
-
-            // Insert into USER_ACCOUNT
-            try (PreparedStatement psUser = conn.prepareStatement(sqlUser, new String[]{"ID_USER"})) {
-                psUser.setString(1, admin.getFirstName());
-                psUser.setString(2, admin.getMiddleName());
-                psUser.setString(3, admin.getLastName());
-                psUser.setString(4, admin.getSecondLastName());
-                psUser.setString(5, admin.getEmail());
-                psUser.setString(6, admin.getPhone());
-                psUser.setString(7, admin.getUsername());
-                psUser.setString(8, admin.getPasswordKey());
-                psUser.executeUpdate();
-
-                // Get generated Id_User
-                ResultSet rs = psUser.getGeneratedKeys();
-                if (rs.next()) {
-                    int generatedId = rs.getInt(1);
-                    admin.setIdUser(generatedId);
-                }
-                rs.close();
-            }
-
-            // Insert into ADMINISTRATOR
-            try (PreparedStatement psAdmin = conn.prepareStatement(sqlAdmin)) {
-                psAdmin.setInt(1, admin.getIdAdmin());
-                if (admin.getIdBranch() != null) {
-                    psAdmin.setInt(2, admin.getIdBranch());
-                } else {
-                    psAdmin.setNull(2, java.sql.Types.INTEGER);
-                }
-                psAdmin.executeUpdate();
-            }
-
-            conn.commit();
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     // UPDATE: Modify admin data
     public boolean update(Administrator admin) {
         String sqlUser = "UPDATE USER_ACCOUNT SET First_Name = ?, Middle_Name = ?, Last_Name = ?, Second_Last_Name = ?, Email = ?, Phone = ?, Username = ?, Password_Key = ? " +
@@ -172,7 +224,7 @@ public class AdminDao {
                 psUser.setString(6, admin.getPhone());
                 psUser.setString(7, admin.getUsername());
                 psUser.setString(8, admin.getPasswordKey());
-                psUser.setInt(9, admin.getIdAdmin());
+                psUser.setInt(9, admin.getIdUser());
                 psUser.executeUpdate();
             }
 
@@ -216,11 +268,12 @@ public class AdminDao {
     // Helper method to map ResultSet to Administrator object
     private Administrator mapResultSetToAdmin(ResultSet rs) throws java.sql.SQLException {
         Administrator a = new Administrator();
-        a.setIdUser(rs.getInt("Id_Admin"));
-        a.setFirstName(rs.getString("First_Name"));
-        a.setMiddleName(rs.getString("Middle_Name"));
-        a.setLastName(rs.getString("Last_Name"));
-        a.setSecondLastName(rs.getString("Second_Last_Name"));
+        a.setIdUser(rs.getInt("ID_USER"));
+        a.setIdAdmin(a.getIdUser());
+        a.setFirstName(rs.getString("FIRST_NAME"));
+        a.setMiddleName(rs.getString("MIDDLE_NAME"));
+        a.setLastName(rs.getString("LAST_NAME"));
+        a.setSecondLastName(rs.getString("SECOND_LAST_NAME"));
         a.setEmail(rs.getString("EMAIL"));
         a.setPhone(rs.getString("PHONE"));
         a.setUsername(rs.getString("USERNAME"));

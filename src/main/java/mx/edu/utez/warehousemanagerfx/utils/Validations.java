@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import mx.edu.utez.warehousemanagerfx.models.dao.AdminDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +62,62 @@ public class Validations {
             Alerts.showAlert(Alert.AlertType.ERROR, txt, "Invalid Input", fieldName + " must be a valid number (e.g., 10.5).");
             return false; // The field does not contain a valid double
         }
+    }
+
+    /**
+     * Validates that the phone field only contains numbers, hyphens, and spaces.
+     * Valid examples: "55-1234-5678", "5512345678", "55 1234 5678"
+     *
+     * @param txt TextField of the phone
+     * @return true if the format is correct, false if it is incorrect
+     */
+    public static boolean validatePhoneField(TextField txt) {
+        // Regex: only digits, spaces or hyphens
+        String phonePattern = "^[0-9\\-\\s]+$";
+
+        if (!txt.getText().matches(phonePattern)) {
+            txt.getStyleClass().add("input-error");
+            Alerts.showAlert(javafx.scene.control.Alert.AlertType.ERROR, txt,
+                    "Invalid phone number", "The phone number can only contain numbers, hyphens, and spaces.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Method to validate duplicate email, phone and user
+    public static boolean checkDuplicateAdmin(TextField emailField, TextField phoneField, TextField usernameField) {
+        AdminDao adminDao = new AdminDao();
+        var dup = adminDao.checkDuplicate(emailField.getText(), phoneField.getText(), usernameField.getText());
+
+        boolean hasDuplicates = false;
+        StringBuilder errorMsg = new StringBuilder("The following data already exists in the system:\n");
+
+        // Clear previous styles
+        emailField.getStyleClass().remove("input-error");
+        phoneField.getStyleClass().remove("input-error");
+        usernameField.getStyleClass().remove("input-error");
+
+        if (dup.isEmailExists()) {
+            errorMsg.append("- Email\n");
+            emailField.getStyleClass().add("input-error");
+            hasDuplicates = true;
+        }
+        if (dup.isPhoneExists()) {
+            errorMsg.append("- Phone\n");
+            phoneField.getStyleClass().add("input-error");
+            hasDuplicates = true;
+        }
+        if (dup.isUsernameExists()) {
+            errorMsg.append("- User\n");
+            usernameField.getStyleClass().add("input-error");
+            hasDuplicates = true;
+        }
+
+        if (hasDuplicates) {
+            Alerts.showAlert(javafx.scene.control.Alert.AlertType.ERROR, emailField, "Duplicate error", errorMsg.toString());
+        }
+
+        return hasDuplicates;
     }
 }

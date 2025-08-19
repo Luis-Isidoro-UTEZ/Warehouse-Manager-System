@@ -188,7 +188,7 @@
                         </TextField>
                     </VBox>
                     <VBox layoutX="305.0" layoutY="10.0">
-                        <Label text="Size:">
+                        <Label text="Size (m²):">
                             <VBox.margin>
                                 <Insets left="10.0" />
                             </VBox.margin>

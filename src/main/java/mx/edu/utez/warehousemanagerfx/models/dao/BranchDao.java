@@ -22,7 +22,7 @@ public class BranchDao {
         String query =
                 "SELECT b.ID_BRANCH, b.BRANCH_CODE, b.BRANCH_REGISTRATION_DATE, b.IS_DELETED, " +
                         "p.ID_PROPERTY, p.PROPERTY_TYPE, p.COUNTRY, p.STATE, p.MUNICIPALITY, p.POSTAL_CODE, p.NEIGHBORHOOD, p.ADDRESS_DETAIL, " +
-                        "(SELECT MIN(a.ID_USER) FROM ADMINISTRATOR a WHERE a.ID_BRANCH = b.ID_BRANCH AND a.IS_DELETED = 0) AS ID_ADMIN, " +
+                        "(SELECT MIN(a.ID_ADMIN) FROM ADMINISTRATOR a WHERE a.ID_BRANCH = b.ID_BRANCH AND a.IS_DELETED = 0) AS ID_ADMIN, " +
                         "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Available') AS AVAILABLE_COUNT, " +
                         "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Rented') AS RENTED_COUNT, " +
                         "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Sold') AS SOLD_COUNT " +

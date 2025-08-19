@@ -76,7 +76,7 @@ public class Administrator extends UserAccount {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, txt, "Error!", "Could not return to the admin window.");
+            Alerts.showAlert(Alert.AlertType.ERROR, txt, "Error!", "Could not return to the Admin Window.");
         }
     }
 
@@ -92,7 +92,7 @@ public class Administrator extends UserAccount {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, txt, "Error!", "Could not show the information account screen.");
+            Alerts.showAlert(Alert.AlertType.ERROR, txt, "Error!", "Could not show the Information Account Screen.");
         }
     }
 }

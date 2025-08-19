@@ -39,6 +39,15 @@ public class AdminRegisterController implements Initializable {
         // Initialize the list here, after @FXML variables are injected
         inputNodes = List.of(firstName, lastName, email, phone, username);
 
+        // Example of character limit:
+        Validations.setMaxLength(firstName, 50);
+        Validations.setMaxLength(middleName, 50);
+        Validations.setMaxLength(lastName, 50);
+        Validations.setMaxLength(secondLastName, 50);
+        Validations.setMaxLength(email, 100);
+        Validations.setMaxLength(phone, 15);
+        Validations.setMaxLength(username, 50);
+
         // Add a focused property listener to each node to remove the error style
         for (Node node : inputNodes) {
             node.focusedProperty().addListener((obs, oldVal, newVal) -> {

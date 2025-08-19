@@ -122,61 +122,6 @@ public class WarehouseDao {
         return fileName; // Save only the name in the DB
     }
 
-    // --- UPDATE ---
-    public boolean updateWarehouse(Warehouse w) {
-        String sql = "UPDATE WAREHOUSE SET Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=?, Id_Client=? WHERE Id_Warehouse=? AND Is_Deleted=0";
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, w.getWarehouseName());
-            ps.setString(2, w.getImage());
-            ps.setDouble(3, w.getRentalPrice());
-            ps.setDouble(4, w.getSalePrice());
-            ps.setDouble(5, w.getSizeSqMeters());
-            ps.setString(6, w.getStatus());
-
-            // Handle Id_Client - can be null
-            if (w.getIdClient() > 0) {
-                ps.setInt(7, w.getIdClient());
-            } else {
-                ps.setNull(7, Types.INTEGER);
-            }
-
-            ps.setInt(8, w.getIdWarehouse());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // --- UPDATE CLIENT ASSIGNMENT ---
-    /**
-     * Method to assign or unassign a client to a warehouse
-     * @param idWarehouse warehouse ID
-     * @param idClient client ID (0 or null to unassign)
-     * @param newStatus new status for the warehouse
-     * @return true if successful
-     */
-    public boolean assignClientToWarehouse(int idWarehouse, Integer idClient, String newStatus) {
-        String sql = "UPDATE WAREHOUSE SET Id_Client=?, Status=? WHERE Id_Warehouse=? AND Is_Deleted=0";
-        try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            if (idClient != null && idClient > 0) {
-                ps.setInt(1, idClient);
-            } else {
-                ps.setNull(1, Types.INTEGER);
-            }
-            ps.setString(2, newStatus);
-            ps.setInt(3, idWarehouse);
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     // --- READ ---
     /**
      * Flexible method to get warehouses according to a combination of filters:
@@ -309,6 +254,61 @@ public class WarehouseDao {
             e.printStackTrace();
         }
         return new double[]{min, max};
+    }
+
+    // --- UPDATE ---
+    public boolean updateWarehouse(Warehouse w) {
+        String sql = "UPDATE WAREHOUSE SET Warehouse_Name=?, Image=?, Rental_Price=?, Sale_Price=?, Size_Sq_Meters=?, Status=?, Id_Client=? WHERE Id_Warehouse=? AND Is_Deleted=0";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, w.getWarehouseName());
+            ps.setString(2, w.getImage());
+            ps.setDouble(3, w.getRentalPrice());
+            ps.setDouble(4, w.getSalePrice());
+            ps.setDouble(5, w.getSizeSqMeters());
+            ps.setString(6, w.getStatus());
+
+            // Handle Id_Client - can be null
+            if (w.getIdClient() > 0) {
+                ps.setInt(7, w.getIdClient());
+            } else {
+                ps.setNull(7, Types.INTEGER);
+            }
+
+            ps.setInt(8, w.getIdWarehouse());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // --- UPDATE CLIENT ASSIGNMENT ---
+    /**
+     * Method to assign or unassign a client to a warehouse
+     * @param idWarehouse warehouse ID
+     * @param idClient client ID (0 or null to unassign)
+     * @param newStatus new status for the warehouse
+     * @return true if successful
+     */
+    public boolean assignClientToWarehouse(int idWarehouse, Integer idClient, String newStatus) {
+        String sql = "UPDATE WAREHOUSE SET Id_Client=?, Status=? WHERE Id_Warehouse=? AND Is_Deleted=0";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (idClient != null && idClient > 0) {
+                ps.setInt(1, idClient);
+            } else {
+                ps.setNull(1, Types.INTEGER);
+            }
+            ps.setString(2, newStatus);
+            ps.setInt(3, idWarehouse);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // --- DELETE ---

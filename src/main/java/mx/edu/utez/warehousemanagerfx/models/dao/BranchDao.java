@@ -11,6 +11,65 @@ public class BranchDao {
 
     // Methods CRUD
 
+    // CREATE: Insert branch + property
+    public boolean create(Branch branch) {
+        String sqlProperty = "INSERT INTO PROPERTY (Property_Type, Country, State, Municipality, Postal_Code, Neighborhood, Address_Detail) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlBranch = "INSERT INTO BRANCH (Id_Property, Branch_Code, Branch_Registration_Date) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Insert into PROPERTY
+            int idProperty;
+            try (PreparedStatement psProp = conn.prepareStatement(sqlProperty, new String[]{"ID_PROPERTY"})) {
+                // If null, Storage Facility is assigned
+                psProp.setString(1, branch.getPropertyType() != null ? branch.getPropertyType() : "Storage Facility");
+                psProp.setString(2, branch.getCountry());
+                psProp.setString(3, branch.getState());
+                psProp.setString(4, branch.getMunicipality());
+                psProp.setInt(5, branch.getPostalCode());
+                psProp.setString(6, branch.getNeighborhood());
+                psProp.setString(7, branch.getAddressDetail());
+                psProp.executeUpdate();
+
+                try (ResultSet rs = psProp.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idProperty = rs.getInt(1);
+                        branch.setIdProperty(idProperty);
+                    } else throw new SQLException("Failed to retrieve generated ID_PROPERTY");
+                }
+            }
+
+            // Generate Branch_Code automatically
+            String branchCode = "A" + idProperty + "-" + java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE) +
+                    "-" + (int)(Math.random() * 9000 + 1000); // 4-digit random
+            branch.setBranchCode(branchCode);
+
+            // Automatic registration date
+            branch.setRegistrationDate(java.time.LocalDate.now());
+
+            // Insert into BRANCH
+            try (PreparedStatement psBranch = conn.prepareStatement(sqlBranch, new String[]{"ID_BRANCH"})) {
+                psBranch.setInt(1, branch.getIdProperty());
+                psBranch.setString(2, branch.getBranchCode());
+                psBranch.setDate(3, java.sql.Date.valueOf(branch.getRegistrationDate()));
+                psBranch.executeUpdate();
+
+                try (ResultSet rs = psBranch.getGeneratedKeys()) {
+                    if (rs.next()) branch.setIdBranch(rs.getInt(1));
+                }
+            }
+
+            conn.commit();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // READ: Get all branches with optional order
     public List<Branch> readFilteredBranches(String orderColumn, String orderDir) {
         List<Branch> branches = new ArrayList<>();
@@ -71,66 +130,20 @@ public class BranchDao {
         return null;
     }
 
-    // CREATE: Insert branch + property
-    public boolean create(Branch branch) {
-        String sqlProperty = "INSERT INTO PROPERTY (Property_Type, Country, State, Municipality, Postal_Code, Neighborhood, Address_Detail) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String sqlBranch = "INSERT INTO BRANCH (Id_Property, Branch_Code, Branch_Registration_Date) VALUES (?, ?, ?)";
-
-        try (Connection conn = DatabaseConnectionFactory.getConnection()) {
-            conn.setAutoCommit(false);
-
-            // Insert into PROPERTY
-            int idProperty;
-            try (PreparedStatement psProp = conn.prepareStatement(sqlProperty, new String[]{"ID_PROPERTY"})) {
-                psProp.setString(1, branch.getPropertyType());
-                psProp.setString(2, branch.getCountry());
-                psProp.setString(3, branch.getState());
-                psProp.setString(4, branch.getMunicipality());
-                psProp.setInt(5, branch.getPostalCode());
-                psProp.setString(6, branch.getNeighborhood());
-                psProp.setString(7, branch.getAddressDetail());
-                psProp.executeUpdate();
-
-                try (ResultSet rs = psProp.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        idProperty = rs.getInt(1);
-                        branch.setIdProperty(idProperty);
-                    } else throw new SQLException("Failed to retrieve generated ID_PROPERTY");
-                }
-            }
-
-            // Insert into BRANCH
-            try (PreparedStatement psBranch = conn.prepareStatement(sqlBranch, new String[]{"ID_BRANCH"})) {
-                psBranch.setInt(1, branch.getIdProperty());
-                psBranch.setString(2, branch.getBranchCode());
-                psBranch.setDate(3, Date.valueOf(branch.getRegistrationDate()));
-                psBranch.executeUpdate();
-
-                try (ResultSet rs = psBranch.getGeneratedKeys()) {
-                    if (rs.next()) branch.setIdBranch(rs.getInt(1));
-                }
-            }
-
-            conn.commit();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     // UPDATE: Branch + property
     public boolean update(Branch branch) {
+        // We only update the editable PROPERTY fields
         String sqlProperty = "UPDATE PROPERTY SET Property_Type=?, Country=?, State=?, Municipality=?, Postal_Code=?, Neighborhood=?, Address_Detail=? WHERE Id_Property=?";
-        String sqlBranch = "UPDATE BRANCH SET Branch_Code=?, Branch_Registration_Date=?, Is_Deleted=? WHERE Id_Branch=?";
+
+        // We only update Is_Deleted in BRANCH
+        String sqlBranch = "UPDATE BRANCH SET Is_Deleted=? WHERE Id_Branch=?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection()) {
             conn.setAutoCommit(false);
 
+            // Update PROPERTY
             try (PreparedStatement psProp = conn.prepareStatement(sqlProperty)) {
-                psProp.setString(1, branch.getPropertyType());
+                psProp.setString(1, branch.getPropertyType() != null ? branch.getPropertyType() : "Storage Facility");
                 psProp.setString(2, branch.getCountry());
                 psProp.setString(3, branch.getState());
                 psProp.setString(4, branch.getMunicipality());
@@ -141,11 +154,10 @@ public class BranchDao {
                 psProp.executeUpdate();
             }
 
+            // Update only Is_Deleted in BRANCH
             try (PreparedStatement psBranch = conn.prepareStatement(sqlBranch)) {
-                psBranch.setString(1, branch.getBranchCode());
-                psBranch.setDate(2, Date.valueOf(branch.getRegistrationDate()));
-                psBranch.setInt(3, branch.isDeleted() ? 1 : 0);
-                psBranch.setInt(4, branch.getIdBranch());
+                psBranch.setInt(1, branch.isDeleted() ? 1 : 0);
+                psBranch.setInt(2, branch.getIdBranch());
                 psBranch.executeUpdate();
             }
 

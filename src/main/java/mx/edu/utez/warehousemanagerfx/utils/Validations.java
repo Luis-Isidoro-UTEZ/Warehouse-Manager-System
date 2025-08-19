@@ -4,10 +4,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import mx.edu.utez.warehousemanagerfx.models.dao.AdminDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public class Validations {
     /**
@@ -64,6 +66,18 @@ public class Validations {
         }
     }
 
+    public static boolean validateIntField(TextField txt, String fieldName) {
+        try {
+            Integer.parseInt(txt.getText());
+            return true; // The field contains a valid double
+        } catch (NumberFormatException e) {
+            // Handle invalid number input
+            txt.getStyleClass().add("input-error");
+            Alerts.showAlert(Alert.AlertType.ERROR, txt, "Invalid Input", fieldName + " must be a valid integer number (e.g., 63589).");
+            return false; // The field does not contain a valid double
+        }
+    }
+
     /**
      * Validates that the phone field only contains numbers, hyphens, and spaces.
      * Valid examples: "55-1234-5678", "5512345678", "55 1234 5678"
@@ -83,6 +97,25 @@ public class Validations {
         }
 
         return true;
+    }
+
+    /**
+     * Limits the input of a TextField to a maximum number of characters.
+     *
+     * @param textField  the TextField to limit
+     * @param maxLength  maximum number of characters allowed
+     */
+    public static void setMaxLength(TextField textField, int maxLength) {
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.length() <= maxLength) {
+                return change;
+            } else {
+                return null; // Reject change if it exceeds max length
+            }
+        };
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        textField.setTextFormatter(textFormatter);
     }
 
     // Method to validate duplicate email, phone and user

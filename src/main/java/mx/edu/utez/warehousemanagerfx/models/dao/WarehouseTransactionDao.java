@@ -140,6 +140,30 @@ public class WarehouseTransactionDao {
         return null;
     }
 
+    // --- UPDATE ---
+    public boolean updateTransaction(WarehouseTransaction wt) {
+        String sql = "UPDATE WAREHOUSE_TRANSACTION SET Transaction_Type = ?, Transaction_Date = ?, Payment_Expiration_Date = ?, Id_Warehouse = ?, Id_Client = ?, Id_Admin = ? " +
+                "WHERE Id_Transaction = ?";
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, wt.getTransactionType());
+            ps.setDate(2, Date.valueOf(LocalDate.now()));
+            if (wt.getPaymentExpirationDate() != null) {
+                ps.setDate(3, Date.valueOf(wt.getPaymentExpirationDate()));
+            } else {
+                ps.setNull(3, Types.DATE);
+            }
+            ps.setInt(4, wt.getIdWarehouse());
+            ps.setInt(5, wt.getIdClient());
+            ps.setInt(6, wt.getIdAdmin());
+            ps.setInt(7, wt.getIdTransaction());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // --- DELETE (optional: soft delete if needed) ---
     public boolean deleteTransaction(int idTransaction) {
         String sql = "DELETE FROM WAREHOUSE_TRANSACTION WHERE Id_Transaction = ?";

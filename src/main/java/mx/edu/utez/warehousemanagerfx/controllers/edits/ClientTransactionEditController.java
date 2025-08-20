@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.Main;
 import mx.edu.utez.warehousemanagerfx.controllers.WarehouseDetailsController;
 import mx.edu.utez.warehousemanagerfx.models.*;
+import mx.edu.utez.warehousemanagerfx.models.dao.AdminDao;
 import mx.edu.utez.warehousemanagerfx.models.dao.ClientDao;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseTransactionDao;
@@ -46,6 +47,8 @@ public class ClientTransactionEditController implements Initializable {
     private DatePicker paymentExpirationDate;
     @FXML
     private VBox expirationDateControls;
+    @FXML
+    private Button edit;
 
     // List of all input nodes that can have an "input-error" style and that have to be validated
     private List<Node> inputNodes;
@@ -76,6 +79,14 @@ public class ClientTransactionEditController implements Initializable {
                 }
             });
         }
+        // Detect changes in the edit button to edit and update.
+        edit.setOnAction(e -> {
+            if (edit.getText().equals("Edit")) {
+                editClientAssignation();
+            } else {
+                updateClientAssignation();
+            }
+        });
     }
 
     public void setCurrentClientAssignation(Warehouse w) {
@@ -100,15 +111,38 @@ public class ClientTransactionEditController implements Initializable {
             transactionType.setDisable(true);
         } else if (w.getStatus().equals("Rented")) {
             transactionType.setValue("Rent");
+            transactionType.setDisable(true);
             expirationDateControls.setVisible(true);
+            paymentExpirationDate.setDisable(true);
             WarehouseTransactionDao wtDao = new WarehouseTransactionDao();
             WarehouseTransaction wt = wtDao.readTransactionById(idClient);
             paymentExpirationDate.setValue(wt.getPaymentExpirationDate());
         }
     }
 
-    @FXML
-    public void editClientAssignation(ActionEvent event) {
+    public void editClientAssignation(){
+        firstName.setEditable(true);
+        middleName.setEditable(true);
+        lastName.setEditable(true);
+        secondLastName.setEditable(true);
+        email.setEditable(true);
+        phone.setEditable(true);
+        if (w.getStatus().equals("Rented")) {
+            transactionType.setDisable(false);
+            paymentExpirationDate.setDisable(false);
+        }
+        edit.setText("Update");
+        edit.setStyle(
+                "-fx-background-color: darkgreen;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-font-family: 'Albert Sans';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 13px;"
+        );
+    }
+
+    private void updateClientAssignation() {
         if (w == null) {
             Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "No warehouse selected for this client.");
             return;
@@ -119,23 +153,41 @@ public class ClientTransactionEditController implements Initializable {
         if (!Validations.validatePhoneField(phone)) return;
         // If all validations pass, proceed with object creation
         Client c = new Client();
+        String firstNameC = firstName.getText();
+        String middleNameC = middleName.getText();
+        String lastNameC = lastName.getText();
+        String secondLastNameC = secondLastName.getText();
+        String phoneC = phone.getText();
+        String emailC = email.getText();
 
-        c.setFirstName(firstName.getText());
-        c.setMiddleName(middleName.getText());
-        c.setLastName(lastName.getText());
-        c.setSecondLastName(secondLastName.getText());
-        c.setEmail(email.getText());
-        c.setPhone(phone.getText());
+        // Put new things on the object
+        c.setFirstName(firstNameC);
+        c.setMiddleName(middleNameC);
+        c.setLastName(lastNameC);
+        c.setSecondLastName(secondLastNameC);
+        c.setPhone(phoneC);
+        c.setEmail(emailC);
 
-        String transaction = "";
-        if (transactionType.getValue().equals("Rent")) {
-            w.setStatus("Rented");
-            transaction = "rental";
-        } else if (transactionType.getValue().equals("Sale")) {
-            w.setStatus("Sold");
-            transaction = "sale";
+        firstName.setEditable(false);
+        middleName.setEditable(false);
+        lastName.setEditable(false);
+        secondLastName.setEditable(false);
+        email.setEditable(false);
+        phone.setEditable(false);
+        if (w.getStatus().equals("Rented")) {
+            transactionType.setDisable(true);
+            paymentExpirationDate.setDisable(true);
         }
-
+        edit.setText("Edit");
+        edit.setStyle(
+                "-fx-background-color: lightgreen;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-font-family: 'Albert Sans';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 13px;"
+        );
+        // Update the DB
         ClientDao clientDao = new ClientDao();
         if (clientDao.updateClient(c)) {
             WarehouseTransaction wt = new WarehouseTransaction();
@@ -147,10 +199,10 @@ public class ClientTransactionEditController implements Initializable {
             Administrator a = (Administrator) SessionManager.getCurrentUser();
             wt.setIdAdmin(a.getIdUser());
             WarehouseTransactionDao warehouseTransactionDao = new WarehouseTransactionDao();
-            if (warehouseTransactionDao.createTransaction(wt)) {
+            if (warehouseTransactionDao.updateTransaction(wt)) {
                 WarehouseDao warehouseDao = new WarehouseDao();
                 warehouseDao.updateWarehouse(w);
-                goHome(event);
+                goHome(null);
                 Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The client/transaction was updated successfully.");
             }
         } else {

@@ -69,7 +69,7 @@
                                 <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="firstName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="firstName" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -84,7 +84,7 @@
                                 <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="middleName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="middleName" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -101,7 +101,7 @@
                                 <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="lastName" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="lastName" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -113,7 +113,7 @@
                                 <Font name="System Bold" size="15.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="secondLastName" prefHeight="40.0" prefWidth="445.0" promptText="Type here..." />
+                        <TextField fx:id="secondLastName" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here..." />
                     </VBox>
                 </HBox>
                 <HBox layoutX="30.0" layoutY="91.0" spacing="20.0">
@@ -126,7 +126,7 @@
                                 <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="email" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="email" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -141,7 +141,7 @@
                                 <Insets top="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="phone" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
+                        <TextField fx:id="phone" editable="false" prefHeight="40.0" prefWidth="445.0" promptText="Type here...">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -158,7 +158,7 @@
                                 <Insets />
                             </VBox.margin>
                         </Label>
-                        <ChoiceBox fx:id="transactionType" prefHeight="40.0" prefWidth="200.0" styleClass="choicebox-rounded" value="Transaction Type">
+                        <ChoiceBox fx:id="transactionType" disable="true" prefHeight="40.0" prefWidth="200.0" styleClass="choicebox-rounded" value="Transaction Type">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -179,7 +179,7 @@
                             <Insets />
                         </HBox.margin>
                     </Button>
-               <Button layoutX="750.0" layoutY="10.0" onAction="#editClientAssignation" prefHeight="42.0" prefWidth="170.0" styleClass="button-blue" text="Update" />
+               <Button fx:id="edit" layoutX="750.0" layoutY="10.0" onAction="#editClientAssignation" prefHeight="42.0" prefWidth="170.0" styleClass="button-blue" text="Edit" />
                 </HBox>
             </VBox>
         </Pane>

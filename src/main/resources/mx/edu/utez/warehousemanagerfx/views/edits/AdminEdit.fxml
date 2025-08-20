@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" stylesheets="@../../styles/Windows/WarehouseDetailsWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.edits.AdminEditController">
+    <padding>
+        <Insets left="20.0" right="20.0" />
+    </padding>
+    <VBox prefWidth="500.0" spacing="10.0">
+        <padding>
+            <Insets left="20.0" right="20.0" />
+        </padding>
+        <HBox spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="First Name:">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="firstName" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="Middle Name:">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="middleName" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox layoutX="20.0" layoutY="10.0" spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="Last Name:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="lastName" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="Second Last Name:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="secondLastName" editable="false" promptText="Type here..." />
+            </VBox>
+        </HBox>
+        <HBox layoutX="30.0" layoutY="91.0" spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="Username:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="username" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="Phone Number:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="phone" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox layoutX="30.0" layoutY="167.0" spacing="20.0">
+         <children>
+               <VBox prefWidth="460.0">
+                   <Label text="Email:">
+                       <font>
+                           <Font name="System Bold" size="15.0" />
+                       </font>
+                       <VBox.margin>
+                           <Insets top="5.0" />
+                       </VBox.margin>
+                   </Label>
+                   <TextField fx:id="email" editable="false" promptText="Type here...">
+                       <VBox.margin>
+                           <Insets />
+                       </VBox.margin>
+                   </TextField>
+               </VBox>
+         </children>
+        </HBox>
+      <HBox layoutX="30.0" layoutY="204.0" spacing="20.0">
+         <children>
+            <VBox prefWidth="460.0">
+               <children>
+                  <Label text="Assigned Branch:">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="assignedBranch" disable="true" prefWidth="460.0" styleClass="choicebox-rounded" value="Unassigned">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ChoiceBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+        <HBox alignment="CENTER" spacing="20.0">
+            <Button fx:id="edit" prefHeight="40.0" prefWidth="115.0" style="-fx-background-radius: 10; -fx-background-color: lightgreen;" text="Edit" />
+            <Button onAction="#deleteAdmin" prefHeight="40.0" prefWidth="115.0" styleClass="button-red-delete" text="Delete Branch" textFill="WHITE" />
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+        </HBox>
+    </VBox>
+</Pane>

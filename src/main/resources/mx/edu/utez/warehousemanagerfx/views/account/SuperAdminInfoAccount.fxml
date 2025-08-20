@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="500.0" maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.account.SuperAdminInfoAccountController">
+   <Rectangle arcHeight="5.0" arcWidth="5.0" height="500.0" layoutX="-3.0" stroke="TRANSPARENT" strokeType="INSIDE" width="242.0">
+      <fill>
+         <LinearGradient>
+            <stops>
+               <Stop>
+                  <color>
+                     <Color />
+                  </color>
+               </Stop>
+               <Stop offset="0.007680491551459294">
+                  <color>
+                     <Color green="0.20392157137393951" blue="0.3490196168422699" />
+                  </color>
+               </Stop>
+               <Stop offset="0.21505376344086025">
+                  <color>
+                     <Color red="0.018089668825268745" green="0.3735516667366028" blue="0.6105263233184814" />
+                  </color>
+               </Stop>
+               <Stop offset="0.4505494505494505">
+                  <color>
+                     <Color green="0.658823549747467" blue="0.9098039269447327" />
+                  </color>
+               </Stop>
+               <Stop offset="0.7657450076804915">
+                  <color>
+                     <Color green="0.8392156958580017" blue="0.9490196108818054" />
+                  </color>
+               </Stop>
+               <Stop offset="1.0">
+                  <color>
+                     <Color red="0.501960813999176" green="0.8313725590705872" blue="0.95686274766922" />
+                  </color>
+               </Stop>
+            </stops>
+         </LinearGradient>
+      </fill>
+   </Rectangle>
+   <VBox alignment="CENTER_LEFT" layoutX="13.0" layoutY="29.0">
+      <children>
+         <Label text="Full Name:" textFill="WHITE">
+            <font>
+               <Font size="20.0" />
+            </font>
+         </Label>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
+         <Label text="E-mail:" textFill="WHITE">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+         </Label>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
+         <Label text="Phone:" textFill="WHITE">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+         </Label>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
+         <Label text="Password:" textFill="WHITE">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+         </Label>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
+         <Label layoutX="10.0" layoutY="178.0" text="Username:" textFill="WHITE">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+         </Label>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="25.0" layoutX="10.0" layoutY="208.0" stroke="BLACK" strokeType="INSIDE" width="210.0" />
+      </children>
+   </VBox>
+   <Button layoutX="456.0" layoutY="438.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="122.0" style="-fx-background-color: #80d4f4; -fx-background-radius: 10;" text="Change Password" />
+   <Label layoutX="20.0" layoutY="62.0">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Label>
+   <Label layoutX="20.0" layoutY="163.0">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Label>
+   <Button layoutX="259.0" layoutY="438.0" mnemonicParsing="false" onAction="#goHomeSA" prefHeight="46.0" prefWidth="175.0" style="-fx-background-color: #80d4f4; -fx-background-radius: 10;" text="Return to the Main Window" />
+   <Label layoutX="368.0" layoutY="29.0" text="User Picture">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Label>
+   <Button layoutX="333.0" layoutY="285.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="175.0" style="-fx-background-color: #80d4f4; -fx-background-radius: 10;" text="Change Your User Picture" />
+   <ImageView fitHeight="211.0" fitWidth="221.0" layoutX="316.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@../../img/avatars/UserPictureHD.png" />
+   </ImageView>
+   <Button layoutX="30.0" layoutY="437.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="176.0" style="-fx-background-color: #80d4f4; -fx-border-color: #000000; -fx-border-radius: 10;" text="Change Personal Information" />
+</AnchorPane>

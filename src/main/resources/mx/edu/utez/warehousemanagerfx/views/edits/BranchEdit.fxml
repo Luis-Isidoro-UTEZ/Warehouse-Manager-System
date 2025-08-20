@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" stylesheets="@../../styles/Windows/WarehouseDetailsWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.edits.BranchEditController">
+    <padding>
+        <Insets left="20.0" right="20.0" />
+    </padding>
+    <VBox alignment="TOP_CENTER" prefWidth="500.0" spacing="10.0">
+        <padding>
+            <Insets left="20.0" right="20.0" />
+        </padding>
+        <HBox layoutX="30.0" layoutY="10.0" spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="Branch Code:">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="branchCode" disable="true" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="Registration Date:">
+                   <VBox.margin>
+                       <Insets top="10.0" />
+                   </VBox.margin>
+                   <font>
+                       <Font name="System Bold" size="15.0" />
+                   </font>
+                </Label>
+                <TextField fx:id="registrationDate" disable="true" editable="false" promptText="Type here...">
+                   <VBox.margin>
+                       <Insets />
+                   </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="Country:">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="country" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="State:">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="state" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox layoutX="20.0" layoutY="10.0" spacing="20.0">
+            <VBox prefWidth="230.0">
+                <Label text="Municipality:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="municipality" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefWidth="230.0">
+                <Label text="Postal Code:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+                </Label>
+                <TextField fx:id="postalCode" editable="false" promptText="Type here..." />
+            </VBox>
+        </HBox>
+        <HBox layoutX="30.0" layoutY="91.0">
+            <VBox prefWidth="460.0">
+                <Label text="Neighborhood:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="neighborhood" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox layoutX="30.0" layoutY="167.0">
+            <VBox prefWidth="460.0">
+                <Label text="Address Detail:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="addressDetail" editable="false" promptText="Type here...">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            </VBox>
+        </HBox>
+        <HBox fx:id="assignedAdminControls" layoutX="30.0" layoutY="272.0">
+            <VBox prefWidth="460.0">
+                <Label text="Assigned Administrator:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+                <ChoiceBox fx:id="assignedAdmin" disable="true" prefWidth="460.0" styleClass="choicebox-rounded" value="Unassigned">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </ChoiceBox>
+            </VBox>
+        </HBox>
+        <HBox alignment="CENTER" spacing="20.0">
+            <Button fx:id="edit" onAction="#editAdmin" prefHeight="40.0" prefWidth="115.0" style="-fx-background-radius: 10; -fx-background-color: lightgreen;" text="Edit" />
+            <Button onAction="#deleteBranch" prefHeight="40.0" prefWidth="115.0" styleClass="button-red-delete" text="Delete Branch" textFill="WHITE" />
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+        </HBox>
+    </VBox>
+</Pane>

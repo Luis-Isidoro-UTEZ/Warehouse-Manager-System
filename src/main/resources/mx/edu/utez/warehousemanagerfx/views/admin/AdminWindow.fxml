@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.*?>
 <?import org.controlsfx.control.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.AdminController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" styleClass="root" stylesheets="@../../styles/Windows/AdminWindow.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.AdminController">
     <top>
         <AnchorPane prefHeight="140.0" prefWidth="950.0" BorderPane.alignment="CENTER">
             <VBox prefHeight="140.0" prefWidth="950.0">
@@ -40,7 +40,7 @@
                                 <Insets right="18.0" />
                             </HBox.margin>
                         </Button>
-                        <ImageView fitHeight="56.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="56.0" fitWidth="91.0" onMouseClicked="#goInfAccount" pickOnBounds="true" preserveRatio="true">
                             <clip>
                                 <Rectangle arcHeight="20.0" arcWidth="20.0" height="56.0" width="56.0" />
                             </clip>
@@ -51,7 +51,7 @@
                         </ImageView>
                     </HBox>
                 </HBox>
-                <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
+                <HBox fx:id="toolbar" prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
                     <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="165.0" spacing="5.0">
                         <padding>
                             <Insets left="14.0" />
@@ -95,11 +95,11 @@
                             </graphic>
                         </Button>
                     </VBox>
-                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="150.0">
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="130.0">
                         <JFXToggleButton fx:id="toggleView" mnemonicParsing="false" prefHeight="58.0" prefWidth="160.0" selected="true" text="Card View" toggleColor="WHITE" toggleLineColor="#003459" />
                     </VBox>
-                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="95.0">
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" styleClass="button-blue-register" text="Register &#10;Warehouse" />
+                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="115.0">
+                        <Button fx:id="buttonaddW" mnemonicParsing="false" onAction="#addWarehouse" prefHeight="40.0" prefWidth="90.0" styleClass="button-blue-register" text="Add Warehouse" />
                     </VBox>
                 </HBox>
             </VBox>

@@ -1,0 +1,24 @@
+@import "../Header.css";
+
+/* Styles for all TextFields */
+.text-field {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #003459;
+}
+
+/* Error styles for TextFields with higher specificity */
+.text-field.input-error {
+    -fx-border-color: darkred;
+    -fx-border-width: 2px;
+}
+
+/* Register blue button */
+.button-blue-register {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 12px;
+    -fx-font-family: "Albert Sans";
+    -fx-font-weight: bold;
+}

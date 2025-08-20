@@ -6,69 +6,54 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.LoginController">
-   <HBox prefHeight="500.0" prefWidth="700.0">
-      <children>
-         <VBox prefHeight="500.0" prefWidth="330.0">
-            <children>
-               <ImageView fitHeight="500.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../../img/thumbnails/Banner.jpg" />
-                  </image>
-               </ImageView>
-            </children>
-         </VBox>
-         <VBox prefHeight="500.0" prefWidth="370.0" style="-fx-background-color: #FAFDFF;">
-            <children>
-               <VBox alignment="CENTER" prefHeight="150.0" prefWidth="370.0" spacing="30.0">
-                  <children>
-                     <ImageView fitHeight="200.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../../img/logos/BlackExtendedLogoRounded.png" />
-                        </image></ImageView>
-                     <Label text="SIGN IN">
+<AnchorPane stylesheets="@../../styles/Windows/LoginWindow.css" styleClass="root" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.LoginController">
+    <HBox prefHeight="500.0" prefWidth="700.0">
+        <VBox prefHeight="500.0" prefWidth="330.0">
+            <ImageView fitHeight="500.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../img/thumbnails/Banner.jpg"/>
+            </ImageView>
+        </VBox>
+        <VBox styleClass="right-pad" prefHeight="500.0" prefWidth="370.0" >
+            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="370.0" spacing="30.0">
+                <padding>
+                    <Insets top="50.0"/>
+                </padding>
+                <ImageView fitHeight="200.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../../img/logos/BlackExtendedLogoRounded.png"/>
+                </ImageView>
+                <Label text="SIGN IN">
+                    <font>
+                        <Font name="Albert Sans Bold" size="24.0"/>
+                    </font>
+                </Label>
+            </VBox>
+            <VBox prefHeight="350.0" prefWidth="370.0">
+                <padding>
+                    <Insets left="30.0" right="30.0" top="20.0"/>
+                </padding>
+                <VBox prefHeight="150.0" prefWidth="100.0">
+                    <Label text="Username or Email">
                         <font>
-                           <Font name="Albert Sans Bold" size="24.0" />
+                            <Font name="Segoe UI" size="16.0"/>
                         </font>
-                     </Label>
-                  </children>
-                  <padding>
-                     <Insets top="50.0" />
-                  </padding>
-               </VBox>
-               <VBox prefHeight="350.0" prefWidth="370.0">
-                  <children>
-                     <VBox prefHeight="150.0" prefWidth="100.0">
-                        <children>
-                           <Label text="Username or Email">
-                              <font>
-                                 <Font name="Segoe UI" size="16.0" />
-                              </font>
-                           </Label>
-                           <TextField id="user" fx:id="user" prefHeight="40.0" prefWidth="207.0" promptText="Enter your Username or Email" style="-fx-background-radius: 10px;" />
-                        </children>
-                     </VBox>
-                     <VBox prefHeight="150.0" prefWidth="100.0">
-                        <children>
-                           <Label text="Password">
-                              <font>
-                                 <Font name="Segoe UI" size="16.0" />
-                              </font>
-                           </Label>
-                           <PasswordField id="password" fx:id="password" prefHeight="40.0" prefWidth="207.0" promptText="Enter your Password" style="-fx-background-radius: 10px;" />
-                        </children>
-                     </VBox>
-                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                        <children>
-                           <Button id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="120.0" style="-fx-background-radius: 20px; -fx-background-color: skyblue;" text="Log In" />
-                        </children>
-                     </VBox>
-                  </children>
-                  <padding>
-                     <Insets left="30.0" right="30.0" top="20.0" />
-                  </padding>
-               </VBox>
-            </children>
-         </VBox>
-      </children></HBox>
+                    </Label>
+                    <TextField styleClass="input" id="user" fx:id="user" onAction="#login" prefHeight="40.0" prefWidth="207.0"
+                               promptText="Enter your Username or Email" />
+                </VBox>
+                <VBox prefHeight="150.0" prefWidth="100.0">
+                    <Label text="Password">
+                        <font>
+                            <Font name="Segoe UI" size="16.0"/>
+                        </font>
+                    </Label>
+                    <PasswordField styleClass="input" id="password" fx:id="password" onAction="#login" prefHeight="40.0"
+                                   prefWidth="207.0" promptText="Enter your Password" />
+                </VBox>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <Button styleClass="button-blue" id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="40.0"
+                            prefWidth="120.0" text="Log In"/>
+                </VBox>
+            </VBox>
+        </VBox>
+    </HBox>
 </AnchorPane>

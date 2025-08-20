@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utez.warehousemanagerfx.controllers.BranchNotAssigned">
+    <VBox alignment="CENTER" prefHeight="440.0" prefWidth="930.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+      <children>
+         <Label text="Branch not assigned. Please wait for a Branch to be assigned &#10;or report the issue to technical support." textAlignment="CENTER">
+            <font>
+               <Font name="Albert Sans Bold Italic" size="24.0" />
+            </font>
+         </Label>
+      </children>
+    </VBox>
+</Pane>

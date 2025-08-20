@@ -5,10 +5,22 @@ public class FXMLRoutes {
     public static final String LOGIN = "/mx/edu/utez/warehousemanagerfx/views/login/LoginWindow.fxml";
     // ADMIN
     public static final String ADMIN = "/mx/edu/utez/warehousemanagerfx/views/admin/AdminWindow.fxml";
+    public static final String BRANCH_NOT_ASSIGNED = "/mx/edu/utez/warehousemanagerfx/views/subviews/BranchNotAssigned.fxml";
     public static final String WAREHOUSE_CARD = "/mx/edu/utez/warehousemanagerfx/views/warehouse/WarehouseCard.fxml";
     public static final String WAREHOUSE_LIST = "/mx/edu/utez/warehousemanagerfx/views/warehouse/WarehouseList.fxml";
+    public static final String WAREHOUSE_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/WarehouseRegister.fxml";
+    public static final String WAREHOUSE_DETAILS = "/mx/edu/utez/warehousemanagerfx/views/warehouse/WarehouseDetails.fxml";
+    public static final String CLIENT_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/ClientRegister.fxml";
+    public static final String CLIENT_ASSIGNATION = "/mx/edu/utez/warehousemanagerfx/views/edits/ClientTransactionEdit.fxml";
+    public static final String INFO_ACCOUNT_ADMIN =  "/mx/edu/utez/warehousemanagerfx/views/account/InfAccountAD.fxml";
     // SUPERADMIN
     public static final String SUPERADMIN = "/mx/edu/utez/warehousemanagerfx/views/superadmin/SuperAdminWindow.fxml";
     public static final String ADMIN_TABLE = "/mx/edu/utez/warehousemanagerfx/views/subviews/AdminTableView.fxml";
     public static final String BRANCH_TABLE  = "/mx/edu/utez/warehousemanagerfx/views/subviews/BranchTableView.fxml";
+    public static final String ADMIN_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/AdminRegister.fxml";
+    public static final String BRANCH_REGISTER = "/mx/edu/utez/warehousemanagerfx/views/register/BranchRegister.fxml";
+    public static final String BRANCH_EDIT = "/mx/edu/utez/warehousemanagerfx/views/edits/BranchEdit.fxml";
+    public static final String ADMIN_EDIT = "/mx/edu/utez/warehousemanagerfx/views/edits/AdminEdit.fxml";
+    public static final String INFO_ACCOUNT_SUPERADMIN = "/mx/edu/utez/warehousemanagerfx/views/account/SuperAdminInfoAccount.fxml";
+
 }

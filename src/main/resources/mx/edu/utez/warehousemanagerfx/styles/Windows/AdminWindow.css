@@ -1,0 +1,11 @@
+@import "../Header.css";
+@import "../Toolbar.css";
+
+/* Register blue button */
+.button-blue-register {
+    -fx-background-color: #80D4F4;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 10px;
+    -fx-font-family: "Albert Sans Regular";
+}

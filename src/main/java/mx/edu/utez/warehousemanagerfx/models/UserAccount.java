@@ -1,8 +1,30 @@
 package mx.edu.utez.warehousemanagerfx.models;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+
+import javax.swing.*;
+import java.util.Objects;
+
 public class UserAccount {
     private int idUser;
-    private String fullName;
+    String firstName;
+    String middleName;
+    String lastName;
+    String secondLastName;
     private String email;
     private String phone;
     private String username;
@@ -12,10 +34,13 @@ public class UserAccount {
     public UserAccount() {
     }
 
-    public UserAccount(int idUser, String fullName, String email, String phone,
-                       String username, String passwordKey, String roleType) {
+    public UserAccount(int idUser, String firstName, String middleName, String lastName, String secondLastName,
+                       String email, String phone, String username, String passwordKey, String roleType) {
         this.idUser = idUser;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.secondLastName = secondLastName;
         this.email = email;
         this.phone = phone;
         this.username = username;
@@ -26,8 +51,30 @@ public class UserAccount {
     // Getters y setters
     public int getIdUser() { return idUser; }
     public void setIdUser(int idUser) { this.idUser = idUser; }
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getMiddleName() {
+        return middleName;
+    }
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getSecondLastName() {
+        return secondLastName;
+    }
+    public void setSecondLastName(String secondLastName) {
+        this.secondLastName = secondLastName;
+    }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPhone() { return phone; }
@@ -43,11 +90,59 @@ public class UserAccount {
     public String toString() {
         return "UserAccount{" +
                 "idUser=" + idUser +
-                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", secondLastName='" + secondLastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", username='" + username + '\'' +
+                ", passwordKey='" + passwordKey + '\'' +
                 ", roleType='" + roleType + '\'' +
                 '}';
+    }
+
+    @FXML
+    public static void logout(ActionEvent event) {
+        try {
+            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(UserAccount.class.getResource(FXMLRoutes.LOGIN)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loginWindow);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+            Label main = new Label("See you soon, Admin!");
+            main.setStyle("-fx-font-size: 16px; -fx-font-weight: 600;");
+            main.setWrapText(true);
+            main.setAlignment(Pos.CENTER);
+
+            VBox content = new VBox(10, main);
+            content.setPadding(new Insets(12));
+            content.setAlignment(Pos.CENTER);
+
+            DialogPane dp = new DialogPane();
+            dp.setContent(content);
+            dp.getStylesheets().clear();
+
+            Alert welcome = new Alert(Alert.AlertType.INFORMATION);
+            welcome.initOwner(stage);
+            welcome.initModality(Modality.WINDOW_MODAL);
+            welcome.setTitle("Welcome");
+            welcome.setHeaderText(null);
+            welcome.getDialogPane().setContent(content);
+            welcome.getDialogPane().setMinWidth(360);
+
+            welcome.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Could not return to the login screen.");
+            alert.show();
+        }
     }
 }

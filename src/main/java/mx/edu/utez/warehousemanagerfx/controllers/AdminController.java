@@ -14,15 +14,18 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import mx.edu.utez.warehousemanagerfx.models.Administrator;
+import mx.edu.utez.warehousemanagerfx.models.UserAccount;
 import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 import org.controlsfx.control.RangeSlider;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -63,6 +66,8 @@ public class AdminController implements Initializable {
     private Label priceLowLabel;
     @FXML
     private Label priceHighLabel;
+    @FXML
+    private HBox toolbar;
 
     private final String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
     private final String[] orderByChoiceList = {"Size: High to Low", "Size: Low to High", "Rental Price: High to Low", "Rental Price: Low to High", "Sale Price: High to Low", "Sale Price: Low to High"};
@@ -139,6 +144,32 @@ public class AdminController implements Initializable {
         loadFilteredViewSync();
     }
 
+    @FXML
+    private void logout(ActionEvent event) {
+        UserAccount.logout(event);
+    }
+
+    @FXML
+    private void goInfAccount(ActionEvent event) {
+        Administrator.goInfoAccount(event, searchTextField);
+    }
+
+    @FXML
+    private void addWarehouse(ActionEvent event) {
+        try {
+            Parent rwWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.WAREHOUSE_REGISTER)));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene escena = new Scene(rwWindow);
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error! Could not load the add warehouse screen.");
+        }
+    }
+
     private void loadWarehouses(List<Warehouse> data, boolean isGridView) {
         warehousesGrid.getChildren().clear(); // Clears the current view
         int column = 0;
@@ -205,8 +236,27 @@ public class AdminController implements Initializable {
     }
 
     private void loadFilteredViewSync() {
-        List<Warehouse> data = fetchFilteredWarehouses();
-        loadWarehouses(data, toggleView.isSelected());
+        Administrator a = (Administrator) SessionManager.getCurrentUser();
+        if (a.getIdBranch() != 0) {
+            List<Warehouse> data = fetchFilteredWarehouses();
+            loadWarehouses(data, toggleView.isSelected());
+        } else if (a.getIdBranch() == 0) {
+            toolbar.setVisible(false);
+            toolbar.setDisable(true);
+            warehousesGrid.getChildren().clear(); // Clears the current view
+            int column = 0;
+            int row = 1;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                String fxmlPath = FXMLRoutes.BRANCH_NOT_ASSIGNED;
+                fxmlLoader.setLocation(getClass().getResource(fxmlPath));
+                Pane pane = fxmlLoader.load();
+                warehousesGrid.add(pane, column, row);
+                GridPane.setColumnSpan(pane, warehousesGrid.getColumnCount());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadFilteredViewAsync() {
@@ -284,22 +334,6 @@ public class AdminController implements Initializable {
             System.err.println("Error setting up price slider: " + e.getMessage());
             priceRangeSlider.setLowValue(0);
             priceRangeSlider.setHighValue(100);
-        }
-    }
-
-    @FXML
-    private void logout(ActionEvent event) {
-        try {
-            Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FXMLRoutes.LOGIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene escena = new Scene(loginWindow);
-            stage.setScene(escena);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-            JOptionPane.showMessageDialog(null, "See you soon, Admin!");
-        } catch (Exception e) {
-            System.out.println("Error! Could not return to the login screen.");
         }
     }
 }

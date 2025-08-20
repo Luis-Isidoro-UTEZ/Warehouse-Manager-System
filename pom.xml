@@ -15,9 +15,14 @@
     </properties>
 
     <dependencies> <!-- Archivo pom.xml -->
-        <dependency> <!-- Hubo cambios en esta dependencia -->
+        <dependency> <!-- Esta dependencia asegura el correcto funcionamiento del EmailSender -->
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency> <!-- Oracle Cloud es más compatible con jdbc 8 y Oracle 19c -->
             <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId> <!-- Oracle Cloud es más compatible con jdbc 8 y Oracle 19c -->
+            <artifactId>ojdbc8</artifactId>
             <version>19.6.0.0</version>
         </dependency>
         <dependency> <!-- Tener estas dos dependencias en la integradora -->
@@ -45,19 +50,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>21</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>19.6.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>19.6.0.0</version>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

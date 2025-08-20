@@ -11,34 +11,36 @@ import java.util.Optional;
 public class ClientDao {
 
     // --- CREATE ---
-    public boolean createClient(Client client) {
-        String sql = "INSERT INTO CLIENT (Full_Name, Email, Phone) VALUES (?, ?, ?)";
+    public boolean createClient(Client c) {
+        String sql = "INSERT INTO CLIENT (First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"Id_Client"})) {
 
-            ps.setString(1, client.getFullName());
-            ps.setString(2, client.getEmail());
-            ps.setString(3, client.getPhone());
+            ps.setString(1, c.getFirstName());
+            ps.setString(2, c.getMiddleName());
+            ps.setString(3, c.getLastName());
+            ps.setString(4, c.getSecondLastName());
+            ps.setString(5, c.getEmail());
+            ps.setString(6, c.getPhone());
 
-            int affected = ps.executeUpdate();
-            if (affected > 0) {
+            if (ps.executeUpdate() > 0) {
                 ResultSet keys = ps.getGeneratedKeys();
                 if (keys.next()) {
-                    client.setIdClient(keys.getInt(1));
+                    c.setIdClient(keys.getInt(1));
                 }
+                conn.close();
+                return true;
             }
-            return affected > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     // --- READ ALL ---
     public List<Client> readAllClients() {
         List<Client> clients = new ArrayList<>();
-        String sql = "SELECT Id_Client, Full_Name, Email, Phone FROM CLIENT";
+        String sql = "SELECT * FROM CLIENT";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -47,7 +49,10 @@ public class ClientDao {
             while (rs.next()) {
                 Client client = new Client(
                         rs.getInt("Id_Client"),
-                        rs.getString("Full_Name"),
+                        rs.getString("First_Name"),
+                        rs.getString("Middle_Name"),
+                        rs.getString("Last_Name"),
+                        rs.getString("Second_Last_Name"),
                         rs.getString("Email"),
                         rs.getString("Phone")
                 );
@@ -61,8 +66,8 @@ public class ClientDao {
     }
 
     // --- READ BY ID ---
-    public Optional<Client> findById(int idClient) {
-        String sql = "SELECT Id_Client, Full_Name, Email, Phone FROM CLIENT WHERE Id_Client = ?";
+    public Optional<Client> readById(int idClient) {
+        String sql = "SELECT Id_Client, First_Name, Middle_Name, Last_Name, Second_Last_Name, Email, Phone FROM CLIENT WHERE Id_Client = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -71,7 +76,10 @@ public class ClientDao {
             if (rs.next()) {
                 Client client = new Client(
                         rs.getInt("Id_Client"),
-                        rs.getString("Full_Name"),
+                        rs.getString("First_Name"),
+                        rs.getString("Middle_Name"),
+                        rs.getString("Last_Name"),
+                        rs.getString("Second_Last_Name"),
                         rs.getString("Email"),
                         rs.getString("Phone")
                 );
@@ -92,7 +100,7 @@ public class ClientDao {
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, client.getFullName());
+            ps.setString(1, client.getFirstName());
             ps.setString(2, client.getEmail());
             ps.setString(3, client.getPhone());
             ps.setInt(4, client.getIdClient());

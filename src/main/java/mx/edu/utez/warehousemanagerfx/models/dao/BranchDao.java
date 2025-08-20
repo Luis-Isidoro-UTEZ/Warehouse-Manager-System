@@ -6,6 +6,7 @@ import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BranchDao {
 
@@ -87,6 +88,7 @@ public class BranchDao {
                         "(SELECT COUNT(*) FROM WAREHOUSE w WHERE w.ID_BRANCH = b.ID_BRANCH AND w.STATUS = 'Sold') AS SOLD_COUNT " +
                         "FROM BRANCH b " +
                         "JOIN PROPERTY p ON b.ID_PROPERTY = p.ID_PROPERTY " +
+                        "WHERE b.IS_DELETED = 0 " +
                         "ORDER BY " + col + " " + dir;
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
@@ -104,14 +106,55 @@ public class BranchDao {
         return branches;
     }
 
+    public List<Branch> readBranchesWithoutAdmin() {
+        List<Branch> branches = new ArrayList<>();
+        String query =
+                "SELECT b.ID_BRANCH, b.BRANCH_CODE, b.BRANCH_REGISTRATION_DATE, b.IS_DELETED, " +
+                        "p.ID_PROPERTY, p.PROPERTY_TYPE, p.COUNTRY, p.STATE, p.MUNICIPALITY, p.POSTAL_CODE, p.NEIGHBORHOOD, p.ADDRESS_DETAIL " +
+                        "FROM BRANCH b " +
+                        "JOIN PROPERTY p ON b.ID_PROPERTY = p.ID_PROPERTY " +
+                        "WHERE b.IS_DELETED = 0 " +
+                        "AND NOT EXISTS (SELECT 1 FROM ADMINISTRATOR a WHERE a.ID_BRANCH = b.ID_BRANCH AND a.IS_DELETED = 0)";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Branch b = new Branch();
+                b.setIdBranch(rs.getInt("ID_BRANCH"));
+                b.setBranchCode(rs.getString("BRANCH_CODE"));
+                b.setRegistrationDate(rs.getDate("BRANCH_REGISTRATION_DATE").toLocalDate());
+
+                b.setIdProperty(rs.getInt("ID_PROPERTY"));
+                b.setPropertyType(rs.getString("PROPERTY_TYPE"));
+                b.setCountry(rs.getString("COUNTRY"));
+                b.setState(rs.getString("STATE"));
+                b.setMunicipality(rs.getString("MUNICIPALITY"));
+                b.setPostalCode(rs.getInt("POSTAL_CODE"));
+                b.setNeighborhood(rs.getString("NEIGHBORHOOD"));
+                b.setAddressDetail(rs.getString("ADDRESS_DETAIL"));
+
+                b.setDeleted(rs.getInt("IS_DELETED") != 0);
+                branches.add(b);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return branches;
+    }
+
+
     // READ BY ID
-    public Branch readById(int idBranch) {
+    public Optional<Branch> readById(int idBranch) {
         String sql =
                 "SELECT b.ID_BRANCH, b.BRANCH_CODE, b.BRANCH_REGISTRATION_DATE, b.IS_DELETED, " +
                         "p.ID_PROPERTY, p.PROPERTY_TYPE, p.COUNTRY, p.STATE, p.MUNICIPALITY, p.POSTAL_CODE, p.NEIGHBORHOOD, p.ADDRESS_DETAIL " +
                         "FROM BRANCH b " +
                         "JOIN PROPERTY p ON b.ID_PROPERTY = p.ID_PROPERTY " +
-                        "WHERE b.ID_BRANCH = ?";
+                        "WHERE b.ID_BRANCH = ? AND b.IS_DELETED = 0 ";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -119,7 +162,22 @@ public class BranchDao {
             ps.setInt(1, idBranch);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToBranch(rs);
+                    Branch b = new Branch();
+                    b.setIdBranch(rs.getInt("ID_BRANCH"));
+                    b.setBranchCode(rs.getString("BRANCH_CODE"));
+                    b.setRegistrationDate(rs.getDate("BRANCH_REGISTRATION_DATE").toLocalDate());
+
+                    b.setIdProperty(rs.getInt("ID_PROPERTY"));
+                    b.setPropertyType(rs.getString("PROPERTY_TYPE"));
+                    b.setCountry(rs.getString("COUNTRY"));
+                    b.setState(rs.getString("STATE"));
+                    b.setMunicipality(rs.getString("MUNICIPALITY"));
+                    b.setPostalCode(rs.getInt("POSTAL_CODE"));
+                    b.setNeighborhood(rs.getString("NEIGHBORHOOD"));
+                    b.setAddressDetail(rs.getString("ADDRESS_DETAIL"));
+
+                    b.setDeleted(rs.getInt("IS_DELETED") != 0);
+                    return Optional.of(b);
                 }
             }
 
@@ -127,7 +185,7 @@ public class BranchDao {
             e.printStackTrace();
         }
 
-        return null;
+        return Optional.empty();
     }
 
     // UPDATE: Branch + property
@@ -171,7 +229,7 @@ public class BranchDao {
     }
 
     // DELETE: Soft delete branch
-    public boolean delete(int idBranch) {
+    public boolean softDelete(int idBranch) {
         String sql = "UPDATE BRANCH SET IS_DELETED = 1 WHERE ID_BRANCH = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();

@@ -119,14 +119,13 @@ public class Validations {
     }
 
     // Method to validate duplicate email, phone and user
-    public static boolean checkDuplicateAdmin(TextField emailField, TextField phoneField, TextField usernameField) {
+    public static boolean checkDuplicateAdmin(TextField emailField, TextField phoneField, TextField usernameField, Integer currentAdminId) {
         AdminDao adminDao = new AdminDao();
-        var dup = adminDao.checkDuplicate(emailField.getText(), phoneField.getText(), usernameField.getText());
+        var dup = adminDao.checkDuplicate(emailField.getText(), phoneField.getText(), usernameField.getText(), currentAdminId);
 
         boolean hasDuplicates = false;
         StringBuilder errorMsg = new StringBuilder("The following data already exists in the system:\n");
 
-        // Clear previous styles
         emailField.getStyleClass().remove("input-error");
         phoneField.getStyleClass().remove("input-error");
         usernameField.getStyleClass().remove("input-error");
@@ -148,7 +147,7 @@ public class Validations {
         }
 
         if (hasDuplicates) {
-            Alerts.showAlert(javafx.scene.control.Alert.AlertType.ERROR, emailField, "Duplicate error", errorMsg.toString());
+            Alerts.showAlert(Alert.AlertType.ERROR, emailField, "Duplicate error", errorMsg.toString());
         }
 
         return hasDuplicates;

@@ -34,7 +34,7 @@
                         <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#goHomeAD" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80D4F4;" styleClass="button-red" text="Home">
+                        <Button mnemonicParsing="false" onAction="#goHomeAD" prefHeight="25.0" prefWidth="60.0" styleClass="button-blue" text="Home">
                             <HBox.margin>
                                 <Insets right="16.0" />
                             </HBox.margin>

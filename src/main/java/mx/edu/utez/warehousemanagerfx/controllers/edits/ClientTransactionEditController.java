@@ -80,6 +80,10 @@ public class ClientTransactionEditController implements Initializable {
 
     public void setCurrentClientAssignation(Warehouse w) {
         this.w = w;
+        if (w == null) {
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "No warehouse selected for this client.");
+            return;
+        }
         int idClient = w.getIdClient();
         ClientDao clientDao = new ClientDao();
         Optional<Client> c = clientDao.readById(idClient);
@@ -91,23 +95,31 @@ public class ClientTransactionEditController implements Initializable {
             email.setText(client.getEmail());
             phone.setText(client.getPhone());
         });
-        if (w.getStatus().equals("Rented")) {
+        if (w.getStatus().equals("Sold")) {
+            transactionType.setValue("Sale");
+            transactionType.setDisable(true);
+        } else if (w.getStatus().equals("Rented")) {
             transactionType.setValue("Rent");
             expirationDateControls.setVisible(true);
             WarehouseTransactionDao wtDao = new WarehouseTransactionDao();
             WarehouseTransaction wt = wtDao.readTransactionById(idClient);
             paymentExpirationDate.setValue(wt.getPaymentExpirationDate());
-        } else if (w.getStatus().equals("Sold")) {
-            transactionType.setValue("Sale");
         }
     }
 
     @FXML
     public void editClientAssignation(ActionEvent event) {
+        if (w == null) {
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "No warehouse selected for this client.");
+            return;
+        }
         // Validate if any fields are empty
         if (Validations.isInputFieldsEmpty(inputNodes, firstName)) return;
+        // Validate phone
+        if (!Validations.validatePhoneField(phone)) return;
         // If all validations pass, proceed with object creation
         Client c = new Client();
+
         c.setFirstName(firstName.getText());
         c.setMiddleName(middleName.getText());
         c.setLastName(lastName.getText());
@@ -125,7 +137,7 @@ public class ClientTransactionEditController implements Initializable {
         }
 
         ClientDao clientDao = new ClientDao();
-        if (clientDao.createClient(c)) {
+        if (clientDao.updateClient(c)) {
             WarehouseTransaction wt = new WarehouseTransaction();
             wt.setTransactionType(transactionType.getValue());
             wt.setPaymentExpirationDate(paymentExpirationDate.getValue());
@@ -139,36 +151,27 @@ public class ClientTransactionEditController implements Initializable {
                 WarehouseDao warehouseDao = new WarehouseDao();
                 warehouseDao.updateWarehouse(w);
                 goHome(event);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                try { alert.initOwner(firstName.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-                alert.setTitle("Registration successful!"); alert.setHeaderText(null); alert.setContentText("The " + transaction + " was successful."); alert.show();
+                Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The client/transaction was updated successfully.");
             }
         } else {
-            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The " + transaction + " could not be made.");
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The client/transaction could not be updated.");
         }
     }
-/*
+
     @FXML
-    private void deleteWarehouse(ActionEvent event) {
+    private void unassignClient(ActionEvent event) {
         WarehouseDao dao = new WarehouseDao();
-        if (confirmDelete()) {
-            if (dao.softDeleteWarehouse(w.getIdWarehouse())) {
-                goHomeAD(event);
-                Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful deletion!", "The warehouse was successfully deleted.");
+        if (Alerts.confirmUnassign(firstName, "client")) {
+            w.setIdClient(0);
+            if (dao.updateWarehouse(w)) {
+                goHome(event);
+                Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful Unassign!", "The client was successfully unassigned.");
             } else {
-                Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be deleted.");
+                Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The client could not be unassigned.");
             }
         }
     }
 
-    private boolean confirmDelete() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-        alert.setTitle("Confirm deletion"); alert.setHeaderText("Hello"); alert.setContentText("Are you sure you want to delete that record?");
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-*/
 
     @FXML
     private void returnWarehouseDetails(ActionEvent event) {
@@ -185,7 +188,7 @@ public class ClientTransactionEditController implements Initializable {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the warehouse details window.");
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "Could not load the warehouse details window.");
         }
     }
 

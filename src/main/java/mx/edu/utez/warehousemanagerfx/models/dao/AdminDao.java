@@ -1,7 +1,6 @@
 package mx.edu.utez.warehousemanagerfx.models.dao;
 
 import mx.edu.utez.warehousemanagerfx.models.Administrator;
-import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.utils.database.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -9,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Data Access Object for an Admin model.
@@ -36,12 +36,15 @@ public class AdminDao {
         }
     }
 
-    public DuplicateCheckResult checkDuplicate(String email, String phone, String username) {
+    public DuplicateCheckResult checkDuplicate(String email, String phone, String username, Integer excludeIdAdmin) {
         boolean emailExists = false;
         boolean phoneExists = false;
         boolean usernameExists = false;
 
-        String sql = "SELECT EMAIL, PHONE, USERNAME FROM USER_ACCOUNT WHERE ROLE_TYPE = 'ADMINISTRATOR' AND (EMAIL = ? OR PHONE = ? OR USERNAME = ?)";
+        String sql = "SELECT ID_USER, EMAIL, PHONE, USERNAME FROM USER_ACCOUNT " +
+                "WHERE ROLE_TYPE = 'ADMINISTRATOR' " +
+                "AND (EMAIL = ? OR PHONE = ? OR USERNAME = ?)";
+
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -51,6 +54,8 @@ public class AdminDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+                    int id = rs.getInt("ID_USER");
+                    if (excludeIdAdmin != null && id == excludeIdAdmin) continue; // ignorar el mismo admin
                     if (email.equalsIgnoreCase(rs.getString("EMAIL"))) emailExists = true;
                     if (phone.equals(rs.getString("PHONE"))) phoneExists = true;
                     if (username.equals(rs.getString("USERNAME"))) usernameExists = true;
@@ -165,7 +170,7 @@ public class AdminDao {
                             "  a.IS_DELETED          AS Is_Deleted " +
                             "FROM USER_ACCOUNT u " +
                             "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
-                            "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' " +
+                            "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' AND a.IS_DELETED = 0 " +
                             "ORDER BY " + orderExpr + " " + dir;
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -181,13 +186,68 @@ public class AdminDao {
         return administrators;
     }
 
+    public List<Administrator> readAssignableAdmins(Integer currentBranchId) {
+        List<Administrator> administrators = new ArrayList<>();
+
+        String sql =
+                "SELECT " +
+                        "  u.ID_USER             AS Id_User, " +
+                        "  u.FIRST_NAME          AS First_Name, " +
+                        "  u.MIDDLE_NAME         AS Middle_Name, " +
+                        "  u.LAST_NAME           AS Last_Name, " +
+                        "  u.SECOND_LAST_NAME    AS Second_Last_Name, " +
+                        "  u.EMAIL               AS Email, " +
+                        "  u.PHONE               AS Phone, " +
+                        "  u.USERNAME            AS Username, " +
+                        "  u.PASSWORD_KEY        AS Password_Key, " +
+                        "  u.ROLE_TYPE           AS Role_Type, " +
+                        "  a.ID_BRANCH           AS Id_Branch, " +
+                        "  a.IS_DELETED          AS Is_Deleted " +
+                        "FROM USER_ACCOUNT u " +
+                        "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
+                        "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' AND a.IS_DELETED = 0 " +
+                        "AND (a.ID_BRANCH IS NULL OR a.ID_BRANCH = ?) " +
+                        "ORDER BY u.FIRST_NAME ASC";
+
+        try (Connection conn = DatabaseConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (currentBranchId != null) {
+                ps.setInt(1, currentBranchId);
+            } else {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    administrators.add(mapResultSetToAdmin(rs));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return administrators;
+    }
+
     // READ: Get admin by ID
-    public Administrator readById(int idUser) {
-        String sql = "SELECT u.ID_USER AS Id_Admin, u.FULL_NAME AS Full_Name, u.EMAIL, u.PHONE, " +
-                "u.USERNAME, u.PASSWORD_KEY, u.ROLE_TYPE, a.ID_BRANCH, a.IS_DELETED " +
+    public Optional<Administrator> readById(int idUser) {
+        String sql = "SELECT " +
+                "  u.ID_USER             AS Id_User, " +
+                "  u.FIRST_NAME          AS First_Name, " +
+                "  u.MIDDLE_NAME         AS Middle_Name, " +
+                "  u.LAST_NAME           AS Last_Name, " +
+                "  u.SECOND_LAST_NAME    AS Second_Last_Name, " +
+                "  u.EMAIL               AS Email, " +
+                "  u.PHONE               AS Phone, " +
+                "  u.USERNAME            AS Username, " +
+                "  u.PASSWORD_KEY        AS Password_Key, " +
+                "  u.ROLE_TYPE           AS Role_Type, " +
+                "  a.ID_BRANCH           AS Id_Branch, " +
+                "  a.IS_DELETED          AS Is_Deleted " +
                 "FROM USER_ACCOUNT u " +
                 "JOIN ADMINISTRATOR a ON a.ID_ADMIN = u.ID_USER " +
-                "WHERE u.ID_USER = ?";
+                "WHERE u.ROLE_TYPE = 'ADMINISTRATOR' AND u.ID_USER = ? AND a.IS_DELETED = 0";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -195,14 +255,29 @@ public class AdminDao {
             ps.setInt(1, idUser);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToAdmin(rs);
+                    Administrator a = new Administrator();
+                    a.setIdUser(rs.getInt("ID_USER"));
+                    a.setIdAdmin(a.getIdUser());
+                    a.setFirstName(rs.getString("FIRST_NAME"));
+                    a.setMiddleName(rs.getString("MIDDLE_NAME"));
+                    a.setLastName(rs.getString("LAST_NAME"));
+                    a.setSecondLastName(rs.getString("SECOND_LAST_NAME"));
+                    a.setEmail(rs.getString("EMAIL"));
+                    a.setPhone(rs.getString("PHONE"));
+                    a.setUsername(rs.getString("USERNAME"));
+                    a.setPasswordKey(rs.getString("PASSWORD_KEY"));
+                    a.setRoleType(rs.getString("ROLE_TYPE"));
+                    int branchId = rs.getInt("ID_BRANCH");
+                    a.setIdBranch(rs.wasNull() ? null : branchId);
+                    a.setDeleted(rs.getInt("IS_DELETED") != 0);
+                    return Optional.of(a);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return Optional.empty();
     }
 
     // UPDATE: Modify admin data
@@ -249,7 +324,7 @@ public class AdminDao {
     }
 
     // DELETE: Soft delete admin
-    public boolean delete(int idAdmin) {
+    public boolean softDelete(int idAdmin) {
         String sql = "UPDATE ADMINISTRATOR SET Is_Deleted = 1 WHERE Id_Admin = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();

@@ -78,9 +78,10 @@ public class WarehouseRegisterController implements Initializable {
         WarehouseDao dao = new WarehouseDao();
 
         if (dao.createWarehouse(w)) {
-            Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Warehouse created!", "The warehouse was successfully created.");
+            goHome(event);
+            Alerts.showAlert(Alert.AlertType.INFORMATION, name, "Warehouse created!", "The warehouse was successfully created.");
         } else {
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be created.");
+            Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "The warehouse could not be created.");
         }
     }
 

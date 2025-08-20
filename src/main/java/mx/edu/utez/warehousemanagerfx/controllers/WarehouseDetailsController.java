@@ -247,31 +247,27 @@ public class WarehouseDetailsController implements Initializable {
         );
         // Update the DB
         if(dao.updateWarehouse(w)){
-            Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful update!", "The warehouse was updated successfully.");
+            Alerts.showAlert(Alert.AlertType.INFORMATION, name, "Successful update!", "The warehouse was updated successfully.");
         } else {
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be updated.");
+            Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "The warehouse could not be updated.");
         }
     }
 
     @FXML
     private void deleteWarehouse(ActionEvent event) {
         WarehouseDao dao = new WarehouseDao();
-        if (confirmDelete()) {
-            if (dao.softDeleteWarehouse(w.getIdWarehouse())) {
-                goHomeAD(event);
-                Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful deletion!", "The warehouse was successfully deleted.");
-            } else {
-                Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "The warehouse could not be deleted.");
+        if (w.getStatus().equals("Rented")) {
+            Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "The warehouse is rented, so it cannot be deleted.");
+        } else {
+            if (Alerts.confirmDelete(name, "warehouse")) {
+                if (dao.softDeleteWarehouse(w.getIdWarehouse())) {
+                    goHomeAD(event);
+                    Alerts.showAlert(Alert.AlertType.INFORMATION, name, "Successful deletion!", "The warehouse was successfully deleted.");
+                } else {
+                    Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "The warehouse could not be deleted.");
+                }
             }
         }
-    }
-
-    private boolean confirmDelete() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        try { alert.initOwner(name.getScene().getWindow()); alert.initModality(Modality.WINDOW_MODAL); } catch (Exception ignore) {}
-        alert.setTitle("Confirm deletion"); alert.setHeaderText("Hello"); alert.setContentText("Are you sure you want to delete that record?");
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     private void rentOrSell() {
@@ -288,7 +284,7 @@ public class WarehouseDetailsController implements Initializable {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the client register window to rent/sell the warehouse.");
+            Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "Could not load the client register window to rent/sell the warehouse.");
         }
     }
 
@@ -306,7 +302,7 @@ public class WarehouseDetailsController implements Initializable {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the client register window to rent/sell the warehouse.");
+            Alerts.showAlert(Alert.AlertType.ERROR, name, "Error!", "Could not load the client register window to rent/sell the warehouse.");
         }
     }
 

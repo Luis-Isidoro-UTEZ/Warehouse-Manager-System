@@ -2,17 +2,32 @@ package mx.edu.utez.warehousemanagerfx.controllers.subviews;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import mx.edu.utez.warehousemanagerfx.Main;
+import mx.edu.utez.warehousemanagerfx.controllers.edits.BranchEditController;
 import mx.edu.utez.warehousemanagerfx.models.Branch;
 import mx.edu.utez.warehousemanagerfx.models.dao.BranchDao;
+import mx.edu.utez.warehousemanagerfx.utils.Alerts;
+import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class BranchTableController implements Initializable {
@@ -59,8 +74,7 @@ public class BranchTableController implements Initializable {
                         setAlignment(Pos.CENTER);
                         btn.setOnAction(event -> {
                             Branch b = getTableView().getItems().get(getIndex());
-                            // TODO: handle branch management action using b
-                            System.out.println("Manage branch: " + (b != null ? b.toString() : "<null>"));
+                            openManagementWindow(b);
                         });
                     }
 
@@ -104,6 +118,40 @@ public class BranchTableController implements Initializable {
         List<Branch> rows = new BranchDao().readFilteredBranches(column, dir);
         ObservableList<Branch> data = FXCollections.observableArrayList(rows);
         tblBranches.setItems(data);
+    }
+
+    public void removeDeletedBranch(Branch b) {
+        tblBranches.getItems().remove(b);
+    }
+
+    private void openManagementWindow(Branch b) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.BRANCH_EDIT));
+            Parent branchEditWindow = loader.load();
+            // 1. Pass the branch to the controller
+            BranchEditController controller = loader.getController();
+            controller.setBranch(b);
+            controller.setParentController(this);
+            // 2. Get a new stage (window/scene/stage)
+            Stage stage = new Stage();
+            // 3. Prepare the new scene.
+            Scene escena = new Scene(branchEditWindow);
+            // 4. Place the new scene on the stage.
+            stage.setScene(escena);
+            stage.setTitle("Manage Branch");
+            // Change the stage icon
+            Image icon = new Image(Objects.requireNonNull(getClass().getResource(ImageRoutes.MAIN_APP_ICON)).toString());
+            stage.getIcons().add(icon);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            // 5. Make sure it's visible.
+            stage.showAndWait();
+            tblBranches.refresh(); //<--- Refresh is only for data in Java memory and not DB.
+        }catch(IOException e){
+            e.printStackTrace();
+            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the Branch window.");
+        }
     }
 
     /**

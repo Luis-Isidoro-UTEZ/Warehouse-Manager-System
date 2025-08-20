@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import mx.edu.utez.warehousemanagerfx.models.Administrator;
@@ -22,6 +23,7 @@ import mx.edu.utez.warehousemanagerfx.models.Warehouse;
 import mx.edu.utez.warehousemanagerfx.models.dao.WarehouseDao;
 import mx.edu.utez.warehousemanagerfx.utils.RangeSliderAnimator;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
+import mx.edu.utez.warehousemanagerfx.utils.services.SessionManager;
 import org.controlsfx.control.RangeSlider;
 
 import java.io.IOException;
@@ -64,6 +66,8 @@ public class AdminController implements Initializable {
     private Label priceLowLabel;
     @FXML
     private Label priceHighLabel;
+    @FXML
+    private HBox toolbar;
 
     private final String[] statusChoiceList = {"Show All", "Available", "Rented", "Sold", "Rent Only", "Sale Only"};
     private final String[] orderByChoiceList = {"Size: High to Low", "Size: Low to High", "Rental Price: High to Low", "Rental Price: Low to High", "Sale Price: High to Low", "Sale Price: Low to High"};
@@ -232,8 +236,27 @@ public class AdminController implements Initializable {
     }
 
     private void loadFilteredViewSync() {
-        List<Warehouse> data = fetchFilteredWarehouses();
-        loadWarehouses(data, toggleView.isSelected());
+        Administrator a = (Administrator) SessionManager.getCurrentUser();
+        if (a.getIdBranch() != 0) {
+            List<Warehouse> data = fetchFilteredWarehouses();
+            loadWarehouses(data, toggleView.isSelected());
+        } else if (a.getIdBranch() == 0) {
+            toolbar.setVisible(false);
+            toolbar.setDisable(true);
+            warehousesGrid.getChildren().clear(); // Clears the current view
+            int column = 0;
+            int row = 1;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                String fxmlPath = FXMLRoutes.BRANCH_NOT_ASSIGNED;
+                fxmlLoader.setLocation(getClass().getResource(fxmlPath));
+                Pane pane = fxmlLoader.load();
+                warehousesGrid.add(pane, column, row);
+                GridPane.setColumnSpan(pane, warehousesGrid.getColumnCount());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadFilteredViewAsync() {

@@ -153,7 +153,7 @@ public class ClientRegisterController implements Initializable {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            Alerts.showAlert(Alert.AlertType.ERROR, null, "Error!", "Could not load the warehouse details window.");
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "Could not load the warehouse details window.");
         }
     }
 

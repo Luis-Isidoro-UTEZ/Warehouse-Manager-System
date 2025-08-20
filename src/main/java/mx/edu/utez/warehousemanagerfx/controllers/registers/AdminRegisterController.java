@@ -66,7 +66,7 @@ public class AdminRegisterController implements Initializable {
         // Validate phone
         if (!Validations.validatePhoneField(phone)) return;
         // Validate duplicates before inserting
-        if (Validations.checkDuplicateAdmin(email, phone, username)) return;
+        if (Validations.checkDuplicateAdmin(email, phone, username, null)) return;
         // If all validations pass, proceed with object creation
         Administrator a = new Administrator();
         a.setFirstName(firstName.getText());

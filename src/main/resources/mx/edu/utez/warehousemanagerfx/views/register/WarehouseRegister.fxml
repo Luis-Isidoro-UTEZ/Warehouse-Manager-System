@@ -34,7 +34,7 @@
                         <Label styleClass="label-slogan-white" text="More than a warehouse, &#10;an investment." textAlignment="CENTER" />
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="240.0">
-                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #80d4f4;" styleClass="button-red" text="Home">
+                        <Button mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="60.0" styleClass="button-blue" text="Home">
                             <HBox.margin>
                                 <Insets right="18.0" />
                             </HBox.margin>
@@ -55,69 +55,83 @@
     </top>
     <center>
         <Pane prefHeight="350.0" prefWidth="950.0" BorderPane.alignment="CENTER">
-            <VBox prefHeight="320.0" prefWidth="950.0" spacing="10.0">
+            <VBox prefWidth="950.0" spacing="10.0">
                 <padding>
-                    <Insets left="10.0" right="15.0" />
+                    <Insets left="20.0" right="20.0" />
                 </padding>
-                <Label text="Warehouse Name:">
+                <HBox layoutX="30.0" layoutY="349.0">
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="20.0" />
                     </VBox.margin>
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="name" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
-                    <VBox.margin>
-                        <Insets top="-10.0" />
-                    </VBox.margin>
-                </TextField>
-                <Label layoutX="10.0" layoutY="10.0" text="Rental Price:">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="rentalPrice" layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
-                    <VBox.margin>
-                        <Insets top="-10.0" />
-                    </VBox.margin>
-                </TextField>
-            <Label layoutX="20.0" layoutY="91.0" text="Sale Price:">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="salePrice" layoutX="20.0" layoutY="112.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here..." />
-                <Label layoutX="10.0" layoutY="53.0" text="Size (m²):">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="size" layoutX="10.0" layoutY="28.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
-                    <VBox.margin>
-                        <Insets top="-10.0" />
-                    </VBox.margin>
-                </TextField>
-                <Label layoutX="10.0" layoutY="53.0" text="Image:">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="image" layoutX="10.0" layoutY="114.0" prefHeight="40.0" prefWidth="935.0" promptText="Type here...">
-                    <VBox.margin>
-                        <Insets top="-10.0" />
-                    </VBox.margin>
-                </TextField>
+                    <VBox>
+                        <Label text="Warehouse Name:">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="name" prefHeight="40.0" prefWidth="910.0" promptText="Type here..." />
+                    </VBox>
+                </HBox>
+                <HBox layoutX="30.0" layoutY="349.0">
+                    <VBox>
+                        <Label text="Rental Price:">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="rentalPrice" prefHeight="40.0" prefWidth="910.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                </HBox>
+                <HBox>
+                    <VBox>
+                        <Label text="Sale Price:">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="salePrice" prefHeight="40.0" prefWidth="910.0" promptText="Type here..." />
+                    </VBox>
+                </HBox>
+                <HBox>
+                    <VBox>
+                        <Label text="Size (m²):">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="size" prefHeight="40.0" prefWidth="910.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                </HBox>
+                <HBox>
+                    <VBox>
+                        <Label text="Image:">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="image" prefHeight="40.0" prefWidth="910.0" promptText="Type here...">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </TextField>
+                    </VBox>
+                </HBox>
+              <HBox alignment="TOP_RIGHT">
+                  <Button fx:id="registerbutton" onAction="#registerWarehouse" prefHeight="40.0" prefWidth="115.0" styleClass="button-blue-register" text="Register">
+                      <HBox.margin>
+                          <Insets top="10.0" />
+                      </HBox.margin>
+                  </Button>
+              </HBox>
             </VBox>
         </Pane>
     </center>
-    <bottom>
-        <HBox alignment="TOP_RIGHT" prefHeight="181.0" prefWidth="950.0" BorderPane.alignment="CENTER">
-            <Button fx:id="registerbutton" onAction="#registerWarehouse" prefHeight="34.0" prefWidth="170.0" styleClass="button-blue-register" text="Register">
-                <HBox.margin>
-                    <Insets right="30.0" />
-                </HBox.margin>
-            </Button>
-        </HBox>
-    </bottom>
 </BorderPane>

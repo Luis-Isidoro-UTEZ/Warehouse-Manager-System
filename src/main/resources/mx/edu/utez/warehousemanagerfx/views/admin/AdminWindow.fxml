@@ -51,7 +51,7 @@
                         </ImageView>
                     </HBox>
                 </HBox>
-                <HBox prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
+                <HBox fx:id="toolbar" prefHeight="70.0" prefWidth="950.0" styleClass="toolbar">
                     <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="165.0" spacing="5.0">
                         <padding>
                             <Insets left="14.0" />

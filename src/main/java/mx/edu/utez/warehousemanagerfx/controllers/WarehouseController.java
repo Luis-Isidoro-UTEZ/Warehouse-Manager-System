@@ -21,6 +21,7 @@ import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -52,9 +53,22 @@ public class WarehouseController {
     public void setData(Warehouse warehouse) {
         // Load and set the image
         w = warehouse;
-        String fullPath = Objects.requireNonNull(getClass().getResource(ImageRoutes.THUMBNAILS_BASE + warehouse.getImage())).toExternalForm();
-        Image image = new Image(fullPath, true);
-        img.setImage(image);
+
+        Image source;
+
+        if (w.getImage() == null || w.getImage().isEmpty()) {
+            source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")));
+        } else {
+            InputStream path = Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + w.getImage());
+            if (path == null) {
+                // Image not found, use default image
+                source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")));
+                System.err.println("Image not found: " + w.getImage());
+            } else {
+                source = new Image(path);
+            }
+        }
+        img.setImage(source);
         imgBorder.setHeight(img.getFitHeight());
         imgBorder.setWidth(img.getFitWidth());
         // Format numbers with commas as a thousand separators
@@ -72,7 +86,7 @@ public class WarehouseController {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(FXMLRoutes.WAREHOUSE_DETAILS));
             Parent warehouseDetailsWindow = loader.load();
             WarehouseDetailsController controller = loader.getController();
-            controller.setWarehouse (w);
+            controller.setWarehouse(w);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene escena = new Scene(warehouseDetailsWindow);
             stage.setScene(escena);

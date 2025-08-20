@@ -132,15 +132,27 @@ public class WarehouseDetailsController implements Initializable {
         Image source;
 
         if (w.getImage() == null || w.getImage().isEmpty()) {
-            source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("img/thumbnails/ImageNotAvailable.jpg")));
+            // Imagen por defecto
+            source = new Image(Objects.requireNonNull(
+                    Main.class.getResourceAsStream("img/thumbnails/ImageNotAvailable.jpg")
+            ));
         } else {
-            InputStream path = Main.class.getResourceAsStream("img/thumbnails/" + w.getImage());
-            if (path == null) {
-                // Image not found, use default image
-                source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("img/thumbnails/ImageNotAvailable.jpg")));
-                System.err.println("Image not found: " + w.getImage());
+            // 1. Buscar en carpeta externa
+            File externalImage = new File("images/thumbnails/" + w.getImage());
+            if (externalImage.exists()) {
+                source = new Image(externalImage.toURI().toString());
             } else {
-                source = new Image(path);
+                // 2. Buscar en resources (placeholders)
+                InputStream resourceImage = Main.class.getResourceAsStream("img/thumbnails/" + w.getImage());
+                if (resourceImage != null) {
+                    source = new Image(resourceImage);
+                } else {
+                    // 3. Imagen por defecto
+                    source = new Image(Objects.requireNonNull(
+                            Main.class.getResourceAsStream("img/thumbnails/ImageNotAvailable.jpg")
+                    ));
+                    System.err.println("Image not found in external folder or resources: " + w.getImage());
+                }
             }
         }
 
@@ -158,7 +170,7 @@ public class WarehouseDetailsController implements Initializable {
     public void uploadImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Archivos de imagen", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Image files", "*.png", "*.jpg", "*.jpeg")
         );
         File selectedFile = fileChooser.showOpenDialog(chooseImage.getScene().getWindow());
 
@@ -167,13 +179,21 @@ public class WarehouseDetailsController implements Initializable {
             String fileName = selectedFile.getName();
             image.setText(fileName);
             w.setImage(fileName);
-            Image selectedImageFile = new Image(selectedFile.toURI().toString());
-            img.setImage(selectedImageFile);
 
-            // Copy the image to the thumbnails directory inside resources
-            Path destination = Paths.get("src/main/resources/mx/edu/utez/warehousemanagerfx/img/thumbnails/" + fileName);
+            // Create external folder "images/thumbnails" if it doesn't exist
+            Path destinationDir = Paths.get("images", "thumbnails");
             try {
+                if (!Files.exists(destinationDir)) {
+                    Files.createDirectories(destinationDir);
+                }
+
+                Path destination = destinationDir.resolve(fileName);
                 Files.copy(selectedFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+                // Display the newly copied image
+                Image selectedImageFile = new Image(destination.toUri().toString());
+                img.setImage(selectedImageFile);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

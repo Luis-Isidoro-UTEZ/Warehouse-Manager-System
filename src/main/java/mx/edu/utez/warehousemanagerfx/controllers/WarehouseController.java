@@ -20,6 +20,7 @@ import mx.edu.utez.warehousemanagerfx.utils.Alerts;
 import mx.edu.utez.warehousemanagerfx.utils.routes.FXMLRoutes;
 import mx.edu.utez.warehousemanagerfx.utils.routes.ImageRoutes;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -57,17 +58,30 @@ public class WarehouseController {
         Image source;
 
         if (w.getImage() == null || w.getImage().isEmpty()) {
-            source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")));
+            // Imagen por defecto
+            source = new Image(Objects.requireNonNull(
+                    Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")
+            ));
         } else {
-            InputStream path = Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + w.getImage());
-            if (path == null) {
-                // Image not found, use default image
-                source = new Image(Objects.requireNonNull(Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")));
-                System.err.println("Image not found: " + w.getImage());
+            // 1. Buscar en carpeta externa
+            File externalImage = new File("images/thumbnails/" + w.getImage());
+            if (externalImage.exists()) {
+                source = new Image(externalImage.toURI().toString());
             } else {
-                source = new Image(path);
+                // 2. Buscar en resources (placeholders)
+                InputStream resourceImage = Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + w.getImage());
+                if (resourceImage != null) {
+                    source = new Image(resourceImage);
+                } else {
+                    // 3. Imagen por defecto
+                    source = new Image(Objects.requireNonNull(
+                            Main.class.getResourceAsStream(ImageRoutes.THUMBNAILS_BASE + "ImageNotAvailable.jpg")
+                    ));
+                    System.err.println("Image not found in external folder or resources: " + w.getImage());
+                }
             }
         }
+
         img.setImage(source);
         imgBorder.setHeight(img.getFitHeight());
         imgBorder.setWidth(img.getFitWidth());

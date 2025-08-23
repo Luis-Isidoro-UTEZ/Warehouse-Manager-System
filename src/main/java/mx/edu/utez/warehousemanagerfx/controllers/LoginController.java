@@ -42,8 +42,8 @@ public class LoginController implements Initializable {
     @FXML private PasswordField password;
 
     // Duraciones (millis)
-    private static final long TRY_DURATION_MS = 0L;   // trying -> more noticeable // 1500 L
-    private static final long FAIL_DURATION_MS = 0L;  // failed -> faster // 1200 L
+    private static final long TRY_DURATION_MS = 1500L;   // trying -> more noticeable // 1500 L
+    private static final long FAIL_DURATION_MS = 1200L;  // failed -> faster // 1200 L
     // Change any to 0 so there is no pause.
 
     private Stage loadingStage;

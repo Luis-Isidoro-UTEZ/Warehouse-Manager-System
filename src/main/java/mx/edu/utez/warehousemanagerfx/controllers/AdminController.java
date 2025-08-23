@@ -151,7 +151,7 @@ public class AdminController implements Initializable {
 
     @FXML
     private void goInfAccount(ActionEvent event) {
-        Administrator.goInfoAccount(event, searchTextField);
+        Administrator.goInfoAccount(searchTextField);
     }
 
     @FXML

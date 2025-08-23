@@ -89,11 +89,11 @@ public class AdminRegisterController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        SuperAdministrator.goHome(event, firstName);
+        SuperAdministrator.goHome(firstName);
     }
 
     @FXML
     private void goInfoAccount(ActionEvent event) {
-        SuperAdministrator.goInfoAccount(event, firstName);
+        SuperAdministrator.goInfoAccount(firstName);
     }
 }

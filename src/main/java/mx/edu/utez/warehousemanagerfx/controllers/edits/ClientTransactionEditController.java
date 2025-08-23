@@ -53,7 +53,10 @@ public class ClientTransactionEditController implements Initializable {
     // List of all input nodes that can have an "input-error" style and that have to be validated
     private List<Node> inputNodes;
     private final String[] transactions = {"Rent", "Sale"};
+    private boolean isFirstRent;
+    private boolean newSale;
     private Warehouse w;
+    private WarehouseTransaction wt;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -106,16 +109,17 @@ public class ClientTransactionEditController implements Initializable {
             email.setText(client.getEmail());
             phone.setText(client.getPhone());
         });
+        WarehouseTransactionDao wtDao = new WarehouseTransactionDao();
+        wt = wtDao.readTransactionById(idClient, w.getIdWarehouse());
         if (w.getStatus().equals("Sold")) {
             transactionType.setValue("Sale");
             transactionType.setDisable(true);
         } else if (w.getStatus().equals("Rented")) {
+            isFirstRent = true;
             transactionType.setValue("Rent");
             transactionType.setDisable(true);
             expirationDateControls.setVisible(true);
             paymentExpirationDate.setDisable(true);
-            WarehouseTransactionDao wtDao = new WarehouseTransactionDao();
-            WarehouseTransaction wt = wtDao.readTransactionById(idClient);
             paymentExpirationDate.setValue(wt.getPaymentExpirationDate());
         }
     }
@@ -161,12 +165,33 @@ public class ClientTransactionEditController implements Initializable {
         String emailC = email.getText();
 
         // Put new things on the object
+        c.setIdClient(w.getIdClient());
         c.setFirstName(firstNameC);
         c.setMiddleName(middleNameC);
         c.setLastName(lastNameC);
         c.setSecondLastName(secondLastNameC);
         c.setPhone(phoneC);
         c.setEmail(emailC);
+
+        Administrator a = (Administrator) SessionManager.getCurrentUser();
+        wt.setIdAdmin(a.getIdUser());
+        wt.setTransactionType(transactionType.getValue());
+        WarehouseTransaction newWt = new WarehouseTransaction();
+
+        if (wt.getTransactionType().equals("Rent")) {
+            wt.setPaymentExpirationDate(paymentExpirationDate.getValue());
+        } else if (isFirstRent && wt.getTransactionType().equals("Sale")) {
+            isFirstRent = false;
+            newSale = true;
+            newWt.setTransactionType(transactionType.getValue());
+            newWt.setIdWarehouse(w.getIdWarehouse());
+            newWt.setIdClient(c.getIdClient());
+            newWt.setIdAdmin(a.getIdUser());
+            w.setIdClient(c.getIdClient());
+            w.setStatus("Sold");
+        } else if (wt.getTransactionType().equals("Sale")) {
+            wt.setPaymentExpirationDate(null);
+        }
 
         firstName.setEditable(false);
         middleName.setEditable(false);
@@ -189,22 +214,12 @@ public class ClientTransactionEditController implements Initializable {
         );
         // Update the DB
         ClientDao clientDao = new ClientDao();
-        if (clientDao.updateClient(c)) {
-            WarehouseTransaction wt = new WarehouseTransaction();
-            wt.setTransactionType(transactionType.getValue());
-            wt.setPaymentExpirationDate(paymentExpirationDate.getValue());
-            wt.setIdWarehouse(w.getIdWarehouse());
-            wt.setIdClient(c.getIdClient());
-            w.setIdClient(c.getIdClient());
-            Administrator a = (Administrator) SessionManager.getCurrentUser();
-            wt.setIdAdmin(a.getIdUser());
-            WarehouseTransactionDao warehouseTransactionDao = new WarehouseTransactionDao();
-            if (warehouseTransactionDao.updateTransaction(wt)) {
-                WarehouseDao warehouseDao = new WarehouseDao();
-                warehouseDao.updateWarehouse(w);
-                goHome(null);
-                Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The client/transaction was updated successfully.");
-            }
+        WarehouseDao warehouseDao = new WarehouseDao();
+        WarehouseTransactionDao warehouseTransactionDao = new WarehouseTransactionDao();
+        if (clientDao.updateClient(c) && (newSale ? warehouseTransactionDao.createTransaction(newWt) : warehouseTransactionDao.updateTransaction(wt))) {
+            warehouseDao.updateWarehouse(w);
+            Administrator.goHome(firstName);
+            Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The client/transaction was updated successfully.");
         } else {
             Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The client/transaction could not be updated.");
         }
@@ -215,6 +230,7 @@ public class ClientTransactionEditController implements Initializable {
         WarehouseDao dao = new WarehouseDao();
         if (Alerts.confirmUnassign(firstName, "client")) {
             w.setIdClient(0);
+            w.setStatus("Available");
             if (dao.updateWarehouse(w)) {
                 goHome(event);
                 Alerts.showAlert(Alert.AlertType.INFORMATION, null, "Successful Unassign!", "The client was successfully unassigned.");
@@ -246,6 +262,6 @@ public class ClientTransactionEditController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        Administrator.goHome(event, firstName);
+        Administrator.goHome(firstName);
     }
 }

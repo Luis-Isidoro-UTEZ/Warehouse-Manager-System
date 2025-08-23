@@ -328,11 +328,11 @@ public class WarehouseDetailsController implements Initializable {
 
     @FXML
     private void goHomeAD(ActionEvent event) {
-        Administrator.goHome(event, name);
+        Administrator.goHome(name);
     }
 
     @FXML
     private void goAccount(ActionEvent event) {
-        Administrator.goInfoAccount(event, name);
+        Administrator.goInfoAccount(name);
     }
 }

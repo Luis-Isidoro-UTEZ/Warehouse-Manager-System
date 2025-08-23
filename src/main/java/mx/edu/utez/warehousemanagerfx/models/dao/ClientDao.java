@@ -96,14 +96,17 @@ public class ClientDao {
 
     // --- UPDATE ---
     public boolean updateClient(Client client) {
-        String sql = "UPDATE CLIENT SET Full_Name = ?, Email = ?, Phone = ? WHERE Id_Client = ?";
+        String sql = "UPDATE CLIENT SET First_Name = ?, Middle_Name = ?, Last_Name = ?, Second_Last_Name = ?, Email = ?, Phone = ? WHERE Id_Client = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, client.getFirstName());
-            ps.setString(2, client.getEmail());
-            ps.setString(3, client.getPhone());
-            ps.setInt(4, client.getIdClient());
+            ps.setString(2, client.getMiddleName());
+            ps.setString(3, client.getLastName());
+            ps.setString(4, client.getSecondLastName());
+            ps.setString(5, client.getEmail());
+            ps.setString(6, client.getPhone());
+            ps.setInt(7, client.getIdClient());
 
             return ps.executeUpdate() > 0;
 

@@ -159,6 +159,6 @@ public class ClientRegisterController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        Administrator.goHome(event, firstName);
+        Administrator.goHome(firstName);
     }
 }

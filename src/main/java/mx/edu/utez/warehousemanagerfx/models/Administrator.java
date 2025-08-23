@@ -65,10 +65,10 @@ public class Administrator extends UserAccount {
     }
 
     @FXML
-    public static void goHome(ActionEvent event, TextField txt) {
+    public static void goHome(TextField txt) {
         try {
             Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(Administrator.class.getResource(FXMLRoutes.ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) txt.getScene().getWindow();
             Scene scene = new Scene(loginWindow);
             stage.setScene(scene);
             stage.setResizable(false);
@@ -81,10 +81,10 @@ public class Administrator extends UserAccount {
     }
 
     @FXML
-    public static void goInfoAccount(ActionEvent event, TextField txt) {
+    public static void goInfoAccount(TextField txt) {
         try {
             Parent infoAdwindow = FXMLLoader.load(Objects.requireNonNull(Administrator.class.getResource(FXMLRoutes.INFO_ACCOUNT_ADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) txt.getScene().getWindow();
             Scene scene = new Scene(infoAdwindow);
             stage.setScene(scene);
             stage.setResizable(false);

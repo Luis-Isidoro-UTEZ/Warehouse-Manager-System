@@ -85,11 +85,11 @@ public class BranchRegisterController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        SuperAdministrator.goHome(event, country);
+        SuperAdministrator.goHome(country);
     }
 
     @FXML
     private void goInfoAccount(ActionEvent event) {
-        SuperAdministrator.goInfoAccount(event, country);
+        SuperAdministrator.goInfoAccount(country);
     }
 }

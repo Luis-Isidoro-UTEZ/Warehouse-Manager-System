@@ -42,10 +42,10 @@ public class SuperAdministrator extends UserAccount {
     }
 
     @FXML
-    public static void goHome(ActionEvent event, TextField txt) {
+    public static void goHome(TextField txt) {
         try {
             Parent loginWindow = FXMLLoader.load(Objects.requireNonNull(SuperAdministrator.class.getResource(FXMLRoutes.SUPERADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) txt.getScene().getWindow();
             Scene escena = new Scene(loginWindow);
             stage.setScene(escena);
             stage.setResizable(false);
@@ -58,10 +58,10 @@ public class SuperAdministrator extends UserAccount {
     }
 
     @FXML
-    public static void goInfoAccount(ActionEvent event, TextField txt) {
+    public static void goInfoAccount(TextField txt) {
         try {
             Parent AccountSA = FXMLLoader.load(Objects.requireNonNull(SuperAdministrator.class.getResource(FXMLRoutes.INFO_ACCOUNT_SUPERADMIN)));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) txt.getScene().getWindow();
             Scene escena = new Scene(AccountSA);
             stage.setScene(escena);
             stage.setResizable(false);

@@ -87,11 +87,11 @@ public class WarehouseRegisterController implements Initializable {
 
     @FXML
     private void goHome(ActionEvent event) {
-        Administrator.goHome(event, name);
+        Administrator.goHome(name);
     }
 
     @FXML
     private void goInfoAccount(ActionEvent event) {
-        Administrator.goInfoAccount(event, name);
+        Administrator.goInfoAccount(name);
     }
 }

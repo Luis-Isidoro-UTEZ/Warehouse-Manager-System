@@ -90,7 +90,7 @@ public class WarehouseTransactionDao {
     }
 
     // --- READ BY ID ---
-    public WarehouseTransaction readTransactionById(int id) {
+    public WarehouseTransaction readTransactionById(int clientId, int warehouseId) {
         String sql = "SELECT " +
                 "    tx.Id_Transaction, " +
                 "    tx.Transaction_Type, " +
@@ -103,12 +103,13 @@ public class WarehouseTransactionDao {
                 "JOIN WAREHOUSE w ON tx.Id_Warehouse = w.Id_Warehouse " +
                 "JOIN CLIENT c ON tx.Id_Client = c.Id_Client " +
                 "JOIN ADMINISTRATOR adm ON tx.Id_Admin = adm.Id_Admin " +
-                "WHERE tx.Id_Client = ?";
+                "WHERE tx.Id_Client = ? AND tx.Id_Warehouse = ?";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
+            ps.setInt(1, clientId);
+            ps.setInt(2, warehouseId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 WarehouseTransaction wt = new WarehouseTransaction();

@@ -77,9 +77,9 @@ public class BranchRegisterController implements Initializable {
         BranchDao branchDao = new BranchDao();
         if (branchDao.create(b)) {
             goHome(event);
-            Alerts.showAlert(Alert.AlertType.INFORMATION, country, "Registration successful!", "Administrator registration was successful.");
+            Alerts.showAlert(Alert.AlertType.INFORMATION, country, "Registration successful!", "Branch registration was successful.");
         } else {
-            Alerts.showAlert(Alert.AlertType.ERROR, country, "Error!", "Administrator registration could not be performed.");
+            Alerts.showAlert(Alert.AlertType.ERROR, country, "Error!", "Branch registration could not be performed.");
         }
     }
 

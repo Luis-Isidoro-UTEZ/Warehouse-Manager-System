@@ -44,10 +44,10 @@ public class WarehouseDao {
 
             // 2️⃣ Insert warehouse without warehouseCode, including idClient
             String sqlInsert = """
-            INSERT INTO WAREHOUSE
-            (Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Id_Property, Id_Branch, Id_Client, Is_Deleted)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-        """;
+                        INSERT INTO WAREHOUSE
+                        (Warehouse_Registration_Date, Warehouse_Name, Image, Rental_Price, Sale_Price, Size_Sq_Meters, Id_Property, Id_Branch, Id_Client, Is_Deleted)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+                    """;
             int generatedIdWarehouse;
             try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, new String[]{"Id_Warehouse"})) {
                 // Copy image if path is selected
@@ -123,8 +123,10 @@ public class WarehouseDao {
     }
 
     // --- READ ---
+
     /**
      * Flexible method to get warehouses according to a combination of filters:
+     *
      * @param keyword     keyword for multi-field search
      * @param status      status filter, "Show All/Status" to skip
      * @param minPrice    minimum price
@@ -134,7 +136,7 @@ public class WarehouseDao {
      * @param priceRental true=filter Rental_Price; false=filter Sale_Price
      * @param orderColumn column for ORDER BY
      * @param orderDir    "ASC" o "DESC"
-     * @param useKeyword      if it includes a keyword filter
+     * @param useKeyword  if it includes a keyword filter
      * @param useStatus   if it includes a status filter
      * @param useSlider   if it includes price/size filters
      */
@@ -181,46 +183,46 @@ public class WarehouseDao {
         params.add(branchId);
         query.append(" ORDER BY ").append(orderColumn).append(" ").append(orderDir);
 
-        try {
-            Connection conn = DatabaseConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query.toString());
+        try (
+                Connection conn = DatabaseConnectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query.toString())
+        ) {
 
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Warehouse w = new Warehouse();
-                w.setIdWarehouse(rs.getInt("Id_Warehouse"));
-                w.setWarehouseCode(rs.getString("Warehouse_Code"));
-                // Convert SQL DATE → LocalDate
-                Date sqlDate = rs.getDate("Warehouse_Registration_Date");
-                if (sqlDate != null) {
-                    w.setRegistrationDate(sqlDate.toLocalDate());
-                }
-                w.setWarehouseName(rs.getString("Warehouse_Name"));
-                w.setImage(rs.getString("Image"));
-                w.setRentalPrice(rs.getDouble("Rental_Price"));
-                w.setSalePrice(rs.getDouble("Sale_Price"));
-                w.setSizeSqMeters(rs.getDouble("Size_Sq_Meters"));
-                w.setStatus(rs.getString("Status"));
-                // Is_Deleted is NUMBER(1), we convert it to boolean
-                w.setDeleted(rs.getInt("Is_Deleted") == 1);
-                w.setIdProperty(rs.getInt("Id_Property"));
-                w.setIdBranch(rs.getInt("Id_Branch"));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Warehouse w = new Warehouse();
+                    w.setIdWarehouse(rs.getInt("Id_Warehouse"));
+                    w.setWarehouseCode(rs.getString("Warehouse_Code"));
+                    // Convert SQL DATE → LocalDate
+                    Date sqlDate = rs.getDate("Warehouse_Registration_Date");
+                    if (sqlDate != null) {
+                        w.setRegistrationDate(sqlDate.toLocalDate());
+                    }
+                    w.setWarehouseName(rs.getString("Warehouse_Name"));
+                    w.setImage(rs.getString("Image"));
+                    w.setRentalPrice(rs.getDouble("Rental_Price"));
+                    w.setSalePrice(rs.getDouble("Sale_Price"));
+                    w.setSizeSqMeters(rs.getDouble("Size_Sq_Meters"));
+                    w.setStatus(rs.getString("Status"));
+                    // Is_Deleted is NUMBER(1), we convert it to boolean
+                    w.setDeleted(rs.getInt("Is_Deleted") == 1);
+                    w.setIdProperty(rs.getInt("Id_Property"));
+                    w.setIdBranch(rs.getInt("Id_Branch"));
 
-                // Handle Id_Client - can be null
-                int idClient = rs.getInt("Id_Client");
-                if (!rs.wasNull()) {
-                    w.setIdClient(idClient);
-                } else {
-                    w.setIdClient(0); // or whatever default value you prefer
-                }
+                    // Handle Id_Client - can be null
+                    int idClient = rs.getInt("Id_Client");
+                    if (!rs.wasNull()) {
+                        w.setIdClient(idClient);
+                    } else {
+                        w.setIdClient(0); // or whatever default value you prefer
+                    }
 
-                warehouses.add(w);
+                    warehouses.add(w);
+                }
             }
-            rs.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -228,8 +230,10 @@ public class WarehouseDao {
     }
 
     // --- READ to get MIN/MAX ---
+
     /**
      * Method to get the minimum and maximum size/price of the warehouse table
+     *
      * @return array with [minimum, maximum]
      * @throws SQLException if the query fails
      */
@@ -240,16 +244,15 @@ public class WarehouseDao {
         }
         double min = 0, max = 0;
         String query = "SELECT MIN(" + columnName + ") AS min_value, MAX(" + columnName + ") AS max_value FROM WAREHOUSE WHERE Is_Deleted = 0";
-        try {
-            Connection conn = DatabaseConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+        try (
+                Connection conn = DatabaseConnectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery()
+        ) {
             if (rs.next()) {
                 min = rs.getDouble("min_value");
                 max = rs.getDouble("max_value");
             }
-            rs.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -284,11 +287,13 @@ public class WarehouseDao {
     }
 
     // --- UPDATE CLIENT ASSIGNMENT ---
+
     /**
      * Method to assign or unassign a client to a warehouse
+     *
      * @param idWarehouse warehouse ID
-     * @param idClient client ID (0 or null to unassign)
-     * @param newStatus new status for the warehouse
+     * @param idClient    client ID (0 or null to unassign)
+     * @param newStatus   new status for the warehouse
      * @return true if successful
      */
     public boolean assignClientToWarehouse(int idWarehouse, Integer idClient, String newStatus) {

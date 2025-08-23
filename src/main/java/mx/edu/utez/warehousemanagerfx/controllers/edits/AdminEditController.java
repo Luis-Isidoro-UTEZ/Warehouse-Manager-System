@@ -207,9 +207,9 @@ public class AdminEditController implements Initializable {
         );
         // Update the DB
         if(dao.update(a)){
-            Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The branch was updated successfully.");
+            Alerts.showAlert(Alert.AlertType.INFORMATION, firstName, "Successful update!", "The admin was updated successfully.");
         } else {
-            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The branch could not be updated.");
+            Alerts.showAlert(Alert.AlertType.ERROR, firstName, "Error!", "The admin could not be updated.");
         }
     }
 

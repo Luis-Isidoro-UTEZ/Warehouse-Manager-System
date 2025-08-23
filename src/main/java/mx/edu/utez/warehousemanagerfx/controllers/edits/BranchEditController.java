@@ -170,7 +170,7 @@ public class BranchEditController implements Initializable {
         String addressDetailB = addressDetail.getText();
 
         // Put new things on the object
-        BranchDao dao = new BranchDao();
+        BranchDao branchDao = new BranchDao();
         b.setCountry(countryB);
         b.setState(stateB);
         b.setMunicipality(municipalityB);
@@ -178,35 +178,49 @@ public class BranchEditController implements Initializable {
         b.setPostalCode(postalCodeB);
         b.setAddressDetail(addressDetailB);
 
-        // 🔹 Update assigned Admin
+        // 🔹 Update assigned Admin ensuring 1:1 relationship
         AdminDao adminDao = new AdminDao();
         String selected = (String) assignedAdmin.getValue();
-        if (selected != null) {
-            if (selected.equals("Unassigned")) {
-                // If deallocated → id_branch = null
-                if (b.getIdAdmin() != null) {
-                    adminDao.readById(b.getIdAdmin()).ifPresent(admin -> {
-                        admin.setIdBranch(null);
-                        adminDao.update(admin);
-                    });
-                }
-                b.setIdAdmin(null);
-            } else {
-                // Find admin corresponding to the selected name
-                List<Administrator> admins = adminDao.readFilteredAdmins("Name", "ASC");
-                for (Administrator admin : admins) {
-                    String fullName = admin.getFirstName() + " " +
-                            (admin.getMiddleName() != null ? admin.getMiddleName() + " " : "") +
-                            admin.getLastName() + " " +
-                            (admin.getSecondLastName() != null ? admin.getSecondLastName() : "");
-                    if (fullName.trim().equals(selected)) {
-                        admin.setIdBranch(b.getIdBranch()); // assign to the current branch
-                        adminDao.update(admin);
-                        b.setIdAdmin(admin.getIdAdmin());
-                        break;
-                    }
+
+        // We load all the admins to be able to control conflicts
+        List<Administrator> allAdmins = adminDao.readFilteredAdmins("Name", "ASC");
+
+        // 1) Resolve the selected admin (if applicable)
+        Administrator selectedAdmin = null;
+        if (selected != null && !selected.equals("Unassigned")) {
+            for (Administrator admin : allAdmins) {
+                String fullName = admin.getFirstName() + " " +
+                        (admin.getMiddleName() != null ? admin.getMiddleName() + " " : "") +
+                        admin.getLastName() + " " +
+                        (admin.getSecondLastName() != null ? admin.getSecondLastName() : "");
+                if (fullName.trim().equals(selected)) {
+                    selectedAdmin = admin;
+                    break;
                 }
             }
+        }
+
+        // 2) Unassign any other admins currently managing this branch
+        // except the selected admin (if any).
+        for (Administrator admin : allAdmins) {
+            if (admin.getIdBranch() != null && admin.getIdBranch() == b.getIdBranch()) {
+                if (selectedAdmin == null || admin.getIdAdmin() != selectedAdmin.getIdAdmin()) {
+                    admin.setIdBranch(null);
+                    adminDao.update(admin);
+                }
+            }
+        }
+
+        // 3) Apply the allocation according to the selection
+        if (selectedAdmin == null) {
+            // Unassigned: the branch is left without admin
+            b.setIdAdmin(null);
+        } else {
+            // If the selected admin was on another branch, with this update
+            // they are automatically reassigned (fulfilling 1:1)
+            selectedAdmin.setIdBranch(b.getIdBranch());
+            adminDao.update(selectedAdmin);
+            b.setIdAdmin(selectedAdmin.getIdAdmin());
         }
 
         country.setEditable(false);
@@ -226,7 +240,7 @@ public class BranchEditController implements Initializable {
                         "-fx-font-size: 13px;"
         );
         // Update the DB
-        if(dao.update(b)){
+        if(branchDao.update(b)){
             Alerts.showAlert(Alert.AlertType.INFORMATION, branchCode, "Successful update!", "The branch was updated successfully.");
         } else {
             Alerts.showAlert(Alert.AlertType.ERROR, branchCode, "Error!", "The branch could not be updated.");
